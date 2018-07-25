@@ -1,0 +1,2 @@
+du -h /strowdata1/s1/sergio/OLD_RUN8_NIRDATABASE/*/abs.dat
+du -h /strowdata1/s1/sergio/RUN8_NIRDATABASE/*/abs.dat

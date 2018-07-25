@@ -1,0 +1,48 @@
+copied from /home/tilak/glab
+
+1A)   Went to /asl/data/hitran/HITRAN2012/HITRAN2012
+      copied HITRAN2012.par smallHITRAN2012.par     <<< so that I can edit and dump out wavenumbers
+                                                        that are not needed eg 0-555 cm-1 and 3333 - 1000000 wn
+      then wrote script "rm43_47.sc" which successively sedded this file and got rid of gases 42,44, ... 47
+      saving final copy in 1to42_HITRAN2012.par
+      (note there were NO gases higher than g47, so did not need to get rid of g48 .. can do this and file remains same size)
+
+1B)   Went to /asl/packages/Genln2/Hitlin
+   cp hitlin08May09x.ip hitlin12Jul14.ip
+     edit hitlin12Jul14.ip so I can put in H2012 info
+
+!..LINE DATA FILES (*LINDAT) [MANDATORY]
+*LINDAT
+!
+! 1A. No of formatted line data files (HITRAN format)                      NFIL
+ 3
+!
+! For each line data file, 1 record (IFIL=1,NFIL)
+! 2A. Status number for lines on file IFIL:                         NEWST(IFIL)
+! 2B. Filename of line data file:                                    FNIN(IFIL)
+! note: HITRAN08.par does not include 30,35,or 42
+10, '/asl/data/hitran/HITRAN2012/HITRAN2012/42_HITRAN2012.par'
+11, '/asl/data/hitran/HITRAN2008/35_hit08.par'
+12, '/asl/data/hitran/HITRAN2008/42_hit08.par'
+!!!!!!!!End of section !!!!!!!
+
+!..OUTPUT FILE (*OUTPUT) [MANDATORY]
+*OUTPUT
+!
+! 1.A File name of the binary output line file to be used by GENLN2:      FNOUT
+'hitlin12Jul14.bin'
+    
+   cp run_hitlin sergio_run_hitlin
+   sergio_run_hitlin hitlin12Jul14             <<<<<< takes a while to run almost 1-2 hours!!!!!
+
+
+2) can make my own copy of newglab_lite.f which has the "newest" HITRAN database 
+   (by editing the file and editing LINFIL) and then 
+     g77 newglab_lite.f
+     mv a.out sergio_newglab_lite
+   right now there is H2012
+
+3) edited my own copy of "dogenln_onegas_sergio.m" which only uses GENERIC subdir and nothing else;
+   it saves the GENLN2 output data there as a mat file, after having read the GENLN2 "lite.tau"
+
+

@@ -1,0 +1,37 @@
+Ciao Sergio,
+
+First of all, sorry for the delay I reply you.
+I'm sorry about you Father (I didn’t know). I understand your conflicting feeling about your mothers! 
+
+I'm sorry also for Scott!
+
+Coming back to the work.
+
+Here I attached  5 files that I use to prepare lblrtm input files (TAPE5) and to read lblrtm output files (TAPE12 and OD_....).
+
+wt5_new.m.
+lbl_read_dbl.m
+odread.m
+tape7_read.m
+wt5l.m
+
+The functions have headers that I hope help you for their use.
+
+wt5_new.m. Is a matlab function that write TAPE5 file for the newest version of lblrtm (from v10 to the current v12.2).
+As you can read in the function comment this script was first prepared by Dave, then I modified according my issues and following changes in LBLRTM.
+
+lbl_read_dbl.m Reads double precision output files (TAPE12), even in this case the original scripts was prepared by Dave.
+
+odread.m  is similar to lbl_read_dbl.m but it reads double precision Optical Depth files (ODexact__).
+
+tape7_read.m read TAPE7 file.
+
+wt5l.m Prepares TAPE5 file for generation of Optical Depth. This is the function I run to generate optical depth to be interpolated in our look-up-table database.
+In doing this I work with the option LBLATM=0. As you know when you set LBLATM=0 you must supply information on the atmosphere to the code. In this script I load it from file atmos_data3. So you for sure cannot run this script without atmos_data3.mat. At moment I don't send you it since it is tuned on our pressure grid (If you need I send it!). But you can provide this information  with your grid specification if you produce a TAPE7 file.
+My suggestion in order to have this TAPE7 file is: you first prepare TAPE5 file with wt5_new.m (set a short wavenumber range); then read TAPE7 with tape7_read.m and save the results in a equivalent "atmos_data3.mat" file;  prepare TAPE5 file for OD with wt5l.m; finally read ODexact_ with odread.m.
+
+Let me know if these help you and don't hesitate in contact me for further clarification.
+
+
+Ciao Guido
+

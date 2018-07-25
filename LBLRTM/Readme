@@ -1,0 +1,262 @@
+Eli Mlawer 20 Oct 2014
+
+A). TAPE5 for gasX
+
+I changed my TAPE5 to do what you suggested, does this look correct?
+(there is no WV, so turning on the self and foreign WV continuum
+should not make a difference, right?
+
+>>> 
+$ Set up KCARTA database 
+ HI=1 F4=1 CN=6 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0    0    0
+ 1.0 1.0 1.0 1.0 0.0 0.0 0.0
+  1805.000  1880.000                                              0.00                        0.0005
+ 1  1   12       1.0                        2.00        1.00
+   7.181625e+02  269.9400              1    1.00 7.18e+02 269.94  1.00 7.18e+02 269.94
+ -0.0000000E+00  1.9071610E+20 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00  4.9515732E+23
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00
+-1
+%
+
+>>>>
+
+I checked the newly produced CO2 ODs against what I produced last
+week, and they look very similar in the 15 um region (no N2 there),
+and very small differences in the 4.3 um region. Testing BTs produced
+using your suggested method of getting CO2 optical depths versus what
+I did last week, shows very small differences (plot below is at 0.0025
+cm-1 kCARTA resolution after averaging over the 49 regression profiles
+.. differences show up in the expected N2 region)
+
+Good.  This seems reasonable.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+B) ) TAPE5 for N2
+
+Assuming I made correct TAPE5 for "other" gases, embarrassingly I am
+still having difficulty with N2 (and presumably O2). I manage to get
+zeros everywhere, or no lines and significantly lower optical depths
+than I expect, or no lines but ballpark ODs that I expect. Can you
+take a look at one of the incarnations of TAPE5 that I made for N2
+this morning, and let me know what is wrong (and also how to modify it
+so I can produce O2 optical depths)?
+
+$ Set up KCARTA database 
+ HI=1 F4=1 CN=5 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0    0    0
+  2305.000  2380.000                                              0.00                        0.0005
+ 1  1   22       1.0                        2.00        1.00
+   9.492199e-03  198.1640              1    1.00 9.49e-03 198.16  1.00 9.49e-03 198.16
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00  5.0002059E+19
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00
+  1.8972364E+20
+-1
+%
+
+I think there are two problems with this TAPE5.  First, there should
+be 8 amounts on each line, not 7.  The 8 on the first line are for 7
+molecules and the broadening gas, but after that each line is for 8.
+So your attempt to use molecule 22 actually ended up using a non-zero
+amount of CH3Cl (molecule 24).  Once you fix that, the N2 lines should
+be as you want, with 21% of the atmosphere being a generic foreign
+broadener.  However, the continuum still won’t be right since I misled
+you on my last email.  The continuum code defines the N2 vmr as 1 –
+X_h2o – X_o2, so this TAPE5 will think all the molecules are N2.  To
+avoid this, you can move the other 21% back to O2, but take steps to
+make sure that O2 does not create any OD on its own.  You can shut off
+the O2 continuum by setting the O2 continuum scale factor to 0.  The
+O2 lines are not as easy.  Depending on the spectral region, you may
+not have any O2 lines to worry about (e.g. none between 1717 and
+6256), but if you are in a region with O2 lines then the only option I
+can think of is to do this run with a line parameter file having no O2
+lines.  To do this, you would run lnfl to generate a TAPE3 with (say)
+only N2 lines.  We can have someone here help you with that if you
+want.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Eli Mlawer 10 Oct 2014
+ Dear Sergio,
+
+I’m glad the (dopey) LBLRTM 10 micron bug was cured by changing the
+spectral region.  We’ll fix this problem in the next release.
+
+The method we use with LBLRTM to get the optical depths only from a
+single species is to run the code with gas amounts both for gasN and
+"rest of gases”, but set the N2 continuum flag to 0.  (For N2 you
+would just have non-zero “rest of gases”.)  I would worry a bit about
+the method you used for O2 (since the N2 continuum has different
+efficiency for collisions with O2 vs N2) and perhaps N2 (if you used
+molecule 22 to do this).
+
+>>>>>>>>>>>>>>>>>>>
+[sergio@n3 LBLRTM]$ more Toff_06/TAPE5   >>>> old <<<<
+$ Set up KCARTA database  
+ HI=1 F4=1 CN=5 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0    0    0 
+  1805.000  1880.000                                              0.00                        0.0005 
+ 1  1   12       1.0                        2.00        1.00 
+   7.181625e+02  269.9400              1    1.00 7.18e+02 269.94  1.00 7.18e+02 269.94 
+ -0.0000000E+00  1.9071610E+20 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00  4.9515732E+23 
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 
+-1 
+% 
+>>>>>>>>>>>>>>>>>>>
+[sergio@n3 LBLRTM]$ more Toff_06/TAPE5      >>>> new <<<<
+$ Set up KCARTA database  
+ HI=1 F4=1 CN=6 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0    0    0 
+ 1.0 1.0 1.0 1.0 0.0 0.0 0.0 
+  1805.000  1880.000                                              0.00                        0.0005 
+ 1  1   12       1.0                        2.00        1.00 
+   7.181625e+02  269.9400              1    1.00 7.18e+02 269.94  1.00 7.18e+02 269.94 
+ -0.0000000E+00  1.9071610E+20 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00  4.9515732E+23 
+ -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 -0.0000000E+00 
+-1 
+% 
+
+>>>>>>>>>>>>>>>>>>>
+
+Do you know why the two results are somewhat different in the O3
+region?  There haven’t been any recent spectroscopic changes that we
+know of.
+
+Some other responses to what you wrote:
+"the N2 optical depths are slightly different (guess your continuum has changed)”
+- a number of years ago we added the O2 efficiency piece; other than
+ that, we can’t think of anything else that changed 
+"whereas our UMBC-LBL optical depths show those very weak N2 quadropole lines in
+ the 2200 - 2500 cm-1 region, the ones computed using LBLRTM only
+ showed the smooth continuum.”
+- you should get those lines if you specify molecule 22
+
+With respect to the fluxes/heating rates, I have concerns about your
+calculations.  RRTM has been compared quite extensively with LBLRTM
+(see http://rtweb.aer.com/rrtm_frame.html and click on RRTM_LW) and
+the errors at TOA, surface, and stratospheric heating rates are not
+consistent with your plots.  For these calculations, LBLRTM is run for
+6 streams (3 up and 3 down), and the fluxes added in quadrature.  That
+sounds like one of the two approaches you used, and I’m interpreting
+your statement, "I also ran off fluxes and heating rates (using my
+kCARTA code) for this 605-2830 cm-1 region; since in the above plots
+you see positive and negative excursions neither the TOA OLR nor the
+vertical heating rates changed by any noticeable amount” to mean that
+you compared a kCARTA run with your ODs to one in which you used
+LBLRTM ODs.  If that is correct, then your LBLRTM-based fluxes and
+heating rates wouldn’t compare well to RRTM’s, which would be
+inconsistent with what we have seen in our comparisons.  If all my
+assumptions are correct, my guess is that something’s wrong with your
+flux calculation.  If it would help, we could send you input and
+output files for an LBLRTM flux run for a profile in our test suites,
+and you could run it with your set-up and see if your fluxes agree
+with ours.
+
+Eli
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Chenxi  Aug 2014
+
+we want to generate spectra using LBLRTM, for gas cell tests. In other
+words we only want to give a few parameters, and get LBLRTM to output
+the spectra. Can you tell me how to do that? For each gas in the cell,
+the gas cell parameters will be of the following form
+   pressure (mb)    partial pressure (mb)     temperature (K)   amount (mol/cm2)
+
+According to my experience, you may want to change the record 2.1
+(including 2.1.1, 2.1.2, and 2.1.3) in TAPE5.
+
+Before you change record 2.1, you should firstly change record 1.2 to the form like this:
+
+ HI=1 F4=1 CN=5 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0   00   00
+
+MG = 1   OD on separate files
+EM = 0   no emission, od only
+AM = 0 means you will provide layer averaged gas properties in record
+2.1 and the LBLRTM won’t call the internal lblatm subroutine to handle
+this.
+
+After that, you need to provide the layer averaged gas properties in record 2.1.1~2.1.3
+
+For example, you want have a cell only have two gases N2 and CO2. The
+total gas pressure is 1mb and the amount ratio of N2 to CO2 is 9. You
+can use the following record 2.1
+
+record 2.1:
+ 1  1    7       1.0                        2.00        1.00
+first “1”: IFORM, 1 means E15.7
+second “1”: number of layers, here you want to use 1
+third “7”: 7 major gases are specified, which are H2O, CO2, O3, N2O, CO, CH4, and O2
+“1.00 and 2.00”: observational altitude and end point altitude in km
+
+record 2.1.1:
+   1.0000000E00  297.6000              1    1.00   1.500 297.60   2.00   0.500 297.60
+first “1.0000000E00 ”:  gas averaged pressure
+second “297.6000”: averaged temperature
+third “1”: looking down merge
+
+“1.00   1.500 297.60   2.00   0.500 297.60”: 
+
+layer bottom altitude (km), pressure (mb), temperature (K) and layer top altitude (km), pressure (mb), temperature (K).
+
+Note that you can set any altitude or pressure for layer boundaries since the averaged value are provided.
+
+record 2.1.2:
+   0.0000000E00   X.XXXXXXXEXX   0.0000000E00   0.0000000E00   0.0000000E00   0.0000000E00   0.0000000E00   X.XXXXXXXEXX
+
+Gas column densities (#molecules/cm^2) for the 7 gases and for the broadening gases.
+
+I am not sure if these LBLRTM settings are correct but you could check the LBLRTM user guide.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Ciao Sergio,
+
+Here I attached 5 files that I use to prepare lblrtm input files
+(TAPE5) and to read lblrtm output files (TAPE12 and OD_....).
+
+wt5_new.m.
+lbl_read_dbl.m
+odread.m
+tape7_read.m
+wt5l.m
+
+The functions have headers that I hope help you for their use.
+
+wt5_new.m. Is a matlab function that write (LEVELS) TAPE5 file for the newest
+           version of lblrtm (from v10 to the current v12.2).  As you can read in
+           the function comment this script was first prepared by Dave, then I
+           modified according my issues and following changes in LBLRTM.
+
+lbl_read_dbl.m Reads double precision READIANCE/TRANSMISSION output files (TAPE12), even in
+               this case the original scripts was prepared by Dave.
+
+odread.m is similar to lbl_read_dbl.m but it reads double precision
+         Optical Depth files (ODexact__).
+
+tape7_read.m read TAPE7 file.
+
+wt5l.m Prepares TAPE5 file for generation of Optical Depth. 
+       This is the function I run to generate optical depth to be interpolated in our
+       look-up-table database.  In doing this I work with the option LBLATM=0. 
+ 
+       As you know when you set LBLATM=0 you must supply information on the atmosphere to the code. In this 
+       script I load it from file atmos_data3. So you for sure cannot run this script without
+       atmos_data3.mat. At moment I don't send you it since it is tuned on
+       our pressure grid (If you need I send it!). But you can provide this
+       information with your grid specification if you produce a TAPE7 file.
+
+       My suggestion in order to have this TAPE7 file is: you first prepare
+       TAPE5 file with wt5_new.m (set a short wavenumber range); then read
+       TAPE7 with tape7_read.m and save the results in a equivalent
+       "atmos_data3.mat" file; prepare TAPE5 file for OD with wt5l.m; finally
+       read ODexact_ with odread.m.
+
+Let me know if these help you and don't hesitate in contact me for further clarification.
+
+
+Ciao Guido
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

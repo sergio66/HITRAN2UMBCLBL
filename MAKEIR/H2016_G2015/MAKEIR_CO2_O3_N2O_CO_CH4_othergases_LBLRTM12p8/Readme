@@ -1,0 +1,37 @@
+mkdir /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H16
+cp -a  ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/*.m .
+cp -a  ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/*.sbatch .
+cp -a  ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/*.txt .
+cp file_parallelprocess_allgases.txt file_parallelprocess_gas_2_6.txt
+  and edit so only two gases are there (CO2 and CH4)
+  and edit parse_job_string.m as needed
+  
+1) freq_boundaries.m freq_boundariesLBL.m
+   this is old, fix it in both
+  dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtm2/'];
+to become
+  dirout = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtm/'];
+
+2) this is old, fix it
+[sergio@maya-usr1 MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H16]$ grep -in lblrtm12 *.m
+clust_runXtopts_mkgNvfiles.m:93:diroutXN = [dirout(1:slash(6)) '/lblrtm12.4/all/abs.dat'];
+clust_runXtopts_mkgWVvfiles.m:111:diroutXN = [dirout(1:slash(6)) '/lblrtm12.4/WV/abs.dat'];
+
+so now it is correct
+[sergio@maya-usr1 MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H16]$ grep -in lblrtm12 *.m
+clust_runXtopts_mkgNvfiles.m:93:diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat'];
+clust_runXtopts_mkgWVvfiles.m:111:diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat'];
+
+3) carefully edit eg
+   clust_runXtopts_savegasN_file.m clust_runXtopts_savegasN_file_2.m clust_runXtopts_savegasN_file_3.m clust_runXtopts_savegasN_file_4.m
+   so 12 --> 16
+
+4) /bin/rm slurm*.out; sbatch --array=1-22 sergio_matlab_jobB.sbatch  (parse_job_string.m has "file_parallelprocess_gas_2_6.txt" for gases2,6)
+
+5) compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
+
+6) these put togeher the chunks after they are made
+-rw-r--r-- 1 sergio pi_strow  5756 Mar 15 03:09 clust_runXtopts_mkgWVvfiles.m
+-rw-r--r-- 1 sergio pi_strow  4603 Mar 15 03:08 clust_runXtopts_mkgNvfiles.m
+and they go into eg /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat/g2v2830.mat
+

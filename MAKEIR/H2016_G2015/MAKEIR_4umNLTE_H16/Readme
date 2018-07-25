@@ -1,0 +1,243 @@
+See /home/sergio/KCARTA/NONLTE/Readme_make_NLTE_H2016, a slightly older version is
+included below (March 29, 2018)
+
+All you really need to do is follow the 7 stages to NLTE nirvana ....
+(A) in INCLUDE/template_kcartaV120_400_H2016.param
+(B) making files for KCARTA/INCLUDE/template_kcartaV120_400_H2016.param --->>>> caStrongLineParams
+(C) making US Std files for LTE_WEAK_STD_OPTDEPTH_H2016_400ppmv
+(D) making files for caWeakCO2Path
+(E) making files for caWeakUpperAtmCO2Path
+(F) making the first order linemix coeffs EASIER THAN IT SEEMS
+
+then you need to run kCARTA so as to make the predictors for SARTA
+(G) doing the kCARTA runs for SARTA
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(A) in INCLUDE/template_kcartaV120_400_H2016.param
+---------------------------------------------------
+making caUA_US_STD and  caLA_US_STD
+      PARAMETER (caUA_US_STD = '^/KCDATA/NLTE/UA/us_std_prof_ua_400ppmv')
+      PARAMETER (caLA_US_STD = '^/KCDATA/NLTE/LA/us_std_prof_la_400ppmv')
+
+see (D) below
+cp  /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS/refgas2_6 /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16/.
+cp  /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS/refgas2_6 /asl/data/kcarta_sergio/KCDATA/NLTE/LA/us_std_prof_la_400ppmv
+cp  /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/UA/refgas2UA_6        /asl/data/kcarta_sergio/KCDATA/NLTE/UA/us_std_prof_ua_400ppmv
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(B) making files for KCARTA/INCLUDE/template_kcartaV120_400_H2016.param --->>>> caStrongLineParams
+----------------------------------------------------------------------------------------------------
+
+in INCLUDE/template_kcartaV120_400_H2016.param
+caStrongLineParams = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H16/co2_allpqr_*'
+
+
+[sergio@strowinteract GENERIC_RADSnJACS_MANYPROFILES]$ ls /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H12/co2_allpqr_*.mat | wc -l
+21
+[sergio@strowinteract GENERIC_RADSnJACS_MANYPROFILES]$ ls /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H12/co2_allpqr_*.dat | wc -l
+21
+
+
+RUN THIS
+[sergio@strowinteract GENERIC_RADSnJACS_MANYPROFILES]$ mkdir /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H16/
+[sergio@strowinteract GENERIC_RADSnJACS_MANYPROFILES]$ cd /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H16/
+[sergio@strowinteract CO2_H16]$ xnw cper_H02_mker_H16.m
+[sergio@strowinteract CO2_H16]$ cp -a /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H16/cper_H02_mker_H16.m /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS/.
+
+OR
+
+cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS
+edit (for HITRAN = 2016) and run drivelineparameters.m (make sure you mkdir /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/CO2_H16/)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(C) making US Std files for LTE_WEAK_STD_OPTDEPTH_H2016_400ppmv
+---------------------------------------------------------------
+
+IS THIS REALLY NEEDED? I don't think so, since below we make the 11 Toffsets and then compress them
+
+mkdir /asl/s1/sergio/AIRSCO2/LTE_WEAK_STD_OPTDEPTH_H2016_400ppmv
+cd ~/KCARTA/MATLAB/NONLTE/
+>> make_lbl2kc_weakco2
+
+[sergio@maya-usr1 AIRSCO2]$ ls -lt LTE_WEAK_STD_OPTDEPTH_H2016_400ppmv/
+total 101660
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 20:30 gas2_2505.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 20:15 gas2_2480.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 20:00 gas2_2455.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 19:44 gas2_2430.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 19:29 gas2_2405.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 19:14 gas2_2380.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 19:01 gas2_2355.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 18:47 gas2_2330.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 18:30 gas2_2305.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 18:05 gas2_2280.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 17:26 gas2_2255.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 16:52 gas2_2230.dat
+-rw-rw-r-- 1 sergio pi_strow 8004076 Mar 27 16:26 gas2_2205.dat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(D) making files for caWeakCO2Path
+----------------------------------
+
+in INCLUDE/template_kcartaV120_400_H2016.param
+caWeakUpperAtmCO2Path = '/asl/data/kcarta_sergio/BACKGND_COUSIN/fbin/etc.ieee-le/400ppmv_H16/'
+
+cp -a /home/sergio/SPECTRA/IPFILES/std_gx2x_6 .        <<<<< THIS IS 385 ppmv file
+mkdir /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16
+cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS
+
+edit cluster_loop_background.m so that
+  a) outdir = '/asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16/';
+  b) prof(:,3) = prof(:,3) * 400/385;
+     prof(:,5) = prof(:,5) * 400/385;
+  c) run the cluster job
+  d) put together the files for compression
+cp /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16/clust_runXtopts_mkgNvfiles.m mkgNvfiles.m
+edit this file so it works for what I made, and
+     diroutXN =  '/asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16/';
+  e) compress the files
+cd    /home/sergio/HITRAN2UMBCLBL/CMPRUN
+mkdir /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16/kcomp
+run   cmprunIR_4umNLTE.m
+  f) turn them in .dat files for f77/f90 kCARTA
+cd           /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+edit and run loop_mat2for_la_ua_4umNLTE.m
+
+cp  /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS/refgas2_6 /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_400ppm_H16/.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+(E) making files for caWeakUpperAtmCO2Path
+------------------------------------------
+
+in INCLUDE/template_kcartaV120_400_H2016.param
+caWeakUpperAtmCO2Path = '/asl/data/kcarta_sergio/BACKGND_COUSIN_UPPER/fbin/etc.ieee-le/400ppmv_H16/'
+
+mkdir /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_UPPER_400ppm_H16
+cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/UA
+cp   /home/sergio/SPECTRA/IPFILES/refgas2 .      <<<<<<< THIS IS 370 ppmv file
+
+note this dir also has code for read_glatm.m which makes the following file
+  fid = fopen('refgas2','w');   YAY  which also makes the files for run7co2 ....   
+and calls make_param_files.m which also makes the following files for kCARTA
+  fid = fopen('airsheights_upper.param','w');
+  fid = fopen('airslevelheights_upper.param','w');
+  fid = fopen('airslevels_upper.param','w');
+  fid = fopen('cbplev_airs_nlte.f','w');
+  fid = fopen('cbplev_airs_nlte.dat','w');
+
+note that /asl/data/kcarta_sergio/KCDATA/NLTE/UA/us_std_prof_ua_378ppmv has 24 plays
+while "refgas2" has 100 plays
+
+run "compare_la_ua.m" 
+  
+edit cluster_loop_background.m so that
+  a) outdir = '/asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_UPPER_400ppm_H16/';
+  b) prof(:,3) = prof(:,3) * 400/370;
+     prof(:,5) = prof(:,5) * 400/370;
+  c) run the cluster job
+  d) put together the files for compression
+cp /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16/clust_runXtopts_mkgNvfiles.m mkgNvfiles.m
+edit this file so it works for what I made, and
+     diroutXN =  '/asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_UPPER_400ppm_H16/';  
+  e) compress the files
+cd    /home/sergio/HITRAN2UMBCLBL/CMPRUN  
+mkdir /asl/s1/sergio/AIRSCO2/BACKGND_COUSIN_UPPER_400ppm_H16/kcomp
+run   cmprunIR_4umNLTE.m  
+  f) turn them in .dat files for f77/f90 kCARTA
+cd           /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+edit and run loop_mat2for_la_ua_4umNLTE.m
+
+cp /asl/packages/klayersV205/Data/glatm_16Aug2010.dat .
+
+(F) making the first order linemix coeffs EASIER THAN IT SEEMS
+--------------------------------------------------------------
+
+These will be saved in INCLUDE/template_kcartaV120_400_H2016.param
+    CHARACTER*120 caLineMixDir
+    
+cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS
+edit "make_linemix_ipfile.m" or mr = 400 and then run it
+
+it writes output to /home/sergio/SPECTRA/IPFILES/co2one_T150_T400_lowp with mixing ratio = 400
+so it basically is a "atmospheric profile" of 25 layers
+
+Now go to /home/sergio/SPECTRA
+  edit CO2_COMMON/y1s.m so that
+    iNLTE_Print = +1
+    HITRAN      = 2016;  co2ppm = 400;
+  and mkdir so that the following can be written out
+   outfile = ['/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H' hitstr '_' num2str(co2ppm) '/PQR/'];
+           = ['/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/'];
+  and then
+    %% use these options to make the code run faster
+    topts.ffin = 0.01;
+    topts.fmed = 1.0;
+    topts.fcor = 5.0;
+    topts.fstep = 1.0;
+    topts.mainloop = -1;
+    [w,d,outlinemix] = run8co2_linemixUMBC(2,2130,2430,'/home/sergio/SPECTRA/IPFILES/co2one_T150_T400_lowp',topts);
+    FILES SAVED TO /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/
+>>>  NOTE : I found an error in y1s.m where I sorted and printed freq(iSort) Y(iSort) but forgot to sort j        <<<
+>>>           so this is a problem for the P branch, since the low wavenumbers (eg 2100 cm-1) has low  j (eg 2)   <<<
+>>>                                             instead of the low wavenumbers (eg 2100 cm-1) has high j (eg 102) <<<
+					     
+can then compare the individual P,Q,R branches using eg
+  cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS
+  f12 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/PQR/150K_band2080_linemixQ.dat';
+  f16 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/150K_band2080_linemixQ.dat';
+  f12 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/PQR/300K_band2350_linemixP.dat';
+  f16 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/300K_band2350_linemixP.dat';
+  f12 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/PQR/300K_band2320_linemixP.dat';
+  f16 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/300K_band2320_linemixP.dat';
+  compare_indPQR_linemixparams(f12,f16);
+  NOTE because of the mistake I found in y1s, during the comparison the older "P" branch j's will be quite funny
+       ie reversed compared to the newly done "P" branch ... guess I could just redo everything for eg H12,385 ppmv
+
+but you also have to combine the params!!!!! and copy over bbiirrnn.dat
+  cd /home/sergio/KCARTA/NONLTE/M_Files_for_kcarta_NLTE_LBL_runs/USUALLAYERS
+  edit combinePR_linemixparams.m so that
+    HITRAN = 2016;  co2ppm = 400;   
+  then run combinePR_linemixparams
+
+  now you can compare
+  f12 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_400/300K_band2350_linemix.dat';
+  f16 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/300K_band2350_linemix.dat';
+  comparePR_linemixparams(f12,f16);
+  NOTE because of the mistake I found in y1s, during the comparison the older "P" branch j's will be quite funny
+       ie reversed compared to the newly done "P" branch ... guess I could just redo everything for eg H12,385 ppmv
+
+more generic comparisons
+  
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_400/PQR/*.dat | wc -l
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_400/*.dat | wc -l
+
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/PQR/*.dat | wc -l
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/*.dat | wc -l
+
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/PQR/*.dat | wc -l  
+  ls -lt /asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/*.dat | wc -l
+
+  thedir = dir('/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/*.dat');
+  dir12 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H12_385/';
+  dir16 = '/asl/data/kcarta_sergio/KCDATA/NLTE/AIRSCO2/LINEMIX_H16_400/';
+  for ii = 1 : length(thedir)
+    f12 = [dir12 '/' thedir(ii).name];
+    f16 = [dir16 '/' thedir(ii).name];
+    fprintf(1,'%3i of %3i %s \n',ii,length(thedir),thedir(ii).name);
+    comparePR_linemixparams(f12,f16,+1);
+    disp('ret to continue'); pause
+  end
+
+  which is all done by generic_compare.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

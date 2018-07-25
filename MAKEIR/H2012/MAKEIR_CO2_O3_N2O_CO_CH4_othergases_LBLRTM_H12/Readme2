@@ -1,0 +1,119 @@
+handrun_clust_runXtopts_checkgasN.m : allows you to run off LBLRTM, for one gas, one layer 605 : 2830 cm-1
+
+makeCompareUMBCvsLBLRTM.m
+makeCompareUMBCvsLBLRTM_chunk.m     : allows you to compare LBLRTM vs UMBC-LBL ods that have been saved
+
+write_ckd_lookup.m  -- write the CKDself(w,t) or CKDfor(w,T) output to a file that kCARTA can read
+put_together_handrun_makeCONT_for_KCARTA.m
+handrun_makeCONT_for_KCARTA.m     : compare ONLE layer of our saved CKD coeffs vs latest CKD coeffs from LBLRTM
+
+clust_runXtopts_savegasWV_file_1,2,3,4,5.m  : produce WV ods for the 5 pressure offsets
+
+clust_runXtopts_savegasN_file_1,2,3,4.m     : produce ODs for the other gases, 4 simultaneous runs
+
+freq_boundariesLBL.m    for 0.0001 cm-1 spacing --> 0.0005 cm-1
+freq_boundaries.m       for 0.0005 cm-1 spacing --> 0.0025 cm-1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+WV
+===
+-rw-rw-r-- 1 sergio pi_strow  939 Apr 25 23:00 sergio_matlab_job_WV_5.sbatch : do the WV
+-rw-rw-r-- 1 sergio pi_strow  939 Apr 25 23:00 sergio_matlab_job_WV_4.sbatch
+-rw-rw-r-- 1 sergio pi_strow  939 Apr 25 23:00 sergio_matlab_job_WV_3.sbatch
+-rw-rw-r-- 1 sergio pi_strow  939 Apr 25 23:00 sergio_matlab_job_WV_2.sbatch
+-rw-rw-r-- 1 sergio pi_strow  937 Apr 25 22:59 sergio_matlab_job_WV.sbatch
+
+-rwxrwxr-x 1 sergio pi_strow 2400 May  1 11:01 run_wv_all_script.sc      runs the above five
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+OTHER GASES
+============
+
+note : this is for all MOLGAS including O2 and N2
+
+-rw-rw-r-- 1 sergio pi_strow 1012 Apr 23 23:12 sergio_matlab_jobB_4.sbatch : run off gases, 4 simultanous runs!
+-rw-rw-r-- 1 sergio pi_strow 1012 Apr 23 23:11 sergio_matlab_jobB_3.sbatch
+-rw-rw-r-- 1 sergio pi_strow 1012 Apr 23 15:55 sergio_matlab_jobB_2.sbatch
+-rw-rw-r-- 1 sergio pi_strow 1006 Apr 21 14:02 sergio_matlab_jobB.sbatch
+
+recall there are 32 MOLgases, 13 (or 40) XSCgases, 2 continuums, 11 temps
+so there are 47*11 (or 74*11) = 517 or 814 processes to be run (and each for 100 layers)
+so the following scripts launch 814 jobs in dependency mode!
+
+-rwxrwxr-x 1 sergio pi_strow 4801 May  1 10:29 run_big_script_4.sc
+-rwxrwxr-x 1 sergio pi_strow 4801 May  1 10:29 run_big_script_3.sc
+-rwxrwxr-x 1 sergio pi_strow 4801 May  1 10:29 run_big_script_2.sc
+-rwxrwxr-x 1 sergio pi_strow 4653 May  1 10:29 run_big_script.sc
+
+So you can
+  -rwxrwxr-x 1 sergio pi_strow  168 Apr 26 21:05 run_SMALL_script.sc   runs scripts 1,3
+  -rwxrwxr-x 1 sergio pi_strow  166 Apr 25 08:49 run_ALL_script.sc     runs scripts 1,2,3,4
+or
+  -rwxrwxr-x 1 sergio pi_strow 10994 Jun 20 18:55 run_MOLGAS_script.sc        do only MOLgases 2-41
+or
+  -rwxrwxr-x 1 sergio pi_strow 10994 Jun 20 18:55 run_MOLGAS_Nonly_script.m  do only MOLgases N
+or
+  -rwxrwxr-x 1 sergio pi_strow  7996 Jun 20 17:57 run_XSC_script.sc           do only XSCgases 51-81
+  ls g[5678][0123456789].dat/lblrtm2 | wc -l
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if you want to blow away eg xsc gases (becuz LBLRTM released a new version)
+ls -lt /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.4/all/abs.dat/g[5678][0123456789]*.mat | more
+/bin/rm /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.4/all/abs.dat/g[5678][0123456789]*.mat
+
+-rw-rw-r-- 1 sergio pi_strow  967 May  1 11:06 sergio_matlab_mkgNvfiles.sbatch : put together the 11 offsets
+
+/bin/rm slurm*.out; sbatch --array=1-81 sergio_matlab_mkgNvfiles.sbatch      all
+/bin/rm slurm*.out; sbatch --array=1-42 sergio_matlab_mkgNvfiles.sbatch      molgas only
+/bin/rm slurm*.out; sbatch --array=51-81 sergio_matlab_mkgNvfiles.sbatch     xscgas only
+ 
+then you have to go to CMPRUN
+-rw-rw-r-- 1 sergio pi_strow  3047 May  1 14:02 cmprunIR_LBLRTM_WV.m
+-rw-rw-r-- 1 sergio pi_strow  4347 May  1 13:36 cmprunIR_LBLRTM_all.m
+-rw-rw-r-- 1 sergio pi_strow   883 Apr 27 23:18 sergio_matlab_cmprun.sbatch
+-rw-rw-r-- 1 sergio pi_strow    72 Apr 27 09:03 clust_cmprunIR_LBLRTM_all.m
+
+to get rid of anything done earlier
+ eg XSC and then do XSC
+/bin/rm  /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.4/all/kcomp/cg[5678][0123456789]*.mat
+/bin/rm slurm*.out; sbatch --array=51-81 sergio_matlab_cmprun.sbatch
+
+and fortran/mat2for
+-rw-rw-r-- 1 sergio pi_strow 3436 May  1 14:07 loop_mat2forIR_LBLRTM_WV.m
+-rw-rw-r-- 1 sergio pi_strow 1784 May  1 14:04 loop_mat2forIR_LBLRTM_all.m
+ls -lt /asl/data/kcarta/H2012.ieee-le/IR605/lblrtm12.4/etc.ieee-le/r*_g[5678][0123456789].dat | more
+/bin/rm /asl/data/kcarta/H2012.ieee-le/IR605/lblrtm12.4/etc.ieee-le/r*_g[5678][0123456789].dat
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Now go to kCARTA and fix couple of things 
+(1) first go to SCRIPTS
+  edit compHT_XY.sc to put in appropriate directories
+  run the script!
+this creates
+-rw-rw-r-- 1 sergio pi_strow   1170 Jun 20 20:54 xsecNEW.param
+-rw-rw-r-- 1 sergio pi_strow   3600 Jun 20 20:54 compNEW.param
+
+(2) then go to the INCLUDE file
+  kcartaV118_385_H2012_LBLRTM.param  
+will be reading :
+  kXsecParamFile = /asl/data/kcarta_sergio/KCDATA/General/lblrtm_xsec.param
+  kCompParamFile = /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC/PARAM_TEMP/testH2012_lblrtm
+so make sure the above info from xsecNEW.param and compNEW.param are there
+eg
+ diff xsecNEW.param /asl/data/kcarta_sergio/KCDATA/General/lblrtm_xsec.param
+ cp   xsecNEW.param /asl/data/kcarta_sergio/KCDATA/General/lblrtm_xsec.param
+and
+  diff compNEW.param /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC/PARAM_TEMP/testH2012_lblrtm
+  makes it look like testH2012_lblrtm is
+  cat compNEW.param xsecNEW.param > /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC/PARAM_TEMP/testH2012_lblrtm
+  
+(3) Finally go to KCARTA/TEST/UMBC_H2012_vs_LBLRTM12.4_ods
+  check nm_weight in quick_rad_umbcVSlblrtm.nml
+  ../../BIN/bkcarta.x_lblrtm12.4 quick_rad_umbcVSlblrtm.nml xyz.dat
+  then in Matlab : quick_compare_umbcVSlblrtm_OD.m or
+                   quick_compare_umbcVSlblrtm_RAD.m
+  

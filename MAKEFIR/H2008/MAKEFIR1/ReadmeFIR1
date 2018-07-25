@@ -1,0 +1,55 @@
+In the MAKEFIR1 dir
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A) Make the database with 11 toffsets. Each offsetT is stored in a
+   separate file
+
+runXtopts_savegases.sc
+  calls runXtopts_savegasesX.m  which loops over gases = [2:32] 
+                                      for chunk 2830:3330
+                                      It makes one file/gas/toffset
+                                      eg std4250_4_pp.mat  pp = 1 : 11
+                                      in dir ~/abscmp/absdat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+B) Put together all 11 Toffset files
+runXtopts_mkgXvfiles.m
+  takes the 11 files per gas (for each chunk) and concats them into one file
+  eg ~/abscmp/absdat/abs.dat has files g4v4250.mat,g5v4250.mat,g6v4250.mat
+
+runXtopts_savegas1 does the same for water (partial pressures)
+  
+runXtopts_mkg1vfiles.m
+  takes the 11 files for water (for each chunk) and concats them into one file
+  eg ~/abscmp/absdat/abs.dat has files g4v4250.mat,g5v4250.mat,g6v4250.mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+C) Compress them
+cmprunFIR1.m 
+  makes the compressed data files 
+  eg ~/abscmp/absdat/kcomp has files cg4v4250.mat,cg5v4250.mat,cg6v4250.mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+C) Turn the compressed mat files into f77 bin files 
+fortran/mat2for/mat2forFIR1.m 
+  %% make sure you edit fstep, and prefix for file in fname (r,v,w whatever)
+fortran/mat2for/loop_mat2forFIR1.m 
+  converts these .mat files into .f77 files for kcarta
+
+which together do the below for you automatically
+  cd /home/sergio/abscmp/fortran/mat2for/
+  gid = 4;
+  vchunk = 4250;
+  cdir = '/home/sergio/abscmp/absdat/kcomp/';
+  fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+  dtype = 'ieee-le';
+
+or 
+
+  gid = 1;
+  vchunk = 4250;
+  cdir = '/home/sergio/abscmp/absdat/kcomp.h2o/';
+  fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+  dtype = 'ieee-le';
+
+   mat2forFIR1(gid, vchunk, cdir, fdir, dtype)
+  will make /home/sergio/abscmp/absdat/fbin/etc.ieee-le/m4250_g4.dat

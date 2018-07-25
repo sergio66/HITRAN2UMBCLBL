@@ -1,0 +1,16 @@
+# kill error and output files from cluster job
+#erou
+
+echo "                "
+echo "qnodes BEFORE submission"
+nodes
+echo "                "
+
+echo "dumping jobs onto 30 nodes"
+/bin/rm JUNK/*
+clustcmd -n 10 -w 96:00:00 loop_driver_run8_xsec.sh filelist_hpc_xsec
+
+echo "          "
+echo "qnodes after submitting jobs"
+nodes
+echo "                "

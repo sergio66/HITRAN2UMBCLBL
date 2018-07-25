@@ -1,0 +1,448 @@
+
+
+                            < M A T L A B (R) >
+                            < M A T L A B (R) >
+                  Copyright 1984-2015 The MathWorks, Inc.
+                  Copyright 1984-2015 The MathWorks, Inc.
+                   R2015a (8.5.0.197613) 64-bit (glnxa64)
+                   R2015a (8.5.0.197613) 64-bit (glnxa64)
+                             February 12, 2015
+                             February 12, 2015
+
+
+
+
+                            < M A T L A B (R) >
+                            < M A T L A B (R) >
+                  Copyright 1984-2015 The MathWorks, Inc.
+                  Copyright 1984-2015 The MathWorks, Inc.
+                   R2015a (8.5.0.197613) 64-bit (glnxa64)
+                   R2015a (8.5.0.197613) 64-bit (glnxa64)
+                             February 12, 2015
+                             February 12, 2015
+
+
+ 
+ 
+ 
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+For product information, visit www.mathworks.com.
+ 
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+For product information, visit www.mathworks.com.
+ 
+ 
+asl matlab startup in ~sergio/Matlab
+asl matlab startup in ~sergio/Matlab
+asl matlab startup in ~sergio/Matlab
+asl matlab startup in ~sergio/Matlab
+
+
+	Academic License
+	Academic License
+
+
+
+
+	Academic License
+	Academic License
+
+
+JOB String = 020065506    parsed to gid =  2 chunk =   655 Stoffset =  6 
+JOB String = 020068006    parsed to gid =  2 chunk =   680 Stoffset =  6 
+JOB String = 020060506    parsed to gid =  2 chunk =   605 Stoffset =  6 
+JOB String = 020063006    parsed to gid =  2 chunk =   630 Stoffset =  6 
+for original kCARTA database, using 0.0005 cm-1 x 5   2000
+for original kCARTA database, using 0.0005 cm-1 x 5   2000
+for original kCARTA database, using 0.0005 cm-1 x 5   2000
+for original kCARTA database, using 0.0005 cm-1 x 5   2000
+In runXtopts_params_smart.m, you sent in a "wavenumber" =  2000.00 cm-1 
+In runXtopts_params_smart.m, you sent in a "wavenumber" =  2000.00 cm-1 
+In runXtopts_params_smart.m, you sent in a "wavenumber" =  2000.00 cm-1 
+  
+In runXtopts_params_smart.m, you sent in a "wavenumber" =  2000.00 cm-1 
+  
+  
+  
+    ffin = fine point spacing nbox(=5) avg =   0.000500 cm-1 
+    ffin = fine point spacing nbox(=5) avg =   0.000500 cm-1 
+    fmed = med  point spacing nbox(=5) avg =   0.100000 cm-1 
+    ffin = fine point spacing nbox(=5) avg =   0.000500 cm-1 
+    ffin = fine point spacing nbox(=5) avg =   0.000500 cm-1 
+    fmed = med  point spacing nbox(=5) avg =   0.100000 cm-1 
+    fcor = cor  point spacing nbox(=5) avg =   0.500000 cm-1 
+    fmed = med  point spacing nbox(=5) avg =   0.100000 cm-1 
+    fcor = cor  point spacing nbox(=5) avg =   0.500000 cm-1 
+    fmed = med  point spacing nbox(=5) avg =   0.100000 cm-1 
+    fcor = cor  point spacing nbox(=5) avg =   0.500000 cm-1 
+ so we would typically divide [fmin,fmax] into boxes of width =    1.00000 cm-1 
+ so we would typically divide [fmin,fmax] into boxes of width =    1.00000 cm-1 
+ while 10000 pts boxcar=5 avg would be   25.00000 cm-1 
+ so we would typically divide [fmin,fmax] into boxes of width =    1.00000 cm-1 
+    fcor = cor  point spacing nbox(=5) avg =   0.500000 cm-1 
+  
+ while 10000 pts boxcar=5 avg would be   25.00000 cm-1 
+ based on this, we have before JAN 2014 (A) 
+ while 10000 pts boxcar=5 avg would be   25.00000 cm-1 
+  
+    near wing distance =   1.000000 cm-1 
+ so we would typically divide [fmin,fmax] into boxes of width =    1.00000 cm-1 
+    med wing distance  =   2.000000 cm-1 
+ based on this, we have before JAN 2014 (A) 
+  
+    far wing distance  =  25.000000 cm-1 
+    near wing distance =   1.000000 cm-1 
+ while 10000 pts boxcar=5 avg would be   25.00000 cm-1 
+ based on this, we have before JAN 2014 (A) 
+  
+    near wing distance =   1.000000 cm-1 
+ based on this, we have before JAN 2014 (A) 
+    med wing distance  =   2.000000 cm-1 
+    near wing distance =   1.000000 cm-1 
+    med wing distance  =   2.000000 cm-1 
+    far wing distance  =  25.000000 cm-1 
+    far wing distance  =  25.000000 cm-1 
+gas freq =   2    680 
+gas freq =   2    655 
+gas freq =   2    630 
+    med wing distance  =   2.000000 cm-1 
+    far wing distance  =  25.000000 cm-1 
+gas freq =   2    605 
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g1.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g1.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g1.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g1.dat
+ run8 will use old polynomial qtips for these HITRAN versions 
+ run8 will use old polynomial qtips for these HITRAN versions 
+ run8 will use old polynomial qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+  h92    h96    h98    h2k   
+ run8 will use old polynomial qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h04    h08    h12   
+ run8 will use new lagrange qtips for these HITRAN versions 
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h04    h08    h12   
+  h04    h08    h12   
+  h04    h08    h12   
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g2.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g2.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g2.dat
+--> using new MEX reader for HITRAN version h12 : /asl/data/hitran/h12.by.gas/g2.dat
+ run8 will use old polynomial qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h04    h08    h12   
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, changing iusgq and ilsgq into old formats for CO2!!! <<<< 
+ run8 will use old polynomial qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h04    h08    h12   
+ run8 will use old polynomial qtips for these HITRAN versions 
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+  h92    h96    h98    h2k   
+ run8 will use old polynomial qtips for these HITRAN versions 
+    >>> in translate2oldHITparams, changing iusgq and ilsgq into old formats for CO2!!! <<<< 
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h92    h96    h98    h2k   
+  h04    h08    h12   
+ run8 will use new lagrange qtips for these HITRAN versions 
+  h04    h08    h12   
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, changing iusgq and ilsgq into old formats for CO2!!! <<<< 
+    >>> in translate2oldHITparams, changing iusgq and ilsgq into old formats for CO2!!! <<<< 
+   ** you have 5 columns in your mass.dat file ==> H2K or H04 or H08
+   ** data was used to save the nuclear degeneracy factor(unused even
+   ** by QTIPS?) and QTIPS partition fcns at 296K
+need new version of qtips ...
+
+ read in hittomat 
+
+orig number of lines in HITRAN file =    28241 
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, NO NEED TO change iusgq and ilsgq into old formats for CO2!!! <<<< 
+ >> number of lines =  28241 
+ >> min/max wavennumber of lines = 580.000603 654.997950 
+   ** you have 5 columns in your mass.dat file ==> H2K or H04 or H08
+   ** data was used to save the nuclear degeneracy factor(unused even
+   ** by QTIPS?) and QTIPS partition fcns at 296K
+need new version of qtips ...
+
+ read in hittomat 
+
+orig number of lines in HITRAN file =    31686 
+   ** you have 5 columns in your mass.dat file ==> H2K or H04 or H08
+   ** data was used to save the nuclear degeneracy factor(unused even
+   ** by QTIPS?) and QTIPS partition fcns at 296K
+need new version of qtips ...
+
+ read in hittomat 
+
+orig number of lines in HITRAN file =    35052 
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, NO NEED TO change iusgq and ilsgq into old formats for CO2!!! <<<< 
+ >> number of lines =  31686 
+ >> min/max wavennumber of lines = 655.007834 729.990945 
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, NO NEED TO change iusgq and ilsgq into old formats for CO2!!! <<<< 
+ >> number of lines =  35052 
+ >> min/max wavennumber of lines = 605.003393 679.997560 
+   ** you have 5 columns in your mass.dat file ==> H2K or H04 or H08
+   ** data was used to save the nuclear degeneracy factor(unused even
+   ** by QTIPS?) and QTIPS partition fcns at 296K
+need new version of qtips ...
+
+ read in hittomat 
+
+orig number of lines in HITRAN file =    36581 
+for CO2, need to translate H04,H08,H12 char(ilsgq,iusgq) to integer
+    >>> in translate2oldHITparams, NO NEED TO change iusgq and ilsgq into old formats for CO2!!! <<<< 
+ >> number of lines =  36581 
+ >> min/max wavennumber of lines = 630.001405 704.994298 
+max gas amount is in layer   1 
+max gas amount is in layer   1 
+max gas amount is in layer   1 
+max gas amount is in layer   1 
+
+
+
+
+line = 
+line = 
+line = 
+line = 
+
+
+      igas: 2
+      igas: 2
+       iso: [1x35052 double]
+       iso: [1x28241 double]
+      wnum: [1x35052 double]
+      wnum: [1x28241 double]
+     stren: [1x35052 double]
+     stren: [1x28241 double]
+     tprob: [1x35052 double]
+     tprob: [1x28241 double]
+    abroad: [1x35052 double]
+    abroad: [1x28241 double]
+    sbroad: [1x35052 double]
+    sbroad: [1x28241 double]
+       els: [1x35052 double]
+       els: [1x28241 double]
+    abcoef: [1x35052 double]
+    abcoef: [1x28241 double]
+       tsp: [1x35052 double]
+       tsp: [1x28241 double]
+        ai: [35052x6 char]
+        ai: [28241x6 char]
+       ref: [35052x12 char]
+       ref: [28241x12 char]
+     linct: 35052
+     linct: 28241
+     gasid: [1x35052 double]
+     gasid: [1x28241 double]
+      uslq: [35052x9 char]
+      uslq: [28241x9 char]
+      bslq: [35052x9 char]
+      bslq: [28241x9 char]
+     iusgq: [1x35052 double]
+     iusgq: [1x28241 double]
+     ilsgq: [1x35052 double]
+     ilsgq: [1x28241 double]
+
+
+
+
+ans =
+ans =
+
+
+           1       35052       35052
+           1       28241       28241
+
+
+found    35052 lines in the HITRAN file ... proceeding
+found    28241 lines in the HITRAN file ... proceeding
+gasid   2 mesh   1 start stop freq = 630.00000 631.00000 num of lines VeryNear/MediumNear/FarWing =  1272   814 19354 gasid   2 mesh   1 start stop freq = 605.00000 606.00000 num of lines VeryNear/MediumNear/FarWing =   923   640 14263 
+
+      igas: 2
+      igas: 2
+       iso: [1x31686 double]
+       iso: [1x36581 double]
+      wnum: [1x31686 double]
+      wnum: [1x36581 double]
+     stren: [1x31686 double]
+     stren: [1x36581 double]
+     tprob: [1x31686 double]
+     tprob: [1x36581 double]
+    abroad: [1x31686 double]
+    abroad: [1x36581 double]
+    sbroad: [1x31686 double]
+    sbroad: [1x36581 double]
+       els: [1x31686 double]
+       els: [1x36581 double]
+    abcoef: [1x31686 double]
+    abcoef: [1x36581 double]
+       tsp: [1x31686 double]
+       tsp: [1x36581 double]
+        ai: [31686x6 char]
+        ai: [36581x6 char]
+       ref: [31686x12 char]
+       ref: [36581x12 char]
+     linct: 31686
+     linct: 36581
+     gasid: [1x31686 double]
+     gasid: [1x36581 double]
+      uslq: [31686x9 char]
+      uslq: [36581x9 char]
+      bslq: [31686x9 char]
+      bslq: [36581x9 char]
+     iusgq: [1x31686 double]
+     iusgq: [1x36581 double]
+     ilsgq: [1x31686 double]
+     ilsgq: [1x36581 double]
+
+
+
+
+ans =
+ans =
+
+
+           1       31686       31686
+           1       36581       36581
+
+
+found    31686 lines in the HITRAN file ... proceeding
+found    36581 lines in the HITRAN file ... proceeding
+gasid   2 mesh   1 start stop freq = 680.00000 681.00000 num of lines VeryNear/MediumNear/FarWing =  1460   888 21731 gasid   2 mesh   1 start stop freq = 655.00000 656.00000 num of lines VeryNear/MediumNear/FarWing =  1741  1173 24559 ............................
+gasid   2 mesh   2 start stop freq = 606.00000 607.00000 num of lines VeryNear/MediumNear/FarWing =   968   593 14360 ..........
+gasid   2 mesh   2 start stop freq = 631.00000 632.00000 num of lines VeryNear/MediumNear/FarWing =  1307   831 19555 ......
+gasid   2 mesh   2 start stop freq = 681.00000 682.00000 num of lines VeryNear/MediumNear/FarWing =  1289   986 21587 .......
+gasid   2 mesh   2 start stop freq = 656.00000 657.00000 num of lines VeryNear/MediumNear/FarWing =  1707  1121 24732 .......
+gasid   2 mesh   3 start stop freq = 607.00000 608.00000 num of lines VeryNear/MediumNear/FarWing =   944   609 14539 .....................
+gasid   2 mesh   3 start stop freq = 632.00000 633.00000 num of lines VeryNear/MediumNear/FarWing =  1290   776 19854 ...........
+gasid   2 mesh   4 start stop freq = 608.00000 609.00000 num of lines VeryNear/MediumNear/FarWing =   931   594 14625 ..
+gasid   2 mesh   3 start stop freq = 682.00000 683.00000 num of lines VeryNear/MediumNear/FarWing =  1322   826 21523 ................
+gasid   2 mesh   3 start stop freq = 657.00000 658.00000 num of lines VeryNear/MediumNear/FarWing =  1656  1178 24663 ...........
+gasid   2 mesh   4 start stop freq = 633.00000 634.00000 num of lines VeryNear/MediumNear/FarWing =  1222   856 20050 .........
+gasid   2 mesh   5 start stop freq = 609.00000 610.00000 num of lines VeryNear/MediumNear/FarWing =   873   619 14791 .
+gasid   2 mesh   4 start stop freq = 683.00000 684.00000 num of lines VeryNear/MediumNear/FarWing =  1220   883 21357 ...............
+gasid   2 mesh   4 start stop freq = 658.00000 659.00000 num of lines VeryNear/MediumNear/FarWing =  1660  1040 24788 ......................
+gasid   2 mesh   6 start stop freq = 610.00000 611.00000 num of lines VeryNear/MediumNear/FarWing =   854   586 15032 .
+gasid   2 mesh   5 start stop freq = 634.00000 635.00000 num of lines VeryNear/MediumNear/FarWing =  1191   844 20374 .....
+gasid   2 mesh   5 start stop freq = 684.00000 685.00000 num of lines VeryNear/MediumNear/FarWing =  1235   749 21269 ........
+gasid   2 mesh   5 start stop freq = 659.00000 660.00000 num of lines VeryNear/MediumNear/FarWing =  1598   977 24915 ........................
+gasid   2 mesh   6 start stop freq = 660.00000 661.00000 num of lines VeryNear/MediumNear/FarWing =  1488  1117 24905 .........
+gasid   2 mesh   7 start stop freq = 611.00000 612.00000 num of lines VeryNear/MediumNear/FarWing =   855   575 15120 .
+gasid   2 mesh   6 start stop freq = 685.00000 686.00000 num of lines VeryNear/MediumNear/FarWing =  1169   837 20983 .
+gasid   2 mesh   6 start stop freq = 635.00000 636.00000 num of lines VeryNear/MediumNear/FarWing =  1169   917 20501 ............................
+gasid   2 mesh   7 start stop freq = 661.00000 662.00000 num of lines VeryNear/MediumNear/FarWing =  1478  1333 24655 ........
+gasid   2 mesh   7 start stop freq = 636.00000 637.00000 num of lines VeryNear/MediumNear/FarWing =  1327   781 20635 ......
+gasid   2 mesh   8 start stop freq = 612.00000 613.00000 num of lines VeryNear/MediumNear/FarWing =   849   570 15298 ....
+gasid   2 mesh   7 start stop freq = 686.00000 687.00000 num of lines VeryNear/MediumNear/FarWing =  1147   756 20951 ...................
+gasid   2 mesh   8 start stop freq = 662.00000 663.00000 num of lines VeryNear/MediumNear/FarWing =  1767  1170 24531 ...........
+gasid   2 mesh   8 start stop freq = 637.00000 638.00000 num of lines VeryNear/MediumNear/FarWing =  1320   865 20848 .......
+gasid   2 mesh   9 start stop freq = 613.00000 614.00000 num of lines VeryNear/MediumNear/FarWing =   858   595 15378 ....
+gasid   2 mesh   8 start stop freq = 687.00000 688.00000 num of lines VeryNear/MediumNear/FarWing =  1122   750 20873 ................
+gasid   2 mesh   9 start stop freq = 663.00000 664.00000 num of lines VeryNear/MediumNear/FarWing =  2022  1270 24013 ...............
+gasid   2 mesh   9 start stop freq = 638.00000 639.00000 num of lines VeryNear/MediumNear/FarWing =  1372   866 21261 ...
+gasid   2 mesh  10 start stop freq = 614.00000 615.00000 num of lines VeryNear/MediumNear/FarWing =   886   617 15471 ..
+gasid   2 mesh   9 start stop freq = 688.00000 689.00000 num of lines VeryNear/MediumNear/FarWing =  1108   811 20662 ........................
+gasid   2 mesh  10 start stop freq = 664.00000 665.00000 num of lines VeryNear/MediumNear/FarWing =  2285  1298 23671 ...........
+gasid   2 mesh  10 start stop freq = 639.00000 640.00000 num of lines VeryNear/MediumNear/FarWing =  1343   931 21642 ....
+gasid   2 mesh  10 start stop freq = 689.00000 690.00000 num of lines VeryNear/MediumNear/FarWing =  1148   761 20194 ..
+gasid   2 mesh  11 start stop freq = 615.00000 616.00000 num of lines VeryNear/MediumNear/FarWing =   927   621 15624 ....................
+gasid   2 mesh  11 start stop freq = 665.00000 666.00000 num of lines VeryNear/MediumNear/FarWing =  2260  1429 23555 ............
+gasid   2 mesh  11 start stop freq = 690.00000 691.00000 num of lines VeryNear/MediumNear/FarWing =  1175   743 19785 ....
+gasid   2 mesh  11 start stop freq = 640.00000 641.00000 num of lines VeryNear/MediumNear/FarWing =  1335   931 22194 ......
+gasid   2 mesh  12 start stop freq = 616.00000 617.00000 num of lines VeryNear/MediumNear/FarWing =   984   571 15774 .......................
+gasid   2 mesh  12 start stop freq = 666.00000 667.00000 num of lines VeryNear/MediumNear/FarWing =  2230  1366 23541 ....
+gasid   2 mesh  12 start stop freq = 691.00000 692.00000 num of lines VeryNear/MediumNear/FarWing =  1193   788 19159 ......
+gasid   2 mesh  12 start stop freq = 641.00000 642.00000 num of lines VeryNear/MediumNear/FarWing =  1408   933 22532 ..........
+gasid   2 mesh  13 start stop freq = 617.00000 618.00000 num of lines VeryNear/MediumNear/FarWing =   951   625 16003 ....................
+gasid   2 mesh  13 start stop freq = 642.00000 643.00000 num of lines VeryNear/MediumNear/FarWing =  1423  1116 22680 .....
+gasid   2 mesh  13 start stop freq = 692.00000 693.00000 num of lines VeryNear/MediumNear/FarWing =  1184   798 18720 
+gasid   2 mesh  13 start stop freq = 667.00000 668.00000 num of lines VeryNear/MediumNear/FarWing =  2071  1533 23508 .............
+gasid   2 mesh  14 start stop freq = 618.00000 619.00000 num of lines VeryNear/MediumNear/FarWing =   931   641 16268 ...................
+gasid   2 mesh  14 start stop freq = 643.00000 644.00000 num of lines VeryNear/MediumNear/FarWing =  1637   994 22916 ...........
+gasid   2 mesh  14 start stop freq = 693.00000 694.00000 num of lines VeryNear/MediumNear/FarWing =  1181   736 18484 ..
+gasid   2 mesh  14 start stop freq = 668.00000 669.00000 num of lines VeryNear/MediumNear/FarWing =  2043  1311 23666 ...........
+gasid   2 mesh  15 start stop freq = 619.00000 620.00000 num of lines VeryNear/MediumNear/FarWing =   910   645 16651 .............
+gasid   2 mesh  15 start stop freq = 644.00000 645.00000 num of lines VeryNear/MediumNear/FarWing =  1708  1073 23184 ............
+gasid   2 mesh  15 start stop freq = 694.00000 695.00000 num of lines VeryNear/MediumNear/FarWing =  1147   796 18048 ..
+gasid   2 mesh  15 start stop freq = 669.00000 670.00000 num of lines VeryNear/MediumNear/FarWing =  1950  1209 23736 ...........
+gasid   2 mesh  16 start stop freq = 620.00000 621.00000 num of lines VeryNear/MediumNear/FarWing =   927   610 16951 ...................
+gasid   2 mesh  16 start stop freq = 645.00000 646.00000 num of lines VeryNear/MediumNear/FarWing =  1775  1033 23430 
+gasid   2 mesh  16 start stop freq = 695.00000 696.00000 num of lines VeryNear/MediumNear/FarWing =  1137   758 17651 .................
+gasid   2 mesh  16 start stop freq = 670.00000 671.00000 num of lines VeryNear/MediumNear/FarWing =  1823  1153 23646 .....
+gasid   2 mesh  17 start stop freq = 621.00000 622.00000 num of lines VeryNear/MediumNear/FarWing =   945   649 17152 ................
+gasid   2 mesh  17 start stop freq = 646.00000 647.00000 num of lines VeryNear/MediumNear/FarWing =  1677  1172 23611 ....
+gasid   2 mesh  17 start stop freq = 696.00000 697.00000 num of lines VeryNear/MediumNear/FarWing =  1106   707 17445 ..............
+gasid   2 mesh  17 start stop freq = 671.00000 672.00000 num of lines VeryNear/MediumNear/FarWing =  1602  1163 23684 ...........
+gasid   2 mesh  18 start stop freq = 622.00000 623.00000 num of lines VeryNear/MediumNear/FarWing =   973   676 17255 ..........
+gasid   2 mesh  18 start stop freq = 647.00000 648.00000 num of lines VeryNear/MediumNear/FarWing =  1641  1167 23832 ......
+gasid   2 mesh  18 start stop freq = 697.00000 698.00000 num of lines VeryNear/MediumNear/FarWing =  1080   703 17216 ...........
+gasid   2 mesh  18 start stop freq = 672.00000 673.00000 num of lines VeryNear/MediumNear/FarWing =  1482   997 23747 ................
+gasid   2 mesh  19 start stop freq = 648.00000 649.00000 num of lines VeryNear/MediumNear/FarWing =  1664  1321 23790 ..
+gasid   2 mesh  19 start stop freq = 623.00000 624.00000 num of lines VeryNear/MediumNear/FarWing =  1025   660 17373 ............
+gasid   2 mesh  19 start stop freq = 698.00000 699.00000 num of lines VeryNear/MediumNear/FarWing =  1021   787 17042 .........
+gasid   2 mesh  19 start stop freq = 673.00000 674.00000 num of lines VeryNear/MediumNear/FarWing =  1363   987 23675 .................
+gasid   2 mesh  20 start stop freq = 649.00000 650.00000 num of lines VeryNear/MediumNear/FarWing =  1885  1198 23767 ..
+gasid   2 mesh  20 start stop freq = 624.00000 625.00000 num of lines VeryNear/MediumNear/FarWing =  1058   645 17596 .......
+gasid   2 mesh  20 start stop freq = 699.00000 700.00000 num of lines VeryNear/MediumNear/FarWing =  1060   709 17047 ........
+gasid   2 mesh  20 start stop freq = 674.00000 675.00000 num of lines VeryNear/MediumNear/FarWing =  1324   911 23594 .......................
+gasid   2 mesh  21 start stop freq = 625.00000 626.00000 num of lines VeryNear/MediumNear/FarWing =  1036   692 18037 ....
+gasid   2 mesh  21 start stop freq = 700.00000 701.00000 num of lines VeryNear/MediumNear/FarWing =  1093   677 16895 .........
+gasid   2 mesh  21 start stop freq = 675.00000 676.00000 num of lines VeryNear/MediumNear/FarWing =  1293   888 23441 ........
+gasid   2 mesh  21 start stop freq = 650.00000 651.00000 num of lines VeryNear/MediumNear/FarWing =  2009  1152 23778 .....................
+gasid   2 mesh  22 start stop freq = 701.00000 702.00000 num of lines VeryNear/MediumNear/FarWing =  1093   684 16720 ....
+gasid   2 mesh  22 start stop freq = 626.00000 627.00000 num of lines VeryNear/MediumNear/FarWing =  1024   709 18408 ......
+gasid   2 mesh  22 start stop freq = 676.00000 677.00000 num of lines VeryNear/MediumNear/FarWing =  1304   948 22981 .......
+gasid   2 mesh  22 start stop freq = 651.00000 652.00000 num of lines VeryNear/MediumNear/FarWing =  2030  1230 23750 ..........................
+gasid   2 mesh  23 start stop freq = 627.00000 628.00000 num of lines VeryNear/MediumNear/FarWing =  1021   782 18680 ...
+gasid   2 mesh  23 start stop freq = 702.00000 703.00000 num of lines VeryNear/MediumNear/FarWing =  1049   695 16622 .
+gasid   2 mesh  23 start stop freq = 652.00000 653.00000 num of lines VeryNear/MediumNear/FarWing =  1916  1321 23881 .
+gasid   2 mesh  23 start stop freq = 677.00000 678.00000 num of lines VeryNear/MediumNear/FarWing =  1384   979 22550 ..................................
+gasid   2 mesh  24 start stop freq = 628.00000 629.00000 num of lines VeryNear/MediumNear/FarWing =  1125   744 18994 ...
+gasid   2 mesh  24 start stop freq = 653.00000 654.00000 num of lines VeryNear/MediumNear/FarWing =  1818  1270 24211 
+gasid   2 mesh  24 start stop freq = 678.00000 679.00000 num of lines VeryNear/MediumNear/FarWing =  1491   846 22304 .......
+gasid   2 mesh  24 start stop freq = 703.00000 704.00000 num of lines VeryNear/MediumNear/FarWing =   996   698 16535 ..........................
+gasid   2 mesh  25 start stop freq = 679.00000 680.00000 num of lines VeryNear/MediumNear/FarWing =  1480   939 21894 ..
+gasid   2 mesh  25 start stop freq = 654.00000 655.00000 num of lines VeryNear/MediumNear/FarWing =  1812  1180 24488 ................
+gasid   2 mesh  25 start stop freq = 629.00000 630.00000 num of lines VeryNear/MediumNear/FarWing =  1199   770 19167 ....
+gasid   2 mesh  25 start stop freq = 704.00000 705.00000 num of lines VeryNear/MediumNear/FarWing =   984   733 16284 ...............
+
+cpptotal =
+
+   1.4890e+04
+
+...
+
+cpptotal =
+
+   1.4948e+04
+
+......
+
+cpptotal =
+
+   1.5055e+04
+
+..
+
+cpptotal =
+
+   1.5198e+04
+

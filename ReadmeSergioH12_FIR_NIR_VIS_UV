@@ -1,0 +1,117 @@
+Warning : MAKEFIR7, MAKEFIR6, MAKEFIR5 : the WORST gas is 12, as it has tons 
+of tons of lines!!!!!!! and slows everything down!
+
+Make the dir you want eg /home/sergio/HITRAN2UMBCLBL/MAKEFIR/H2012/MAKEFIR3
+
+then 
+ cp  /home/sergio/HITRAN2UMBCLBL/MAKEFIR/H2012/MAKEFIR2/* .
+
+then
+  a) edit freq_boundaries.m and copy in relevant info from the same file in 
+     eg if re-doing FIR2 look at 
+        /home/sergio/HITRAN2UMBCLBL/MAKEFIR/H2008/MAKEFIR2/
+     namely the following MUST be correct
+
+       dirout = ...
+   ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR300_510/g' num2str(gid) '.dat/'];
+       topts = runXtopts_params_smart(400); 
+       dv = topts.ffin*nbox*pointsPerChunk;
+
+       wn1 = 300;
+       wn2 = 520-10;
+
+     Also make sure the individual directories do exist!! this is done in 
+     (b) below
+
+  b) make the filelist text files by running
+      filelist_g1.m
+      loop_filelist_gN.m
+      loop_filelist_xsecN.m
+
+      NOTE : some of the FIR databases have eg 0.5 chunk sizes, parser(s) that take
+      GID CHUNK TOFF = XX ABCDE TT handles this for these bands 
+        MAKEFIR4, MAKEFIR5, MAKEFIR6, MAKEFIR7
+      Especially for these FIR chunks, need to make sure we use lines with 25 
+      cm-1 away, not within dv away
+      as dv << 25 cm-1 and so may not be including "all lines that could effect"
+
+  c) now run off the database
+       clustcmd -q short -n 64 clust_runXtopts_savexsecN_file.m gN_xseclist.txt    ### very very fast
+
+       ## clust_runXtopts_savegasN_file.sc
+       clustcmd -q medium       -n 64 clust_runXtopts_savegasN_file.m gN_list.txt
+       clustcmd -q long_contrib -n 64 clust_runXtopts_savegasN_file.m gN_list.txt
+
+       ## clust_runXtopts_savegas1_file.sc
+       clustcmd -q medium       -n 64 clust_runXtopts_savegas1_file.m g1_list.txt
+       clustcmd -q long_contrib -n 64 clust_runXtopts_savegas1_file.m g1_list.txt
+
+      ************ 
+      NOTE : After you figure out which gas(es) are the ottleneck in a particular band
+      you can run "randomize_filelist.m" to generate a random filelist WITHOUT these gases,
+      so you can separatey run off a fresh copy of eg
+        clustcmd -q long_contrib -n 64 clust_runXtopts_savegasN_file.m gN_list_permute.txt
+
+      and also see this code, which does INDIVIDUAL layers of g12 in MAKEFIR7
+-rw-r--r-- 1 sergio pi_strow 2909 Feb 14 16:19 clust_runXtopts_savegas12_file.m
+-rw-r--r-- 1 sergio pi_strow 2981 Feb 14 16:01 filelist_g12.m
+
+      ************ 
+
+  d) check the progress by running
+       gas_done_already_g1(1)
+       loop_gas_done_already
+       loop_xsec_done_already
+
+     can blow away files of zero size using 
+       loop_rmerX
+       loop_rmerx_g1
+     or dangerously blow away ALL (empty/full files) using
+       all_gases_REMOVE_dangerous.m
+
+  e) when done, pull together the Toffsets into one file in 
+              abs.dat (make this dir!!!!) 
+           or g1.out/abs.dat (make this dir!!!!)
+
+       mkdir /asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR300_510/abs.dat
+       mkdir /asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR300_510/g1.dat/abs.dat
+
+       [for gas1, at Matlab prompt] runXtopts_mkg1vfiles
+       clustcmd -q short -n 32 clust_runXtopts_mkg1vfiles.m    wn1:dv:wn2  (eg 300:10:510)
+
+       clustcmd -q short -n 32 clust_runXtopts_mkgNvfiles.m    2:42
+       clustcmd -q short -n 32 clust_runXtopts_mkxsecNvfiles.m 51:81
+
+  f) then go to CMPRUN and make the compressions eg EDIT cmprunFIR2.m so can 
+     account for 
+       mkdir /asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR300_510/g1.dat/kcomp
+       mkdir /asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR300_510/kcomp
+
+  g) then go to fortran/mat2for and make the final files eg EDIT 
+     loop_mat2forFIR2.m so can account for
+       mkdir -p /asl/data/kcarta/H2012.ieee-le/FIR300/h2o.ieee-le/
+       mkdir -p /asl/data/kcarta/H2012.ieee-le/FIR300/etc.ieee-le/
+
+Finally go to KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC, and then run all of 
+comp_*database.sc  so you can tabulate the compressed files! so you can 
+finally have
+      The files go into PARAM_TEMP (you can eventually rename this eg 
+PARAM_HT2012), after which you run "catter" and cut and paste eg testH2012 into eg
+         PARAMETER (kCompParamFile = '#/KCARTADATA/General/compHT2012.param')
+can diff this versus previous one using eg
+      KCARTA/SCRIPTS/diff_compHT1_compHT2.m
+
+
+CKD
+---
+
+Use "copy_ckd.sc" to copy files in eg 
+  #/H2008_otherbands.ieee-le/FIR15_30/etc.ieee-le/
+  #/H2004_otherbands.ieee-le/FIR300_510/etc.ieee-le/
+to 
+  #/H2012.ieee-le/FIR15_30/etc.ieee-le/
+
+Testing
+-------
+
+Go to KCARTA/TEST/TEST_EXTENDED_DATABASE/CLUSTCMD

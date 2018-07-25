@@ -1,0 +1,19 @@
+addpath /home//sergio/HITRAN2UMBCLBL/READ_XSEC
+
+%ix = 0;
+for gid = 61 : 81
+  ix = ix + 1;
+  fname = gid2mol(gid);
+  fall = ['/asl/data/hitran/HITRAN08_SERGIO/Xsec/' fname '.xsc'];
+  [dd,ii] = info_read_xsec(fall);
+  i1 = unique(ii.fmin);
+  i2 = unique(ii.fmax);
+
+  n = min(length(i1),length(i2));
+  f1 = zeros(1,20); f1(1:n) = i1(1:n);
+  f2 = zeros(1,20); f2(1:n) = i2(1:n);
+  save_xsecdata.gid(ix) = gid;
+  save_xsecdata.nchunk(ix) = n;
+  save_xsecdata.f1(ix,:) = f1;  
+  save_xsecdata.f2(ix,:) = f2;  
+  end

@@ -1,0 +1,92 @@
+
+Have noticed when I use CAAMIX = 1.01 for co2 that
+a) US ods get multiplied by 1.01 x 1.01 ie have it there twice
+b) the Planck modifiers stay the same so that's good!!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[dua,w] = readkcUA('std2205_2_1.dat_UA'); whos
+[dPlanck,w] = readkcPlanck('std2205_2_1.dat_PLANCK');  %% lower atm/UA planck modifiers
+[d,w] = readkcstd('std2205_2_1.dat'); whos
+
+  Name             Size                  Bytes  Class     Attributes
+
+  d            80000x101              64640000  double              
+  dPlanck      80000x132              84480000  double              
+  dua          80000x37               23680000  double              
+  w                1x80000              640000  double              
+
+dOD = [d(:,1:100) dua(:,1:35)];
+xdOD = [d(:,1:100) dua(:,[2 2:35])];
+semilogx(dPlanck(70001,1:132),1:132,'o-')
+semilogx(dOD(70001,1:135),1:135,'o-',xdOD(70001,1:135),1:135,'ro-')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+cd NLTEProfs
+make_regr49.m  : this takes 
+  /strowdata1/s1/sergio/pin_feb2002_sea_airsnadir_g80_ip.so2.rtp
+  and outputs 11 copies of profile 49 (US Std), ensuring CO2ppm in LA
+  (lower atm) is 385 ppmv
+
+make_toffsets_USSTD.m : this is smarter version of above in that
+  it takes same input ip file, and outputs  
+    IPFILES/toffset_XY_USSTD.op.rtp   where XY = 0,40,60,80,85,90
+  which are the US Std Profs upto 0.005 mb (80 km); each file
+  will have 11 profiles, which are basically US Std, with
+    Toffset = -50 -40 .. +40 +50
+    solzen  = XY
+
+makeVT_numprofs.m :  the whole shebang
+  Can take either IPFILES/toffset_USSTD.op.rtp or IPFILES/toffset_XY_USSTD.op.rtp
+  and for each of the profiles in there, produce
+    nlte_1_1_1_TT_sol_Z.input
+    nlte_1_1_1_TT_sol_Z.output
+    nlte_1_1_1_TT_sol_Z.prof
+    nlte_1_1_1_TT_sol_Z.genln2
+  where nlte_1_1_1_TT_sol_Z.genln2 is what is read in by kCARTA SLOW NLTE LBL
+    1_1_1_ is just dummy MM DD GG
+ and the big engine is really M. Lopes-Puertas "tpara_test.exe" code
+
+  The BIG problem is that even though we input Tkinetics that are offset by
+  -50 -40 .. +40 +50 K, then Tnle that are produced all asymptote to the
+  same temperatures in the upper atm; so can't really use this for kCompressed
+  Database
+
+xmakeVT_numprofs.m :  the whole shebang as above, but modified to read in
+    nlte_1_1_1_6_sol_Z.genln2
+ and the rest of the TNLTEs are done by literally offsetting the temps
+ saved in this file (we keep the TK since it drives the QT vib functions)
+ Results saved into xnlte_1_1_1_XY_sol_Z.genln2
+
+ymakeVT_numprofs.m :  the whole shebang as above, but modified to read in
+    nlte_1_1_1_6_sol_Z.genln2
+ and the rest of the TNLTEs are done by literally offsetting the temps
+   and then FUNNELLING them down according to the prescription in
+   /home/sergio/KCARTA/MATLAB/compare_vt01_48_profiles_usstd.m
+ saved in this file (we keep the TK since it drives the QT vib functions)
+ Results saved into ynlte_1_1_1_XY_sol_Z.genln2
+
+zmakeVT_numprofs.m :  the whole shebang as above, but modified to read in
+    nlte_1_1_1_6_sol_Z.genln2
+ and the rest of the TNLTEs are done by literally offsetting the temps
+   and then FUNNELLING them down according to the prescription in
+   /home/sergio/KCARTA/MATLAB/compare_vt01_48_profiles_usstd.m
+ saved in this file (we keep the TK since it drives the QT vib functions)
+
+ However instead of making the NLTE temps the same profile TNLTE_vib(z), we 
+ make them as TNLTE_vib(z) + offset, where offset = -10,-5,0,5,10 K
+ Results saved into znlte_1_1_1_XY_sol_Z.genln2
+
+amakeVT_numprofs.m :  same as makeVT_numprofs.m
+    nlte_1_1_1_6_sol_Z.genln2
+ but it ADJUSTS the NLTE profs according to "adjust_vt_profiles" as used in
+ /home/sergio/KCARTA/MATLAB/compare_vt01_48_profiles_sergioVSmanuel.m
+ Results saved into anlte_1_1_1_XY_sol_Z.genln2
+
+>>>>>>>
+
+Then either run
+  g2_forwards_runXtopts_savegasXversB.m
+or
+  g2_forwards_runXtopts_savegasX.m

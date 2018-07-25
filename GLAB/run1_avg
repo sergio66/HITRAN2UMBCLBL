@@ -1,0 +1,12 @@
+for i in $1
+do
+   echo '***** starting run '$i
+#  now run genln2
+   rm fort.4 fort.30 $i'.txt' $i'.dat'
+   ln $i'.ip' fort.4
+   /asl/packages/Genln2/Bin/genln2_glab_avg
+   ln fort.30 $i'.txt'
+   mv xg_tau.txt $i'.tau'
+   mv xg_rad.txt $i'.rad'
+done
+echo 'all done'

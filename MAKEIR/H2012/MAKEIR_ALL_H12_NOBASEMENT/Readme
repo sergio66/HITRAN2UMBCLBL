@@ -1,0 +1,43 @@
+NEEDED
+-rw-r--r-- 1 sergio pi_strow 2720 Oct  6 04:37 clust_runXtopts_savegasN_file.m
+-rw-r--r-- 1 sergio pi_strow 9920 Oct  6 18:27 gas_done_already.m
+-rw-r--r-- 1 sergio pi_strow  469 Oct  6 04:36 freq_boundaries.m
+-rw-r--r-- 1 sergio pi_strow 1612 Oct  6 04:27 filelist_gN.m
+-rw-r--r-- 1 sergio pi_strow 1144 Oct  5 19:11 loop_rmerxN.m
+-rw-r--r-- 1 sergio pi_strow 3358 Oct  5 19:11 clust_runXtopts_mkgNvfiles.m
+
+a) first set the dirs you need, in freq_boundaries.m
+   dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/WOBASEMENT/'];
+
+b) generate filelist name using filelist_gN(3)
+
+c) put above info  on parallel processor
+   clustcmd -q long_contrib -n 64 clust_runXtopts_savegasN_file.m gN_testozone_list.txt
+
+e) can check progress with gas_done_already(3)
+
+f) can blow away empty files with loop_rmerxN.m
+
+g) put things together
+   JOB=3; clust_runXtopts_mkgNvfiles
+
+h) once done, go to /home/sergio/HITRAN2UMBCLBL/CMPRUN
+   cmprunIR_LBLRTM(3);
+
+i) then go to /home/sergio/HITRAN2UMBCLBL/fortran/mat2for
+   loop_mat2forIR_LBLRTM.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+
+NOT REALLY NEEDED
+-rw-r--r-- 1 sergio pi_strow  898 Oct  5 19:11 randomize_filelist.m
+-rw-r--r-- 1 sergio pi_strow 3537 Oct  5 19:11 loop_gas_done_already.m
+-rw-r--r-- 1 sergio pi_strow 1906 Oct  5 19:11 loop_filelist_gN.m
+-rw-r--r-- 1 sergio pi_strow  450 Oct  5 19:11 individual_clust_runXtopts_savegasN_file.m
+-rw-r--r-- 1 sergio pi_strow 9815 Oct  5 19:11 gas_done_already_g1.m
+
+NOT NEEDED
+-rw-r--r-- 1 sergio pi_strow 1914 Oct  6 19:23 loop_filelist_gN.m
+-rw-r--r-- 1 sergio pi_strow  898 Oct  5 19:11 randomize_filelist.m
+-rw-r--r-- 1 sergio pi_strow 3537 Oct  5 19:11 loop_gas_done_already.m
+

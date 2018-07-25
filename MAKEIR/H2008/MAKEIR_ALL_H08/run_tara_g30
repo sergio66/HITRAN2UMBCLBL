@@ -1,0 +1,16 @@
+# kill error and output files from cluster job
+#erou
+
+echo "                "
+echo "qnodes BEFORE submission"
+nodes
+echo "                "
+
+echo "dumping jobs onto 20 nodes"
+/bin/rm JUNK/*
+clustcmd -n 20 -w 20-00:00:00 loop_driver_run8.sh filelist_hpc_g30
+
+echo "          "
+echo "qnodes after submitting jobs"
+nodes
+echo "                "

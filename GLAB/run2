@@ -1,0 +1,17 @@
+for i in $1
+do
+   echo '***** starting run '$i
+#  do layers
+#   rm fort.4 fort.30
+#   ln l$i.ip fort.4
+#   ../Layers/layers
+#   ln fort.30 l$i.op
+#
+#  now run genln2
+   rm fort.4 fort.30 'g'$i'.txt' $i'.txt' $i'.dat'
+   ln $i'.ip' fort.4
+   ../Bin/genln2_glab
+   ln fort.30 'g'$i'.txt'
+   mv xgenln2.txt $i'.txt'
+done
+echo 'all done'

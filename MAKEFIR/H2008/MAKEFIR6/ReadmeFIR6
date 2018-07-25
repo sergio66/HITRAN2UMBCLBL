@@ -1,0 +1,106 @@
+In the MAKEFIR6 dir
+
+First when you know which dir you are going to be saving the mat files to, 
+then run 
+   mv_files_ind_gas_dirs.m
+so that you create the subdirs for the individual gases g1,g2,g3 ...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+A) Make the database with 11 toffsets. Each offsetT is stored in a
+   separate file
+
+runXtopts_savegases.sc
+  calls runXtopts_savegasesX.m  which loops over gases = [2:32] 
+                                      for chunk 2830:3330
+                                      It makes one file/gas/toffset
+                                      eg std4250_4_pp.mat  pp = 1 : 11
+                                      in dir ~/abscmp/absdat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+B) Put together all 11 Toffset files
+runXtopts_mkgXvfiles.m
+  takes the 11 files per gas (for each chunk) and concats them into one file
+  eg ~/abscmp/absdat/abs.dat has files g4v4250.mat,g5v4250.mat,g6v4250.mat
+
+runXtopts_savegas1 does the same for water (partial pressures)
+  
+runXtopts_mkg1vfiles.m
+  takes the 11 files for water (for each chunk) and concats them into one file
+  eg ~/abscmp/absdat/abs.dat has files g4v4250.mat,g5v4250.mat,g6v4250.mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+C) Compress them
+cmprunFIR6.m 
+  makes the compressed data files 
+  eg ~/abscmp/absdat/kcomp has files cg4v4250.mat,cg5v4250.mat,cg6v4250.mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+C) Turn the compressed mat files into f77 bin files 
+fortran/mat2for/loop_mat2forFIR6.m 
+  make sure you edit fstep, and prefix for file in fname (r,v,w whatever)
+  converts these .mat files into .f77 files for kcarta
+
+which together do the below for you automatically
+  cd /home/sergio/abscmp/fortran/mat2for/
+  gid = 4;
+  vchunk = 4250;
+  cdir = '/home/sergio/abscmp/absdat/kcomp/';
+  fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+  dtype = 'ieee-le';
+
+or 
+
+  gid = 1;
+  vchunk = 4250;
+  cdir = '/home/sergio/abscmp/absdat/kcomp.h2o/';
+  fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+  dtype = 'ieee-le';
+
+   mat2forFIR2(gid, vchunk, cdir, fdir, dtype)
+  will make /home/sergio/abscmp/absdat/fbin/etc.ieee-le/m4250_g4.dat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+now also need to make CKD files
+cd /home/sergio/SPECTRA
+ckd_lookupBIN_FIR6.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clean up
+on /home/sergio/HITRAN2UMBCLBL
+  run check_du
+  and see which dirs you can blow away stuff from (after all, these are
+  dirs that contains data from the 11 toffsets put into one big
+       10000 x 100 x 11
+  matrix!!! and can easily be regenerated
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+           GETTING READY FOR KCARTA
+
+copy all your compressed data to 
+  /asl/data/kcarta/H2008_otherbands.ieee-le/FIR30_50/etc.ieee-le
+  /asl/data/kcarta/H2008_otherbands.ieee-le/FIR30_50/h2o.ieee-le
+
+KCARTA/SCRIPTS
+  run comp_fir5database.sc  (assumes that UTILITY/compdatabase.f is upto date!)
+  then include comp_fir50_80.param into
+    kCompParamFile = '/asl/data/kcarta/KCARTADATA/General/compHT2010.param'
+
+KCARTA/INCLUDE
+  need to edit kcarta.param so that you include
+  c !!! h = 050_080 cm-1, at 0.00015 cm-1 spacing (= 1.5 cm-1 chunk span)
+      CHARACTER*80 kWaterPathg,kCompPathg,kCKDPathg
+      PARAMETER (kWaterPathg = '/asl/data/kcarta/H2008_otherbands.ieee-le/FIR30_50/h2o.ieee-le/')
+      PARAMETER (kCompPathg  = '/asl/data/kcarta/H2008_otherbands.ieee-le/FIR30_50/etc.ieee-le/')
+      PARAMETER (kCKDPathg   = '/asl/data/kcarta/H2008_otherbands.ieee-le/FIR30_50/etc.ieee-le/')
+  edit dump_kaTag_for_predefined.m so that you have the new band
+  then run it to make 
+    dump_kaTag_for_predefined.param
+  Put it into pre_defined.param
+
+KCARTA/SRCv1.16
+  need to edit s_misc.f, subroutine CompFileName
+  type     make datafix385
+  type     make

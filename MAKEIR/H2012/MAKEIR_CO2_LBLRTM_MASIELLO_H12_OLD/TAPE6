@@ -1,0 +1,195 @@
+1
+0  Set up KCARTA database                                                 LBLRTM    14/12/08  23:54:02
+0  TIME ENTERING LBLRTM           0.0000
+ HIRAC    LBLF4    CNTNM    AERSL    EMISS    SCNFN    FILTR     PLOT     TEST     IATM     IMRG     ILAS    OPDEP    XSECT
+    1        1        5        0        0        0        0        0        0        0        1        0        1        0
+0
+0                       LINE FILE INFORMATION 
+0$ f100 format                                          ^V:  2.8  NLTE          I   12/19/10  17:02:45
+0
+                       COUPLED    NLTE   NEGATIVE   RESET    SUM LBLRTM
+       MOL     LINES    LINES    LINES      EPP      EPP      STRENGTHS
+
+       H2O  =  17027        0    17027        0        0     2.8355E-20
+       CO2  = 240819   201879    93175        0        0     5.7218E-20
+        O3  = 275040        0   180255        0        0     1.6238E-20
+       N2O  =  37179        0        0        0        0     3.6643E-20
+        CO  =   1413        0     1413        0        0     4.7091E-21
+       CH4  = 168413      931        0        0        0     7.8132E-21
+        O2  =    435        0        0        0        0     6.0967E-30
+        NO  =  42935        0    13750        0        0     2.4633E-21
+       SO2  =  44972        0        0        0        0     3.2794E-20
+       NO2  =  71999        0        0        0        0     3.8055E-20
+       NH3  =  20536        0        0        0        0     2.6919E-20
+       HNO3 = 393036        0        0        0        0     1.1487E-19
+         OH =   8165        0        0        0        0     2.6232E-21
+         HF =     14        0        0        0        0     5.2310E-21
+       HCL  =    164        0        0        0        0     2.1819E-21
+       HBR  =    779        0        0        0        0     5.5844E-22
+        HI  =    410        0        0        0        0     8.4907E-24
+       CLO  =   2048        0        0        0        0     4.7073E-22
+       OCS  =  18442        0        0        0        0     6.0091E-20
+      H2CO  =  30200        0        0        0        0     1.6522E-20
+      HOCL  =   4986        0        0        0        0     6.6136E-21
+        N2  =    120        0        0        0        0     2.8641E-30
+       HCN  =   3795        0        0        0        0     1.9259E-20
+     CH3CL  = 122737        0        0        0        0     7.1971E-22
+      H2O2  =  53916        0        0        0        0     4.0361E-20
+      C2H2  =   3523        0        0        0        0     4.6667E-20
+      C2H6  =  15171        0        0        0        0     2.3471E-21
+       PH3  =  14839        0        0     3049        0     1.4900E-20
+      COF2  =  70601        0        0        0        0     8.7582E-20
+       SF6  = ******        0        0        0        0     6.2716E-20
+       H2S  =   8529        0        0        0        0     1.9505E-22
+     HCOOH  =  55001        0        0        0        0     5.4934E-20
+       HO2  =  12929        0        0        0        0     4.1003E-21
+         O  =      0        0        0        0        0     0.0000E+00
+     CLONO2 =  32199        0        0        0        0     3.7076E-21
+       NO+  =   1206        0        0        0        0     1.1145E-21
+      HOBr  =     96        0        0        0        0     4.8612E-22
+      C2H4  =  18378        0        0     1393        0     1.6267E-20
+     CH3OH  =  15234        0        0      122        0     1.7336E-20
+
+0 LOWEST LINE =    300.006       HIGHEST LINE =   3499.997      TOTAL NUMBER OF LINES = 2872735
+                                                                                                                        
+                                                                                                                        
+                  *** CONTINUA mt_ckd_2.5.2                                                                             
+                                                                                 Most recent significant change         
+                         H2O  SELF  (T)     0 - 20000 CM-1              mt_ckd_2.5 - increase 2000-3200 cm-1  (Jan 2010)
+                              AIR           0 - 20000 CM-1              mt_ckd_2.4 - modify far-ir and MW     (Nov 2008)
+                         CO2  AIR           0 - 10000 CM-1              mt_ckd_2.5 - modify 2000-3000 cm-1    (Jan 2010)
+                              AIR   (T)  2386 -  2434 CM-1              mt_ckd_2.5 - temperature dep. added   (Jan 2010)
+                         N2   SELF  (T)     0 -   350 CM-1              ckd_2.2    - Borysow Fromhold         (Feb 1996)
+                              AIR   (T)     0 -   350 CM-1              mt_ckd_2.1 - incl. O2 rel. efficiency (Sep 2004)
+                              AIR   (T)  2085 -  2670 CM-1              ckd_2.4.1  - Lafferty et al.          (Mar 1998)
+                         O2   AIR   (T)  1340 -  1850 CM-1              ckd_2.4.1  - Thibault et al.          (Mar 1998)
+                              O2/N2      7550 -  8486 CM-1              ckd_2.4.1  - Mate et al.              (Feb 2000)
+                              AIR        9100 - 11000 CM-1              ckd_2.4.1  - Mlawer et al.            (Aug 1999)
+                              O2        15000 - 29870 CM-1              ckd_2.4.2  - Greenblatt et al.        (May 2000)
+                              O2/N2     36000 -  >>>> CM-1 HERZBERG     ckd_0                                           
+                         O3   AIR   (T)  9170 - 24565 CM-1 CHAPP/WULF   ckd_2.2                               (Feb 1996)
+                                    (T) 27370 - 40800 CM-1 HARTL/HUGG   ckd_0                                           
+                                        40800 - 54000 CM-1 HARTL/HUGG   ckd_0                                           
+                                                                                                                        
+                                                                                                                        
+                                                                                                                        
+Continuum    LBL_n                      Description of Modification                                            Date     
+---------    -----                    -------------------------------                                          ----     
+                    H2O SELF HAS BEEN REDUCED IN THE 800-1200 CM-1 REGION                                  (01 SEP 1985)
+                    03       TEMPERATURE DEPENDENCE HAS BEEN CORRECTED                                     (01 MAY 1987)
+                    02       (1390-1760) HAS BEEN REDUCED (FACTOR = 0.78)                                  (07 MAR 1990)
+ ckd_1.0      2.2   H2O SELF HAS BEEN REDUCED IN THE 1100-1500 CM-1 REGION                                 (01 APR 1993)
+     "              H2O FOREIGN HAS BEEN REDUCED AT ~1300 CM-1 AND IN ALL THE WINDOW REGIONS               (01 APR 1993)
+ ckd_2.1      3.3   H2O SELF HAS BEEN MODIFIED IN THE 700-1500 CM-1 REGION                                 (01 MAY 1994)
+     "              H2O FOREIGN HAS BEEN MODIFIED IN THE ENTIRE 1200-2200 CM-1 SPECTRAL RANGE              (01 MAY 1994)
+ ckd_2.2      3.7   H2O SELF HAS BEEN INCREASED 30% IN THE MICROWAVE REGION                                (09 FEB 1996)
+     "              N2 COLLISION INDUCED PURE ROTATION BAND ADDED                                          (09 FEB 1996)
+     "              O3 CHAPPUIS CHANGED TO VALUES FROM MODTRAN3                                            (09 FEB 1996)
+ ckd_2.2.2    3.12  INTERPOLATION EFFECTS BETWEEN HARTLEY HUGGINS DATA AROUND 40800 CM-1                   (18 SEP 1996)
+ ckd_2.4.1    5.12  O2 COLLISION INDUCED FUNDAMENTAL BAND (1340-1850 CM-1) CHANGED TO THIBAULT ET AL., 1996   (MAR 1998)
+     "              N2 COLLISION INDUCED FUNDAMENTAL BAND (2085-2670 CM-1) CHANGED TO LAFFERTY ET AL., 1996   (MAR 1998)
+     "              H2O FOREIGN HAS BEEN MODIFIED IN THE 0-800 CM-1 AND 1200-2200 CM-1 RANGE BASED ON      (04 JUN 1999)
+     "                       AERI-ER FROM SHEBA, TOBIN ET AL., 1998                                                     
+     "              H2O SELF HAS BEEN INCREASED IN THE 0-200 CM-1 REGION                                   (04 JUN 1999)
+     "              O2 COLLISION INDUCED BAND HAS BEEN ADDED  (9100 - 11000 CM-1); MLAWER ET AL. 1998      (16 AUG 1999)
+     "              O2 COLLISION INDUCED BAND HAS BEEN CHANGED (7555 - 8486 CM-1); MATE ET AL. 1999        (10 FEB 2000)
+ ckd_2.4.2    5.17  O2 COLLISION INDUCED BANDS HAVE BEEN ADDED (15000 - 29870 CM-1); GREENBLATT ET AL. 1990 (8 MAY 2000)
+     "              The nu2 CO2 increased by a factor of 7: based on U  Wisc. AFWEX and AERI_xr at ARM NSA    (Jul 2002)
+ mt_ckd_1.00  7.01  *********   The entire water vapor continuum has been revised   *********                 (Dec 2002)
+     "              *********   This continuum is based on a new line shape/collision induced formulation, mt_ckd ******
+ mt_ckd_1.1   9.1   H2O foreign modified in the 250-550 cm-1 region; results now consistent with ckd_2.4.1    (Aug 2004)
+ mt_ckd_1.2   9.2   Collision induced nitrogen 0-350 cm-1 increased (~1.35):  Boissoles at al., 2003          (Sep 2004)
+ mt_ckd_1.3  10.0   Nu2 CO2: with P-R line mixing included; factor of 7 increase has been reduceed to 4.5     (May 2006)
+ mt_ckd_2.0  11.1   CO2: Based on Hartmann P-Q-R line mixing.  Modification to v3 band based on AIRS data.    (Jul 2007)
+ mt_ckd_2.01 11.2   H2O foreign modified in 250-550 cm-1 region based on analyses of nsa aeri_er data.        (Sep 2007)
+ mt_ckd_2.1  11.3   CO2: Fundamental change in the lblrtm fourth function with consequent changes in continuum(Nov 2007)
+     "              Bug fix impacting the nitrogen continuum in the 0-350 cm-1 region.                        (Nov 2007)
+ mt_ckd_2.2  11.4   Analytic Derivative (species retrievals): n2 continuum removed from Jacobian calculation  (Mar 2008)
+ mt_ckd_2.3  11.5   Bug fix: corrects error in which Analytic Derivative result depends on starting wavenumber(Aug 2008)
+ mt_ckd_2.4  11.6   H2O: modification to self and foreign continuum (microwave and IR ARM data 0-600 cm-1)    (Nov 2008)
+ mt_ckd_2.5  11.7   CO2: modification from 2000-3200 cm-1 (AERI(ARM),IASI AIRS measurements); Temp. dep. added(Jan 2010)
+     "              H2O: modification to self cont. 2000-3000 cm-1   (IASI data, fit to near-IR results of              
+     "              Bicknell et al., 2006 and Fulghum and Tilleman,  1991                                               
+ mt_ckd_2.5.1 11.8  Updated common block for constants                                                        (May 2010)
+ mt_ckd_2.5.2 12.0  Minor bug fixes, updated continuum summary info,   made consistent with monortm contnm.f (Jan 2011) 
+                    ----------------------------------------------------------------------------------------------------
+
+  The continuum scale factors are as follows: 
+     H2O Self:         1.000
+     H2O Foreign:      1.000
+     CO2:              1.000
+     O3:               1.000
+     O2:               1.000
+     N2:               1.000
+     Rayleigh:         0.000
+
+1
+0 V1(CM-1) =    2080.0000
+0 V2(CM-1) =    2180.0000
+0 SAMPLE   =       4.0000
+0 DVSET    =     0.000000
+0 ALFAL0   =       0.0400
+0 AVMASS   =      36.0000
+0 DPTMIN   =   0.0000E+00               DPTFAC   =     0.000000
+0 SECANT   =       1.0000
+0 NLAYRS=   1
+0 NMOL=   7
+0                        2.00        1.00        0.000       
+1
+0  Set up KCARTA database                                                 LBLRTM    14/12/08  23:54:02
+0LAYER                          P(MB)       T(K)    ALPHL    ALPHD    ALPHV   ZETA  CALC DV  H2OSLF     DV     TYPE ITYPE IPATH    SECANT
+
+0    1  1.000 TO  2.000 KM  1.0853934E+03  296.00 0.042848 0.002187 0.042959 0.951 0.010740  1.0000 0.010740  0.000  -99    1    1.000000
+
+
+
+
+
+0                                                     MOLECULAR AMOUNTS (MOL/CM**2) BY LAYER 
+                                P(MB)      T(K)   IPATH         H2O           CO2            O3           N2O            CO           CH4            O2            OTHER
+0  1  1.000 TO  2.000 KM   1085.3934000   296.00    1    0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  2.2448926E+21  0.0000000E+00  0.0000000E+00  6.1842070E+23
+
+1                                                      ----------------------------------
+0                                                            MIXING RATIOS BY LAYER 
+                                P(MB)      T(K)   IPATH         H2O           CO2            O3           N2O            CO           CH4            O2            OTHER
+0  1  1.000 TO  2.000 KM   1085.3934000   296.00    1    0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  3.6169116E-03  0.0000000E+00  0.0000000E+00  6.1842070E+23
+1
+0 LAYER =        1
+0  Set up KCARTA database                                                 LBLRTM    14/12/08  23:54:02
+0 TIME ENTERING OPDPTH           0.000
+0  IPTS4 FOR LINF4 =    36    DV FOR LINF4 =    0.68735     BOUND FOR LINF4 =   25.0000
+0                    TIME           READ         SHRINK      NO. LINES   AFTER SHRINK
+  LINF4             0.050          0.040          0.010            571            430
+0  * HIRAC1 *  OUTPUT ON FILE    10           DV =   0.01073984           BOUNDF3(CM-1) =   5.4988
+0 DV FOR LBLF4 =    0.68735     BOUND FOR LBLF4 =   25.0000
+0                    TIME           READ    CONVOLUTION          PANEL         OTHER+      NO. LINES   AFTER REJECT     HW CHANGES
+  LINF4             0.050          0.040                         0.010          0.000            571            430
+  XSECT             0.000          0.000          0.000          0.000
+  LBLF4             0.000          0.000          0.000          0.000                           430            852
+  HIRAC1            0.040          0.040          0.000          0.000          0.000            458            440              0
+ Total Accumulated Times
+0                    TIME           READ    CONVOLUTION          PANEL         OTHER+
+  LINF4             0.050          0.040                         0.010          0.000
+  XSECT             0.000          0.000          0.000          0.000
+  LBLF4             0.000          0.000          0.000          0.000
+  HIRAC1            0.040          0.040          0.000          0.000          0.000
+
+0     + OTHER timing includes:
+0             In LINF4:  MOLEC, BUFIN, BUFOUT, NWDL, ENDFIL, and SHRINK
+0             In HIRAC:  LNCOR, XINT, SHAPEL, SHAPEG, VERFN, MOLEC, and other loops and file maintenance within HIRAC
+
+0  * HIRAC1 *  AVERAGE WIDTH = 0.057433,  AVERAGE ZETA = 0.958219
+0 TIME LEAVING OPDPTH           0.090  TOTAL FOR LAYER           0.090
+0 TIME  LEAVING LBLRTM          0.0900 TOTAL         0.0900
+1
+0  Set up KCARTA database                                                 LBLRTM    14/12/08  23:54:02
+0 Modules and versions used in this calculation:
+
+              lblrtm.f:  $Revision: 16446 $                   contnm.f:  $Revision: 16421 $
+              fftscn.f:     NOT USED                          lblatm.f:     NOT USED       
+              lbllow.f:     NOT USED                         ncargks.f:     NOT USED       
+               oprop.f:  $Revision: 16421 $                  postsub.f:     NOT USED       
+              pltlbl.f:     NOT USED                          testmm.f:     NOT USED       
+              xmerge.f:     NOT USED                  util_linux_pgi.f:  $Revision: 10548 $
+               solar.f:     NOT USED                          nonlte.f:     NOT USED       
+

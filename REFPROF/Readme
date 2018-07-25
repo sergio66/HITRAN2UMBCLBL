@@ -1,0 +1,9 @@
+lrwxrwxrwx 1 sergio pi_strow     39 Jun 19  2013 refproTRUE_OLD.x2.mat -> /asl/data/kcarta/v24.matlab/refpro3.mat
+lrwxrwxrwx 1 sergio pi_strow     40 Jun 19  2013 refproTRUE_OLD.x.mat -> /home/motteler/abstab/refpro/refpro3.mat
+lrwxrwxrwx 1 sergio pi_strow     11 Jun 19  2013 refproTRUE_OLD.mat -> refpro3.mat
+lrwxrwxrwx 1 sergio pi_strow     30 Jun 19  2013 refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
+-rw-r--r-- 1 sergio pi_strow 110289 Aug 19  2010 refprof_usstd16Aug2010_lbl.mat
+-rw-r--r-- 1 sergio pi_strow 110181 Aug  8  2010 refprof_usstd06Aug2010_lbl.mat
+-rw-r--r-- 1 sergio pi_strow 110238 Jul 20  2010 refprof_usstd2010_lbl.mat
+-rw-r--r-- 1 sergio pi_strow  35696 Jul 16  2010 refprof_usstd2010.mat
+-rw-r--r-- 1 sergio users     73584 Nov 14  2009 refpro3.mat

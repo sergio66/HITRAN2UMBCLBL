@@ -1,0 +1,68 @@
+NEEDED
+-rw-r--r-- 1 sergio pi_strow 3890 Oct  9 12:23 clust_runXtopts_savegasN_file_N2O2only.m  %% runs N2, O2 optical depths
+-rw-r--r-- 1 sergio pi_strow 3168 Oct  6 20:15 clust_runXtopts_savegasN_file.m     %% runs in Toff_*   subdirs
+-rw-r--r-- 1 sergio pi_strow 3168 Oct  6 20:15 clust_runXtopts_savegasN_file_2.m   %% runs in Toff2_*  subdirs
+-rw-rw-r-- 1 sergio pi_strow  519 Oct  6 20:11 run_all_co2.m
+-rw-r--r-- 1 sergio pi_strow 9909 Oct  6 19:26 gas_done_already.m
+-rw-r--r-- 1 sergio pi_strow  465 Oct  6 19:15 freq_boundaries.m
+-rw-rw-r-- 1 sergio pi_strow  110 Oct  7 07:07 file_parallelprocess_CO2.txt
+-rw-r--r-- 1 sergio pi_strow 1144 Oct  5 19:11 loop_rmerxN.m
+-rw-r--r-- 1 sergio pi_strow 3398 Oct  6 19:16 clust_runXtopts_mkgNvfiles.m
+
+a) first set the dirs you need, in freq_boundaries.m
+   dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtm/'];
+
+b) then (from below) you could either run "filelist_gN.m" or realize that you need to do 11 jobs (T offsets) for gasID 2 (or 3),
+   starting at 605 cm-1 and going to 2830 cm-1, so just edit "run_all_co2.m
+
+c) then RUN run_all_co2.m on one orocessor
+
+d) or can put above info  on parallel processor
+   clustcmd -q medium -n 11 clust_runXtopts_savegasN_file.m file_parallelprocess_CO2.txt
+   clustcmd -q medium -n 11 clust_runXtopts_savegasN_file_2.m file_parallelprocess_CO2.txt
+FOR ABOVE TO WORK, /home/sergio/HITRAN2UMBCLBL/LBLRTM has copies of itself in 
+   Toff_01  Toff_02  Toff_03  Toff_04  Toff_05  Toff_06  Toff_07  Toff_08  Toff_09  Toff_10  Toff_11 
+   Toff2_01 Toff2_02 Toff2_03 Toff2_04 Toff2_05 Toff2_06 Toff2_07 Toff2_08 Toff2_09 Toff2_10 Toff2_11 
+which were ALL made using
+  /home/sergio/HITRAN2UMBCLBL/LBLRTM/copy_TOFFSETS.sc
+
+e) can check progress with gas_done_already(2)
+
+f) can blow away empty files with loop_rmerxN.m
+
+g) put things together
+   JOB=2; clust_runXtopts_mkgNvfiles
+
+h) once done, go to /home/sergio/HITRAN2UMBCLBL/CMPRUN
+   cmprunIR_LBLRTM(2);
+
+i) then go to /home/sergio/HITRAN2UMBCLBL/fortran/mat2for
+   loop_mat2forIR_LBLRTM.m
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> O2 and N2 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+j) >>>>>> use gid=7 to run clust_runXtopts_savegasN_file_N2O2only.m and get combined ODs for O2 and N2; of course 
+   need to separate that into optical depths for N2 and for O2!!!!!!
+   this would be smart_separate_N2O2.m
+
+   first get rid of all empty files in /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g7.dat/lblrtm/
+     rm_empty_gas7.m
+
+   then move them to a tempdir, and copy over/separate the files carefully
+     smart_separate_N2O2.m
+
+   then do the usual
+   JOB=7; clust_runXtopts_mkgNvfiles  
+   JOB=22; clust_runXtopts_mkgNvfiles  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+
+NOT REALLY NEEDED
+-rw-rw-r-- 1 sergio pi_strow 9680 Oct  6 19:25 gN_ir_list.txt
+-rw-r--r-- 1 sergio pi_strow 1604 Oct  6 19:25 filelist_gN.m
+-rw-r--r-- 1 sergio pi_strow  450 Oct  5 19:11 individual_clust_runXtopts_savegasN_file.m
+
+NOT NEEDED
+-rw-r--r-- 1 sergio pi_strow 1914 Oct  6 19:23 loop_filelist_gN.m
+-rw-r--r-- 1 sergio pi_strow  898 Oct  5 19:11 randomize_filelist.m
+-rw-r--r-- 1 sergio pi_strow 3537 Oct  5 19:11 loop_gas_done_already.m
+

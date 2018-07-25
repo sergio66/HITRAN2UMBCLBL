@@ -1,0 +1,18 @@
+ **************************************************
+ ******************* GLAB LITE ********************
+ **************************************************
+  
+ Enter the start freq (integer, in cm-1)
+  
+ Enter the end freq (integer, in cm-1)
+  
+ What gas? Enter gas id (1=H2O, 2=CO2, etc)
+  
+ Enter the total pressure (in torr)
+  
+ Enter the partial pressure (in torr)
+  
+ Enter the temperature (in K)
+  
+ saving file
+ all done

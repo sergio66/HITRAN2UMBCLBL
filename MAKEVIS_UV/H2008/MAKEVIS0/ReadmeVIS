@@ -1,0 +1,43 @@
+In the MAKEVIS dir
+visible_runXtopts_savegases.sc
+  calls visible_runXtopts_savegases.m  which loops over gases = [1 2 3 4 5 6] 
+                                       for chunk 4250
+                                       It makes one file/gas/toffset
+                                       eg std4250_4_pp.mat  pp = 1 : 11
+                                       in dir ~/abscmp/absdat
+visible_runXtopts_mkgXvfiles.m
+  takes the 11 files per gas (for each chunk) and concats them into one file
+  eg ~/abscmp/absdat/abs.dat has files g4v4250.mat,g5v4250.mat,g6v4250.mat
+
+
+
+visible_runXtopts_savegas1 does the same for water (partial pressures)
+visible_runXtopts_mkg1vfiles.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+cmprunVIS(gid) gid = 4,5,6
+  makes the compressed data files 
+  eg ~/abscmp/absdat/kcomp has files cg4v4250.mat,cg5v4250.mat,cg6v4250.mat
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+fortran/mat2for/mat2forVIS.m 
+  converts these .mat files into .f77 files for kcarta
+
+cd /home/sergio/abscmp/fortran/mat2for/
+gid = 4;
+vchunk = 4250;
+cdir = '/home/sergio/abscmp/absdat/kcomp/';
+fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+dtype = 'ieee-le';
+
+or 
+
+gid = 1;
+vchunk = 4250;
+cdir = '/home/sergio/abscmp/absdat/kcomp.h2o/';
+fdir = '/home/sergio/abscmp/absdat/fbin/etc.ieee-le/';
+dtype = 'ieee-le';
+
+ mat2forVIS(gid, vchunk, cdir, fdir, dtype)
+will make /home/sergio/abscmp/absdat/fbin/etc.ieee-le/m4250_g4.dat

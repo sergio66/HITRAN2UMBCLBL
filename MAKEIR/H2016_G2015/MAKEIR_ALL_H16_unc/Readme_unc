@@ -1,0 +1,63 @@
+Originally I did gases [1,103 .. see WV dir] and gases 3,4,5,6,9,12 but 12 takes so long I dropped it
+
+look at set_str_unc.m .. will have to keep editing for different uncertainties
+  S-/S+ = strength
+  B-/B+ = broadening
+  P-/P+ = pressure shift
+  W-/W+ = wavenumber
+  should also do R = random
+
+then cp gN_ir_list0.txt gN_ir_list.txt    == list of gases/chunks to run, about 4000 (see loop_filelist_gN.m)
+
+then call sergio_matlab_makegas3_42.sbatch
+  you basically switch between
+    running "run8" to make the ODs using
+    clust_runXtopts_savegasN_file
+    called by sbatch --array=1-4004%128 sergio_matlab_makegas3_42.sbatch
+
+monitor things by using
+  loop_filelist_gN_missing
+when happy first call
+  loop_rmerxN (to remove empty files)
+  loop_filelist_gN_missing (to make a list of missing files)
+  cp gN_ir_list2.txt gN_ir_list.txt
+
+THEN run the sergio_matlab_makegas3_42.sbatch gatherer using
+    clust_runXtopts_mkgNvfiles
+    called by sbatch --array=3-9 sergio_matlab_makegas3_42.sbatch
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+simultaneouly in WV dir do
+
+cp g1_ir_list_all990.txt g1_ir_list.txt
+cp g103_1105_list_all990.txt g103_1105_list.txt
+
+# run this with sbatch --array=1-990%256 --output='/dev/null' sergio_matlab_makegas1_103.sbatch
+matlab -nodisplay -r "clust_runXtopts_savegas1_file; exit"
+matlab -nodisplay -r "clust_runXtopts_savegas103_file; exit"
+
+monitor things using
+gas_done_already_g1_OR_g103(1,1)
+gas_done_already_g1_OR_g103(103,1)
+
+they remove empty files and produce output files which you can use
+cat g1_ir_list_missing.txt g103_1105_list_missing.txt > g1_ir_list.txt
+cat g1_ir_list_missing.txt g103_1105_list_missing.txt > g103_1105_list.txt
+
+then finally run the gatherer
+# for these do sbatch --array=1-90 sergio_matlab_makegas1_103.sbatch
+matlab -nodisplay -r clust_runXtopts_mkg1vfiles; exit
+matlab -nodisplay -r clust_runXtopts_mkg103vfiles; exit
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+now go to /home/sergio/HITRAN2UMBCLBL/CMPRUN
+  edir (to set the input/output dir) and run the following two files
+  cmprunIR_OTHERS                          (does gases 3,4,5,6,9,12)
+  cmprunIR_WV_H16([1 103],605:25:2830);    (does gases 1,103)
+
+now go to /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+  edit (to set the input/output dir) and run the foloowing two files
+  loop_mat2forIR
+  loop_mat2forIR_WV_H16

@@ -1,0 +1,209 @@
+These are interesting.  At least we can dismiss the pedestal explanation, which is progress.
+
+A line shift/position issue is possible, but the interpretation of the
+differences is made more difficult than usual since with O3 vertical
+regions with both positive and negative temperature lapse rates are
+involved.  So it’s hard to infer from the plot what the differences in
+the region surrounding the strong line at 1042.91276 cm-1 may be due
+to.  Here are some more pieces of evidence that would be good to
+evaluate:
+
+1.  The differences in OD between kc0, kc1, and kc2 for a single layer
+(in the stratosphere?) for the region near the 1042.91276 cm-1 line
+(maybe we could verify that our LBLRTM ODs match your LBLRTM ODs — for
+that we’d need the TAPE5 entry for the chosen layer and your LBLRTM
+ODs)
+
+2.  The differences in OD between kc0, kc1, and kc2 for the full
+vertical path for the region near the 1042.91276 cm-1 line
+
+3.  The line parameters (strength, position, shift, air width, self
+width, temperature dependence of width) that the kCARTA calculation is
+using for the 1042.91276 cm-1 line.  I think we think that we’re both
+using HITRAN 2008, but it would be nice to have an explicit check.
+
+Are you able to do this easily?  I don’t think we’ve looked at these
+things before, but I’m not going back and looking through this long
+email thread to check.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Jan 2015 : Eli Mlawer wanted confirmation of the TAPE5 files .... so modify things slightly
+   in freq_boundaries : 
+   dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtmMlawer/'];  %% O2,N2 continuum off (CN=6)
+    >> edit clust_runXtopts_savegasN_file.m, clust_runXtopts_savegasN_file_2.m as approrpiate, to select one or other above <<<<<
+   clustcmd -q medium -n 11 clust_runXtopts_savegasN_file.m file_parallelprocess_O3Mlawer.txt
+
+   or at Matlab prompt
+   JOB='030060506'; clust_runXtopts_savegasN_file
+
+o3 = load('/home/sergio/SPECTRA/IPFILES/std_ozone');
+plot(o3(:,4),1:100); grid               %% looks like layer 70 or 80 is a nice strat layer
+plot(o3(:,5)/max(o3(:,5)),1:100); grid  %% looks like layer 80 is a nice strat layer, as it is 72% of max amt, and in mid-strat
+ 
+then just to make TAPE5 for 030103006,lay50 run clust_runXtopts_savegasN_file_ONELAY_ONECHUNK 
+(and with looping to next layer/chunk disallowed)
+and then 
+  cp -a /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_06/TAPE5 /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12/.
+
+amt = o3(80,5) * 6.023e23 = 2.1939e+14 molecules/cm2
+temp = o3(80,4) = 227.8530 K 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+new = load('/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtmMlawer//std1030_3_6.mat');
+kc2 = load('/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm2//std1030_3_6.mat');
+plot(new.w,new.d(:,80) ./ kc2.d(:,80)); %% check new and kc2 are the same
+
+pts = find(new.w > 1042.89 & new.w < 1042.94);
+plot(new.w(pts),new.d(pts,80),'.-'); axis([1042.89 1042.93 0 0.35]); grid
+ 
+chunk = 1030; toff = 6;
+dir0 = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g3.dat/';
+file0        = [dir0 'std' num2str(chunk) '_3_' num2str(toff) '.mat'];
+file_lblrtm  = [dir0 'lblrtm/std' num2str(chunk) '_3_' num2str(toff) '.mat'];
+file_lblrtm2 = [dir0 'lblrtm2/std' num2str(chunk) '_3_' num2str(toff) '.mat'];
+fileWOBASE   = [dir0 'WOBASEMENT/wobasement_std' num2str(chunk) '_3_' num2str(toff) '.mat'];
+chunk0        = load(file0);          %% this is kc0
+chunk_lblrtm  = load(file_lblrtm);
+chunk_lblrtm2 = load(file_lblrtm2);   %% this is kc2
+chunkWOBASE   = load(fileWOBASE);     %% this is kcw
+
+[sum(kc2.w - chunk_lblrtm2.w)  sum(sum(kc2.d - chunk_lblrtm2.d))]   %% check that kc2 and chunk_lblrtm2 are same
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% check for layer 80
+plot(new.w(pts),chunk0.d(80,pts),'bo',new.w(pts),new.d(pts,80),'r.-',new.w(pts),chunkWOBASE.d(80,pts),'k.-'); 
+  axis([1042.89 1042.94 0 0.35]); grid
+
+semilogy(new.w(pts),chunk0.d(80,pts),'bo',new.w(pts),new.d(pts,80),'r.-',new.w(pts),chunkWOBASE.d(80,pts),'k.-'); 
+  axis([1042.89 1042.94 0 0.35]); grid
+
+plot(new.w(pts),chunk0.d(80,pts) ./ new.d(pts,80)','r.-',new.w(pts), chunk0.d(80,pts) ./ chunkWOBASE.d(80,pts) ,'k.-'); 
+  axis([1042.89 1042.94 0.99 1.01]); grid
+
+xff = new.w(pts);
+xkc0 = chunk0.d(80,pts);
+xkc2 = chunk_lblrtm2.d(pts,80)';
+xkcw = chunkWOBASE.d(80,pts);
+semilogy(xff,xkc0,'bo',xff,xkc2,'r.-',xff,xkcw,'k.-')
+  axis([1042.89 1042.94 0 0.35]); grid
+whos xff xkc0 xkc2 xkcw
+fid = fopen('layer80.txt','w');
+fprintf(fid,'wn in cm-1, 5 pt boxcar integrated from 0.0005 to 0.0025 cm-1 \n');
+fprintf(fid,'kc0 = raw UMBC optical depths, voigt \n');
+fprintf(fid,'kc2 = LBLRTM optical depths \n');
+fprintf(fid,'kcw = UMBC optical depths, no basement \n');
+fprintf(fid,'   wn            kc0          kc2         kcw \n');
+data = [xff; xkc0; xkc2; xkcw];
+fprintf(fid,'%8.6f %8.6e %8.6e %8.6e \n',data);
+fclose(fid);
+
+plot(xff,xkc0./xkc2,'r',xff,xkc0./xkcw,'k')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% check for whole atm (4:100)
+
+plot(kc2.w(pts),chunk0.d(4:100,pts),'bo',kc2.w(pts),kc2.d(pts,4:100),'r.-',kc2.w(pts),chunkWOBASE.d(4:100,pts),'k.-'); 
+  axis([1042.89 1042.94 0 0.35]); grid
+
+semilogy(kc2.w(pts),chunk0.d(4:100,pts),'bo',kc2.w(pts),kc2.d(pts,4:100),'r.-',kc2.w(pts),chunkWOBASE.d(4:100,pts),'k.-'); 
+  axis([1042.89 1042.94 0 0.35]); grid
+
+plot(kc2.w(pts),chunk0.d(4:100,pts) ./ kc2.d(pts,4:100)','r.-',kc2.w(pts), chunk0.d(4:100,pts) ./ chunkWOBASE.d(4:100,pts) ,'k.-'); 
+  hold on
+plot(kc2.w(pts),sum(chunk0.d(4:100,pts),1) ./ sum(kc2.d(pts,4:100),2)','b.-',...
+     kc2.w(pts),sum(chunk0.d(4:100,pts),1) ./ sum(chunkWOBASE.d(4:100,pts),1) ,'g.-','linewidth',4); 
+  hold off
+axis([1042.89 1042.94 0.98 1.02]); grid
+
+clf
+
+xff = new.w(pts);
+xkc0 = chunk0.d(1:100,pts);
+fid = fopen('kc0.txt','w');
+fprintf(fid,'%% wn in cm-1, 5 pt boxcar integrated from 0.0005 to 0.0025 cm-1 \n');
+data = [xff];
+fprintf(fid,'%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f \n',data);
+fprintf(fid,'%% kc0 data \n');
+for ii = 1 : 100
+  data = xkc0(ii,:);
+  fprintf(fid,'%8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e\n',data);
+end
+fclose(fid);
+semilogx(xkc0(:,9),1:100,'b'); hold on
+
+xff = new.w(pts);
+xkc2 = chunk_lblrtm2.d(pts,1:100)';
+fid = fopen('kc2.txt','w');
+fprintf(fid,'%% wn in cm-1, 5 pt boxcar integrated from 0.0005 to 0.0025 cm-1 \n');
+data = [xff];
+fprintf(fid,'%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f \n',data);
+fprintf(fid,'%% kc2 data \n');
+for ii = 1 : 97
+  data = xkc2(ii,:);
+  fprintf(fid,'%8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e\n',data);
+end
+fclose(fid);
+semilogx(xkc2(:,9),1:100,'r'); hold on
+
+xff = new.w(pts);
+xkcw = chunkWOBASE.d(1:100,pts);
+fid = fopen('kcw.txt','w');
+fprintf(fid,'%% wn in cm-1, 5 pt boxcar integrated from 0.0005 to 0.0025 cm-1 \n');
+data = [xff];
+fprintf(fid,'%8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f %8.6f \n',data);
+fprintf(fid,'%% kcw data \n');
+for ii = 1 : 100
+  data = xkcw(ii,:);
+  fprintf(fid,'%8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e %8.6e\n',data);
+end
+fclose(fid);
+semilogx(xkcw(:,9),1:100,'k'); hold off
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% get line params
+
+cd /home/sergio/SPECTRA
+filename08 = '/asl/data/hitran/h08.by.gas/g3.dat';
+filename12 = '/asl/data/hitran/h12.by.gas/g3.dat';
+line08 = hitread(1042.5,1043.5,0,3,filename08,-1);
+line12 = hitread(1042.5,1043.5,0,3,filename12,-1);
+
+woo08 = find(abs(line08.wnum-1042.91276) < 0.001);
+woo12 = find(abs(line12.wnum-1042.91276) < 0.001);
+semilogy(line08.wnum,line08.stren,'y',line08.wnum(woo08),line08.stren(woo08),'ro',line12.wnum(woo12),line12.stren(woo12),'bx')
+
+format long e
+line_subset(line12,woo12)
+
+ans = 
+
+      igas: 3
+     linct: 1
+       iso: 1
+      wnum: 1.042912760000000e+03
+     stren: 4.253000000000000e-21
+     tprob: 4.102000000000000e+00
+    abroad: 8.720000000000000e-02
+    sbroad: 1.180000000000000e-01
+       els: 0
+    abcoef: 7.200000000000000e-01
+       tsp: -7.000000000000000e-04
+     iusgq: [15x1 char]
+     ilsgq: [15x1 char]
+      uslq: '  1  0  1      '
+      bslq: '  0  0  0      '
+        ai: '006550'
+       ref: '1412 4 2 2 1'
+     gasid: 3
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+tar -cvf ozone_line.tar TAPE5 std_ozone kc0.txt  kc2.txt  kcw.txt  layer80.txt
