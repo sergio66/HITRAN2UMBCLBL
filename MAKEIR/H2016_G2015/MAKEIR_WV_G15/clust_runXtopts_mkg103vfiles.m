@@ -7,6 +7,10 @@ addpath /home/sergio/SPECTRA
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %JOB  = 1
 
+if ~exist('iSummmAlreadyy')
+  iSummmAlreadyy = 0;  % see loop_hand_clust_runXtopts_savegas1_file.m
+end
+
 nbox = 5;
 pointsPerChunk = 10000;
 gases = [1];
@@ -20,7 +24,7 @@ poffset = [0.1, 1.0, 3.3, 6.7, 10.0];
 freq_boundaries_g103
 
 fmin = wn1; 
-fchunks = 605 : 25 : 2805;
+fchunks = 605 : 25 : 2830;
 fmin = fchunks(JOB);
 
 fout = [dirout '/abs.dat'];
@@ -44,38 +48,44 @@ end
 
   fr = [];
   k = zeros(10000,100,11);
+  mm = 1;
   for mm = 1 : 5
-    iSave = 0;  
-    for pp = -5 : +5
-      fin = [dirout '/stdHDO' num2str(fmin)];
-      fin = [fin '_1_' num2str(pp+6) '_' num2str(mm) '.mat'];
-      lser = dir(fin);
-      if lser.bytes > 500000
-        iSave = iSave + 1;
-        fprintf(1,'gas freq pp mm = %3i %6f %3i %3i \n',gg,fmin,pp,mm);
+    fout = [dirout '/abs.dat/g103v' num2str(fmin) 'p' num2str(mm) '.mat'];
+    if exist(fout)
+      iSummmAlreadyy = iSummmAlreadyy + 1;
+    else      
+      iSave = 0;  
+      for pp = -5 : +5
+        fin = [dirout '/stdHDO' num2str(fmin)];
+        fin = [fin '_1_' num2str(pp+6) '_' num2str(mm) '.mat'];
+        lser = dir(fin);
+        if lser.bytes > 500000
+          iSave = iSave + 1;
+          fprintf(1,'gas freq pp mm = %3i %6f %3i %3i \n',gg,fmin,pp,mm);
+  
+          loader = ['load ' fin ];
+          eval(loader);
 
-        loader = ['load ' fin ];
-        eval(loader);
-
-        fr = w;
-        k(:,:,pp+6) = d';
-        if pp == 0
-          plot(fr,exp(-d(1,:)));   % disp('ret to continue');   
-          title(num2str(mm));      pause(0.1)
-        end
+          fr = w;
+          k(:,:,pp+6) = d';
+          if pp == 0
+            plot(fr,exp(-d(1,:)));   % disp('ret to continue');   
+            title(num2str(mm));      pause(0.1)
+          end
+        else
+          fprintf(1,'%s size %8i \n',fin,lser.bytes)
+        end               %% loop over filezize > 500000
+      end                 %% loop over temperature
+      if iSave == 11
+        fout = [dirout '/abs.dat/g103v' num2str(fmin) 'p' num2str(mm) '.mat'];
+        saver = ['save ' fout ' fr gid k ' ];
+        fprintf(1,'saving gas %3i : freq %5i partial pressure %2i \n ---->>>>  %s \n',gg,fmin,mm,fout);
+        eval(saver);
       else
-        fprintf(1,'%s size %8i \n',fin,lser.bytes)
-      end               %% loop over filezize > 500000
-    end                 %% loop over temperature
-    if iSave == 11
-      fout = [dirout '/abs.dat/g103v' num2str(fmin) 'p' num2str(mm) '.mat'];
-      saver = ['save ' fout ' fr gid k ' ];
-      fprintf(1,'saving gas %3i : freq %5i partial pressure %2i \n ---->>>>  %s \n',gg,fmin,mm,fout);
-      eval(saver);
-    else
-      fprintf(1,'file(s) too small : gas freq pp = %3i %6i %3i \n',gg,fmin,pp);
-    end  %% if
+        fprintf(1,'file(s) too small : gas freq pp = %3i %6i %3i \n',gg,fmin,pp);
+      end %% if
+    end               %% if output file not already there
   end                 %% loop over pressure
   fmin = fmin + dv;
-%end                   %% loop over freq
+%end                  %% loop over freq
 

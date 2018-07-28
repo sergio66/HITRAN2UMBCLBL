@@ -15,7 +15,7 @@ nbox = 5;
 pointsPerChunk = 10000;
 gases = [1];
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_WV_H16/
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_WV_G15
 
 freq_boundaries_g1
 
