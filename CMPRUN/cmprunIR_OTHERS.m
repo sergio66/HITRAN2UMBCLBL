@@ -29,11 +29,13 @@ if nargin < 1
   glist = 51:81;             % default to all xsec     gases
   glist = 3:42;              % default to all mol     gases
   glist = 2;                 % CO2
-  glist = [3:42];            % all gases
   glist = 51:81;             % default to all xsec     gases
   
   glist = [3 4 5 6 9 12];    %% doing the HIRTRAN UNC perturbations
-  glist = [3 4 5 6 9];       %% doing the HIRTRAN UNC perturbations  
+  glist = [3 4 5 6 9];       %% doing the HIRTRAN UNC perturbations
+
+  glist = [3:42];            % all gases
+
 end
 
 %% assume we are only dealing with H2000 onwards here
@@ -93,6 +95,10 @@ for gid00 = 1 : length(glist)
        %HITRAN UNC
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830_unc/abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830_unc/kcomp/'];
+
+       %GEISA 2015
+       gdir = ['/asl/s1/sergio/G' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/abs.dat/']; 
+       cdir = ['/asl/s1/sergio/G' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/kcomp/'];
 
      end
 

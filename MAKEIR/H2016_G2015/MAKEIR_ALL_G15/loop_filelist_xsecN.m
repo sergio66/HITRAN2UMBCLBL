@@ -19,7 +19,7 @@ fid = fopen('gN_ir_xseclist.txt','w');
 nbox = 5;
 pointsPerChunk = 10000;
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_G15
 
 for ii = 1 : length(gids)
   gid = gids(ii);
@@ -32,7 +32,7 @@ for ii = 1 : length(gids)
   %%                   12 34567 89
   %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-  fdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+  fdir = ['/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
   ee = exist(fdir,'dir');
   if ee == 0
     fprintf(1,'%s does not exist \n',fdir);
@@ -46,11 +46,12 @@ for ii = 1 : length(gids)
 
   iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
   iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
+  iSwitchXsecDataBase = 9999;  %% now we have       G2015 for g51-81  
 
   iCnt = 0;
   for gg = gid : gid
     if gg <= iSwitchXsecDataBase
-      bands = list_bands(gg,2016);
+      bands = list_bands(gg,2015);
     else
       bands = list_bands(gg,2012);
     end

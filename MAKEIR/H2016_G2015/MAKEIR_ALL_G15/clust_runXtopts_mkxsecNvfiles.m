@@ -17,10 +17,11 @@ addpath /home/sergio/SPECTRA
 addpath /asl/matlib/aslutil
 addpath /asl/matlib/science
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_G15
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+%JOB = 51
 gid = JOB;
 if gid < 51
   error('not for MOL GAS IDs')
@@ -42,7 +43,7 @@ addpath /home/sergio/SPECTRA/READ_XSEC
 iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
 if gid <= iSwitchXsecDataBase
-  bands = list_bands(gid,2016);
+  bands = list_bands(gid,2015);
 else
   bands = list_bands(gid,2012);
 end  
@@ -59,7 +60,7 @@ for wn = wn1 : dv : wn2
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_G15
 
 slash = findstr(dirout,'/');
 diroutXN = dirout(1:slash(end)-1);

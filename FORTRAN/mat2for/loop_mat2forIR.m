@@ -1,10 +1,10 @@
 chunkprefix = 'r';
 gases = 51 : 81;
-gases = [[3 : 42] [51 : 81]];
 gases = 2;
 gases = [3 : 42];
 gases = [[51 : 81]];
 gases = [3 4 5 6 9 12];  %% for uncertainty
+gases = [[3 : 42] [51 : 81]];
 
 fchunks = 605 : 25 : 2830;
 dtype = 'ieee-le';
@@ -58,6 +58,11 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_P+/';  %% pressure shift max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S+/';  %% strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_Rn/';  %% randomize all    
+
+    %% G2015
+    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
+    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/etc.ieee-le/';
+
 
   end
 

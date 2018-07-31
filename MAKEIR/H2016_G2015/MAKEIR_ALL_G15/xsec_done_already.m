@@ -54,11 +54,12 @@ addpath /home/sergio/SPECTRA/READ_XSEC
 iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
 if gasid <= iSwitchXsecDataBase
-  bands = list_bands(gasid,2016);
+  bands = list_bands(gasid,2015);
 else
   bands = list_bands(gasid,2012);
 end
 
+clear lines
 iCnt = 0;
 for wn = wn1 : dv : wn2
   woo = findxsec_plot_fast(wn,wn+dv,bands);
@@ -70,11 +71,16 @@ for wn = wn1 : dv : wn2
   end
 end
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 figure(1); clf
 
-[mm,nn] = size(lines.wnum);
-if nn > 0
+if iCnt > 0
+  [mm,nn] = size(lines.wnum);
+else
+  nn = 0;
+end  
+if nn > 0 & iCnt > 0
   figure(1);
   plot(lines.wnum,lines.stren,'+');
   pause(0.1)

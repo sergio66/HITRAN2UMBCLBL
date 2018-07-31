@@ -21,6 +21,7 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le
 
+    %% unc
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/g1.dat/kcomp.h2o/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_S-/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, strength min
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_Rn/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, every perturbation randomized
@@ -30,6 +31,10 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_P+/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, pressure shift max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_S+/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_Rn/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, randomize    
+    %% unc
+
+    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/';
+    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/hdo.ieee-le/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le
 
     gidxx = 1;
     
@@ -44,6 +49,7 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat/kcomp.h2o/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le
 
+    %% unc
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/g103.dat/kcomp.h2o/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_S-/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, strength min    
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_Rn/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, every perturbation randomized
@@ -53,6 +59,10 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_P+/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, pressure shift max    
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_S+/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_Rn/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, randomize all
+    %% unc
+
+    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/g103.dat/kcomp.h2o/';
+    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/hdo.ieee-le/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le
 
     gidxx = 103;
     

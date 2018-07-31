@@ -21,7 +21,9 @@ home = pwd;
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+%JOB = 3
 gid = JOB;
+
 if gid == 1
   error('not for WV')
 end

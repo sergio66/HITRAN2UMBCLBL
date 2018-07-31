@@ -10,6 +10,7 @@
 % clustcmd -q long_contrib -n 64 clust_runXtopts_savexsecN_file.m gN_ir_xseclist.txt
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+%JOB = 1
 %JOB = 586
 %JOB = 800
 
@@ -83,8 +84,9 @@ while fmin <= wn2
 
       iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
       iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
+      iSwitchXsecDataBase = 9999;  %% now we have       G2015 for g51-81      
       if gasid <= iSwitchXsecDataBase
-        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2016);
+        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2015);
       else
         [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2012);
       end
@@ -113,7 +115,7 @@ while fmin <= wn2
         %[d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,1);
 	figno = 1;
 	if gasid <= iSwitchXsecDataBase
-          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2016);
+          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2015);
 	else
           [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2012);
 	end
@@ -134,4 +136,4 @@ while fmin <= wn2
   return
 end                   %% loop over freq
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_G15
