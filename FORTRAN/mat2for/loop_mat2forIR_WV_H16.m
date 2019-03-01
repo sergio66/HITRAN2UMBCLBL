@@ -3,6 +3,8 @@ gases = [1 103 110];
 gases = [1        ];
 gases = [  103    ];
 gases = [1 103    ];
+gases = [      110];
+
 fchunks = 1105 : 25 : 1705; fx = 1;     %% ISOTOPES + OTHERS
 fchunks = 0605 : 25 : 2805; fx = 0;     %% ALL
 dtype = 'ieee-le';
@@ -87,7 +89,11 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_S+/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/unc_Rn/';        %%%% <<<< note how G1 and G103 go into hdo.ieee-le, randomize all
 
-    gidxx = 1;
+    %%%%%%%%%%%%%%%%%%%%%%%%%
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g110.dat/kcomp.h2o/';          
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/h2o_ALLISO.ieee-le/';  %%%% <<<< note how G110 goes into h2o_ALLISO.ieee-le
+
+    gidxx = 110;
   end
 
   ee = exist(fdir);
@@ -130,3 +136,7 @@ disp('c >>>>           see eg /asl/data/kcarta/H2012.ieee-le/IR605/hdo.ieee-le/l
 disp('c >>>> dont forget to symbolically link the files in h2o.ieee-le to hdo.ieee-le using lner.m <<<<<')
 disp('c >>>>           see eg /asl/data/kcarta/H2012.ieee-le/IR605/hdo.ieee-le/lner.m <<<<<')
 %}
+
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')

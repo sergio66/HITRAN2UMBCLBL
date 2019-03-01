@@ -30,5 +30,5 @@
 
 ####### calling srun twice for these paralel jobs might be asking for too much overhead
 ####### srun matlab -nodisplay -r "clustbatch_random_allfovV1; exit"  
-#matlab -nodisplay -r "clust_runXtopts_savegasN_file; exit"
-matlab -nodisplay -r "clust_runXtopts_mkgNvfiles; exit"  
+matlab -nodisplay -r "clust_runXtopts_savegasN_file; exit"
+#matlab -nodisplay -r "clust_runXtopts_mkgNvfiles; exit"  

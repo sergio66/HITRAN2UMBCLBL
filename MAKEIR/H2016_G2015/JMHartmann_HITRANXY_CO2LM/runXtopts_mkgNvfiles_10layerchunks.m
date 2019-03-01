@@ -8,6 +8,7 @@ addpath /home/sergio/SPECTRA
 addpath /asl/matlib/aslutil
 addpath /asl/matlib/science
 
+outputdir
 home = pwd;
 
 %gid = input('Enter gasID : ');
@@ -76,6 +77,53 @@ end
 outputdir;
 dirout   = output_dir0;
 diroutXN = output_dir0;
+dirout   = output_dir5;
+diroutXN = output_dir5;
+
+fid = fopen('xg2_ir_list_notdone.txt','w');
+for fmin = 605 : 25 : 2805
+  iTCnt = 0;
+  for pp = - 5 : 5
+    iCnt = 0;  
+    for iBlock = 1 : 10
+      fin = [dirout '/'  num2str(iBlock) '/std' num2str(fmin) '_' num2str(gid) '_' num2str(pp+6) '_laychunk_' num2str(iBlock) '.mat'];
+      ee = exist(fin);
+      if ee > 0
+        eeData((fmin-605)/25+1,pp+6,iBlock) = 1;
+	iCnt = iCnt + 1;
+      else
+        %% 020188008 is an example     02 = gid    01880 = freq chunk     08 = Toffset
+        eeData((fmin-605)/25+1,pp+6,iBlock) = 0;
+	str = ['02' num2str(fmin,'%05d') num2str(pp+6,'%02d')];
+	fprintf(fid,'%s\n',str);
+      end      
+    end
+    eeData_allchunks((fmin-605)/25+1,pp+6) = iCnt;
+    if iCnt == 10
+      iTCnt = iTCnt + 1;
+    end      
+  end
+  eeDataT((fmin-605)/25+1) = iTCnt;
+  fx((fmin-605)/25+1) = fmin;
+end
+
+figure(1); plot(fx,eeDataT,'+-')
+figure(2); imagesc(fx,1:11,eeData_allchunks'); colorbar
+iBad = 0;
+for ff = 1 : 89
+  for pp = 1 : 11
+    if eeData_allchunks(ff,pp) < 10
+      iBad = iBad + 1;
+      fprintf(1,'chunk %4i Toffset %2i only done %3i layerchunks instead of 10 layer chunks \n',fx(ff),pp,eeData_allchunks(ff,pp))
+    end
+  end
+end
+fclose(fid);
+if iBad > 0
+  error('xooox')
+else
+  disp('proceeding ...')
+end
 
 iShape = input('for LM ods enter (-1) voigt (0) first (+1) full : ');
 if iShape == -1
@@ -91,7 +139,7 @@ if ee == 0
   fprintf(1,'%s \n',fout);
   iAns = input('dir does not exist, do you want to make it? (+1 = Y) ');
   if iAns == 1
-    mker = ['!mkdir ' fout];
+    mker = ['!mkdir -p ' fout];
     eval(mker);
   else
     error('cannot proceed');
@@ -120,17 +168,36 @@ while fmin <= iaChunk(end)
     fprintf(1,'processing %8.2f \n',fmin)
 
     for pp = -5 : +5
-      fin = [dirout '/std' num2str(fmin) '_' num2str(gid) '_' num2str(pp+6) '.mat'];
-      lser = dir(fin);
-      if length(lser) == 0
-        clear lser
-        lser.bytes = 0;
+      iBlockCnt = 0;
+      dvoigt = [];
+      dfirst = [];
+      dfull = [];
+      
+      for iBlock = 1 : 10
+        ind = (1:10) + (iBlock-1)*10;
+	fin = [dirout '/'  num2str(iBlock) '/std' num2str(fmin) '_' num2str(gid) '_' num2str(pp+6) '_laychunk_' num2str(iBlock) '.mat'];	
+        lser = dir(fin);
+        if length(lser) == 0
+          clear lser
+          lser.bytes = 0;
+        end
+        if lser.bytes > 50000
+          loader = ['junk = load(''' fin ''');'];
+          eval(loader);
+	  dvoigt = [dvoigt; junk.dvoigt];
+	  dfirst = [dfirst; junk.dfirst];
+	  dfull  = [dfull ; junk.dfull];
+	  w = junk.w;
+	  iBlockCnt = iBlockCnt + 1;
+	end
       end
-      if lser.bytes > 500000
+
+      [mmfinal,nnfinal] = size(dfull);
+      if iBlockCnt == 10 & mmfinal == 100
         iSave = iSave + 1;
         fprintf(1,'  gasID freq pp = %3i %6f %3i \n',gid,fmin,pp);
-        loader = ['load ' fin ];
-        eval(loader);
+%        loader = ['load ' fin ];
+%        eval(loader);
         fr = w;
 
         if iShape == -1

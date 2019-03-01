@@ -1,7 +1,7 @@
-addpath /home/sergio/SPECTRA
-
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-%JOB = 23
+%JOB = 1
+
+cpptotal0 = cputime;
 
 %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset
 %%                   12 34567 89
@@ -20,11 +20,14 @@ Stoffset = str2num(XJOB(8:9));    %Stt = Stoffset - 6;
 %%% junkstr = [num2str(Schunk,'%04d') '_2_' num2str(Stoffset,'%02d') '.mat'];
 junkstr = [num2str(Schunk) '_2_' num2str(Stoffset) '.mat'];  %% should have been this, have to rename things
 outputdir
-finalname = [output_dir5 '/std' junkstr];
+finalname = [output_dir0 '/std' junkstr];
 if exist(finalname)
   fprintf(1,'%s already exists .. why bother running???? \n',finalname)
   error('file already exists')
 end
+
+useCO2ppm = 385;  %% mistakenly used this for first set of runs
+useCO2ppm = 400;  %% not yet done
 
 for lay = 1 : 100
   cd /home/sergio/HITRAN2UMBCLBL/JMHartmann_HITRANXY_CO2LM/
@@ -33,9 +36,9 @@ for lay = 1 : 100
   
   load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat         %% symbolic link
   ptot = refpro.mpres(lay);
-  pco2 = refpro.gpart(lay,2);
+  pco2 = refpro.gpart(lay,2) * useCO2ppm/385;;
   layT = refpro.mtemp(lay) + (Stoffset-6)*10;
-  qamt = refpro.gamnt(lay,2);
+  qamt = refpro.gamnt(lay,2) * useCO2ppm/385;;
   fprintf(1,'  from refpro p/pp/T/q = %8.6f %8.6f %8.6f %8.6e \n',ptot,pco2,layT,qamt)
   
   %cp /home/sergio/SPECTRA/IPFILES/std_gx2x_6 .
@@ -43,11 +46,11 @@ for lay = 1 : 100
   xdata = xdata(lay,:);
   xptot = xdata(2);
   xpco2 = xdata(3);
-  xlayT = xdata(4)  + (Stoffset-6)*10;
+  xlayT = xdata(4) + (Stoffset-6)*10;
   xqamt = xdata(5);
   fprintf(1,'  from std_gx2x_6 p/pp/T/q = %8.6f %8.6f %8.6f %8.6e \n',xptot,xpco2,xlayT,xqamt)
   
-  fname = ['inputparam_5pointboxcar' num2str(Schunk,'%04d') '_' num2str(Stoffset,'%02d') '_' num2str(lay,'%03d')];
+  fname = ['inputparam_' num2str(Schunk,'%04d') '_' num2str(Stoffset,'%02d') '_' num2str(lay,'%03d')];
   fprintf(1,'%s \n',fname);
   fid = fopen(fname,'w');
   fprintf(fid,'%5i \n',Schunk);
@@ -58,35 +61,35 @@ for lay = 1 : 100
   fclose(fid);
 
   cd /asl/data/hitran/H2016/LineMix
+
+  fortran_exec = 'lm_kcarta.x';                     %% at 0.0025 cm-1 res
+  fortran_exec = 'lm_kcarta_5ptboxcar.x';
+  fortran_exec = 'lm_kcarta_5ptboxcar_noWVbroad.x';
+  fortran_exec = 'lm_kcarta_5ptboxcar_new.x';       %% Oct 2018`
+
   fullname = ['/home/sergio/HITRAN2UMBCLBL/JMHartmann_HITRANXY_CO2LM/' fname];
   junkstr = [num2str(Schunk,'%04d') '_2_' num2str(Stoffset,'%02d') '_' num2str(lay,'%03d')];
-
-  fortran_exec = 'lm_kcarta.x';  %% at 0.0025 cm-1 res
-  fortran_exec = 'lm_kcarta_5ptboxcar.x';
-  fortran_exec = 'lm_kcarta_5ptboxcar_noWVbroad.x';    
-  lmer = ['!' fortran_exec ' < ' fullname];  
+  lmer = ['!time ' fortran_exec ' < ' fullname];
   eval(lmer);
-  
   rmer = ['!/bin/rm ' fullname];
   eval(rmer);
   
-  outname  = [output_dir5 '/std' junkstr];  %% this is all in the executable of lm_kcarta.x
-  lalaHI = load(outname);
-
-  %% suppose you want to do the               655 : 0.0025 : 680 chunk
-  %% the LM code that is called actually does 654 : 0.0005 : 681 chunk
-  %% 655 is the 02001 st point (but you have to go 2 before for the 5pt box car integ)
-  %% 680 is the 52001 st point (but you have to go 2 later  for the 5pt box car integ) 
-  %lalaHI = lalaHI(1999:52003,:);
-  lala = boxint_many(lalaHI(1999:52003,:),5);
-  lala = lala';
-
+  outname  = [output_dir0 '/std' junkstr];  %% this is all in the executable of lm_kcarta.x
+  lala = load(outname);
   w = lala(1:10000,1);
   dvoigt(lay,:) = lala(1:10000,2);
   dfirst(lay,:) = lala(1:10000,3);
   dfull(lay,:)  = lala(1:10000,4);  
   rmer = ['!/bin/rm ' outname];
   eval(rmer);
+
+  cpptotal = cputime-cpptotal0;
+  fprintf(1,'cpptotal     for %3i loops = %12.6f mins \n',lay,cpptotal/60)
+  fprintf(1,'cpptotal avg for %3i loops = %12.6f mins \n',lay,cpptotal/60/lay)
+
+  %saver = ['save ' finalname ' w dvoigt dfirst dfull'];
+  %eval(saver)
+  %fprintf(1,'saver = %s \n',saver);
 
 end
 
@@ -95,3 +98,7 @@ eval(saver)
 fprintf(1,'saver = %s \n',saver);
 
 disp('done');
+
+cpptotal = cputime-cpptotal0;
+fprintf(1,'cpptotal     for 100 loops = %12.6f mins \n',cpptotal/60)
+fprintf(1,'cpptotal avg for 100 loops = %12.6f mins \n',cpptotal/60/100)

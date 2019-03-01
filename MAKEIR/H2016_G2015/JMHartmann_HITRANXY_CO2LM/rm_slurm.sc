@@ -1,0 +1,1 @@
+/bin/rm /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/JMHartmann_HITRANXY_CO2LM/slurm-*

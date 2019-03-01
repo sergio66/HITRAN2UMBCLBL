@@ -2,14 +2,8 @@ addpath /home/sergio/HITRAN2UMBCLBL/FORTRAN/for2mat
 addpath /home/sergio/KCARTA/MATLAB
 addpath /home/sergio/MATLABCODE
 
-iWhichDir = input('Enter run8 using (0) rather incorrect LM lineparams (+1) slightly bad LM line params (-1) H2016 line params or (+2) good LM params : ');
-if iWhichDir == 2
-  %% hopefully this one has the broadenings done correctly while writing out the g2 file
-  %% which was done using SUBR read_parse_file_march20 in rewrite_g2.m
-  %% /asl/data/hitran/h16.by.gas/g2.dat -> /asl/data/hitran/H2016/LineMix/new_lm_g2.dat_Mar20_10.43am
-  umbcdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_run8/';
-  str = ['UMBC uses swapped LM database (try 3, March 20)'];
-elseif iWhichDir == 1
+iWhichDir = input('Enter run8 using (0) rather incorrect LM lineparams (+1) slightly bad LM line params (-1) H2016 line params :');
+if iWhichDir == 1
   %% hopefully this one has the broadenings done correctly while writing out the g2 file, still small problems
   %% which was done using SUBR read_parse_file_march19 in rewrite_g2.m
   %% /asl/data/hitran/h16.by.gas/g2.dat -> /asl/data/hitran/H2016/LineMix/new_lm_g2.dat_Mar19_22.29pm  
@@ -30,13 +24,15 @@ end
 %outputdir
 %lmdir = output_dir0;
 %lmdir = output_dir5;
-iWhichLMDir = input('Enter LM dir (-9999) GARBAGE LM using 0005 cm-1 boxcar, WV broad = 0,1 (-1) LM using 0025 cm-1 (+1) LM using 0005 cm-1 boxcar : ');
+iWhichLMDir = input('Enter LM dir (-9999) GARBAGE LM using 0005 cm-1 boxcar, WV broad = 0,1 (-1) LM using 0025 cm-1 (+1) LM using 0005 cm-1 boxcar (+2) new Oct 2018 : ');
 if iWhichLMDir == -1
   lmdir   = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/';                    %% 385 ppm
 elseif iWhichLMDir == +1
   lmdir   = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox/';              %% 385 ppm
 elseif iWhichLMDir == -9999
   lmdir   = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_noWVbroad/';    %% 385 ppm
+elseif iWhichLMDir == 2
+  lmdir   =  '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18/';    
 end  
 
 wall     = [];

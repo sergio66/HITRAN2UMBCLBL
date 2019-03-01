@@ -1,9 +1,9 @@
 function cmprunIR_WV(glist, vlist, iDo_g110)
 
 if nargin == 2
-  iDo_g110 = +1;  %% do gases 1
-  iDo_g110 = +3;  %% do gases 1,103,110
-  iDo_g110 = +2;  %% do gases 1,103  
+  iDo_g110 = +1;   %% do gases 1
+  iDo_g110 = +2;   %% do gases 1,103  
+  iDo_g110 = +3;   %% do gases 1,103,110
 end
 iDo_g110 = length(glist);
 
@@ -21,13 +21,15 @@ nbox = 5; pointsPerChunk = 10000;
 
 %% always do gas 1
 
-dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_WV_H16/';
-dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16_unc/WV/';
+dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_H16_unc/WV/';
+dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_WV_H16/';
 
 cder = ['cd ' dir0]; eval(cder);
 freq_boundaries_g1
 
 cdirALL = [dirout '/kcomp.h2o/']; 
+fprintf(1,'cdirALL = %s \n',cdirALL)
+
 ee = exist(cdirALL,'dir');
 %fprintf('chunks 605-1105,1705-2405 in %s \n',cdirALL);
 fprintf('g1 : chunks 605-2805 in %s \n',cdirALL);
@@ -66,7 +68,7 @@ end
 if iDo_g110 >= 3
   cder = ['cd ' dir0]; eval(cder);
   freq_boundaries_g1
-  dirout = [dirout(1:end-7) 'g110.dat/'];
+  dirout = [dirout(1:end-7) '/g110.dat/'];
   cdir_110 = [dirout '/kcomp.h2o/']; 
   ee = exist(cdir_110,'dir');
   fprintf('chunks 605-2805 in %s \n',cdir_110);
@@ -92,6 +94,9 @@ elseif iDo_g110 == 2
 elseif iDo_g110 == 1
   fprintf(1,'save gases 1         in %s %s \n',dirout_1);
 end
+dirout_110
+whos vlist
+disp('ret to procieed'); pause
 
 allfreqchunks = 605 : 25 : 2830-25;
 %hdochunks = [];
@@ -103,6 +108,8 @@ allfreqchunks = 605 : 25 : 2830-25;
 %  end
 %hdochunks = sort(hdochunks);  %% do all chunks beginning with this
 hdochunks = allfreqchunks;
+
+hdochunks = vlist;   %%% new Jan 2019, can always comment this out
 
 %% these frequencies tally up with those in
 %% /asl/s1/sergio/xRUN8_NIRDATABASE/IR_2405_3005_WV/fbin/h2o.ieee-le
@@ -163,6 +170,8 @@ end
 cder = ['cd ' homedir]; eval(cder);
 % loop on gas IDs
 glist
+vlist
+disp('about to start : ret to proceed'); pause
 
 for gid00 = 1 : length(glist)
    gid0 = glist(gid00);
@@ -185,16 +194,16 @@ for gid00 = 1 : length(glist)
        vlist = hdochunks;
        gdir = [dirout_110 '/abs.dat/'];
        cdir = [dirout_110 '/kcomp.h2o/'];
-       gidx = 1; 
+       gidx = gid; 
      otherwise
        gid0
        error('huh???')
    end
 
-disp(' ')
-fprintf(1,'gid = %2i \n',gid);
-fprintf(1,'gdir = %s \n',gdir)
-fprintf(1,'cdir = %s \n',cdir)
+  disp(' ')
+  fprintf(1,'gid = %2i \n',gid);
+  fprintf(1,'gdir = %s \n',gdir)
+  fprintf(1,'cdir = %s \n',cdir)
 
   % loop on chunk start freq's
   for vv = 1 : length(vlist)

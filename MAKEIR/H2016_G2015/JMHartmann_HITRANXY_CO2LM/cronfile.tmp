@@ -1,0 +1,4 @@
+## when you are happy can do crontab < cronfile.tmp
+## to see what is running    crontab -l
+## to stop what is running   crontab -r
+0 * * * *  /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/JMHartmann_HITRANXY_CO2LM/rm_slurm.sc

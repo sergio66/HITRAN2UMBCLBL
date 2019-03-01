@@ -8,6 +8,7 @@ JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('gN_ir_list.txt');
+gasIDlist = load('gN_ir_list_7_22.txt');
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
@@ -65,7 +66,7 @@ while fmin <= wn2
       toucher = ['!touch ' fout]; %% do this so other runs go to diff chunk 
       eval(toucher);
       profile = [(1:100)' refpro.mpres refpro.gpart(:,gg) tprof refpro.gamnt(:,gg)]';
-      fip = ['IPFILES/std_gx' num2str(gg) 'x_' num2str(tt+6)];
+      fip = ['/home/sergio/SPECTRA/IPFILES/std_gx' num2str(gg) 'x_' num2str(tt+6)];
       fid = fopen(fip,'w');
       fprintf(fid,'%3i %10.8f %10.8f %7.3f %10.8e \n',profile);
       fclose(fid);

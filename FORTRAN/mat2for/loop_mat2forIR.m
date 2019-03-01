@@ -1,10 +1,11 @@
 chunkprefix = 'r';
 gases = 51 : 81;
-gases = 2;
 gases = [3 : 42];
 gases = [[51 : 81]];
 gases = [3 4 5 6 9 12];  %% for uncertainty
 gases = [[3 : 42] [51 : 81]];
+gases = 2;
+gases = [7 22];   %% ew MT CKD3.2 version
 
 fchunks = 605 : 25 : 2830;
 dtype = 'ieee-le';
@@ -34,6 +35,17 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/hartmann/kcompNOZEROS/'
     fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/hartmann/';
 
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_385ppm/kcomp/full/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_385ppm/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm/kcomp/full/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed1/kcomp/full/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed1/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed2/kcomp/full/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed2/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed3/kcomp/full/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed3/';
+
   else
     %% H2008
     cdir = '/asl/s1/sergio/RUN8_NIRDATABASE/IR_605_2830_H08/kcomp/';
@@ -43,10 +55,6 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
     fdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/fbin/etc.ieee-le/';   
     fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/';
-
-    %% H2016
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
 
     %% H2016 uncertainty
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/kcomp/';
@@ -63,6 +71,9 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
     fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/etc.ieee-le/';
 
+    %% H2016
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
 
   end
 
@@ -91,3 +102,7 @@ for gg = 1 : length(gases)
     end
   end
 end
+
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')

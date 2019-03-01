@@ -1,14 +1,5 @@
 %% this simply does all wavenumbers for gN
 
-% local running to test
-% clustcmd -L clust_runXtopts_mkgNvfiles.m 2:42
-%
-% otherwise when happy
-% clustcmd -q medium -n 32 clust_runXtopts_mkgNvfiles.m 2:42
-%
-% or
-% clustcmd -q long_contrib -n 32 clust_runXtopts_mkgNvfiles.m 2:42
-
 %% make sure you do have directory [dirout /abs.dat] available
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
 %% after the compression, you may want to delete this [dirout /abs.dat] dir
@@ -17,11 +8,12 @@ addpath /home/sergio/SPECTRA
 addpath /asl/matlib/aslutil
 addpath /asl/matlib/science
 
+outputdir
 home = pwd;
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-%JOB = 22
+JOB = 2;
 gid = JOB;
 if gid == 1
   error('not for WV')
@@ -82,13 +74,27 @@ else
   diroutXN = dirout(1:slash(end)-1);
 end
 
-fout = [diroutXN '/abs.dat'];
+outputdir;
+dirout   = output_dir0;
+diroutXN = output_dir0;
+dirout   = output_dir5;
+diroutXN = output_dir5;
+
+iShape = input('for LM ods enter (-1) voigt (0) first (+1) full : ');
+if iShape == -1
+  fout = [diroutXN '/abs.dat/voigt/'];
+elseif iShape == 0
+  fout = [diroutXN '/abs.dat/firstorder/'];
+elseif iShape == +1
+  fout = [diroutXN '/abs.dat/full/'];
+end
+
 ee = exist(fout,'dir');
 if ee == 0
   fprintf(1,'%s \n',fout);
   iAns = input('dir does not exist, do you want to make it? (+1 = Y) ');
   if iAns == 1
-    mker = ['!mkdir ' fout];
+    mker = ['!mkdir -p ' fout];
     eval(mker);
   else
     error('cannot proceed');
@@ -105,7 +111,14 @@ while fmin <= iaChunk(end)
   fr = [];
   k = zeros(10000,100,11);
 
-  fout = [diroutXN '/abs.dat/g' num2str(gid) 'v' num2str(fmin) '.mat'];
+  if iShape == -1
+    foutY = [diroutXN '/abs.dat/voigt/'];
+  elseif iShape == 0
+    foutY = [diroutXN '/abs.dat/firstorder/'];
+  elseif iShape == +1
+    foutY = [diroutXN '/abs.dat/full/'];
+  end
+  fout = [foutY '/g' num2str(gid) 'v' num2str(fmin) '.mat'];
   if exist(fout) == 0
     fprintf(1,'processing %8.2f \n',fmin)
 
@@ -122,6 +135,16 @@ while fmin <= iaChunk(end)
         loader = ['load ' fin ];
         eval(loader);
         fr = w;
+
+        if iShape == -1
+          d = dvoigt;
+        elseif iShape == 0
+          d = dfirst;
+        elseif iShape == +1
+          d = dfull;
+        end
+        d = max(d,0);
+
         k(:,:,pp+6) = d';
         if pp == 0
           figure(2); plot(fr,exp(-d(1,:))); hold on; pause(0.1); % disp('ret to continue');   
