@@ -1,4 +1,4 @@
-function [w,dglab,dlblrtm] = driver_run8_glab_lblrtm_self(gid,v1,v2,ipfile,iDoGlab)
+function [w,dglab,dlblrtm] = driver_glab_lblrtm_self_MANYLAY(gid,v1,v2,ipfile,iDoGlab)
 
 %% >>>>>>>>> see code in /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_ALL_H12_NOBASEMENT <<<<<<<<<<<<
 

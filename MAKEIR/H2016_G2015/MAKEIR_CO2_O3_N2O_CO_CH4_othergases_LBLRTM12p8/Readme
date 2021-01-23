@@ -1,3 +1,7 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ **** clust_runXtopts_savegasN_fileHIGHRES.m : is for FIr1 = 500 - 805 cm-1 at 0.0005 cm-1 ****
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 mkdir /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H16
 cp -a  ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/*.m .
 cp -a  ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/*.sbatch .

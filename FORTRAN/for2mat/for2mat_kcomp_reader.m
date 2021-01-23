@@ -24,6 +24,7 @@ fname = filename;
 
 fid=fopen(fname, 'r' ,dtype);
 if fid == -1
+  fprintf(1,'trying to read %s \n',fname)
   error('can''t open input file')
 end
 

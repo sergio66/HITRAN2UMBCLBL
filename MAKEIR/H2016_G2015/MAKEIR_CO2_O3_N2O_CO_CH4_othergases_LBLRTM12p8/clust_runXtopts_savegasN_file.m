@@ -1,3 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat has 385 ppmv for CO2  %%%
+%% so you either increase CO2 here using a mutiplier eg                     %%%
+%%   385*1.038961                                                           %%%
+%%                                                                          %%%
+%% or eg                                                                    %%%
+%% /asl/data/kcarta/H2016.ieee-le/IR605/lblrtm12.8/etc.ieee-le/CO2_400ppmv/ %%%
+% /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/kcomp_co2_385_to_400.m        %%%
+%% has a code to change the abs coeff "kcomp_co2_385_to_400.m"              %%%
+%% which we have copied here to this dir                                    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% same as clust_runXtopts_savegasN_file_*.m except it goes to "Toff_" subdirs ....
 
 %% this simply does all wavenumbers for gN
@@ -35,8 +47,10 @@ addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
 gg    = Sgid;
 gasid = Sgid;  
 gid   = Sgid;
-freq_boundaries       %%% these are standard, using 0.0025 cm-1 output
-%% freq_boundariesLBL    %%% these are high res, using 0.0005 cm-1 output
+
+freq_boundaries                           %% these are standard, using 0.0025 cm-1 output
+%% freq_boundariesLBL                     %% these are high res, using 0.0005 cm-1 output
+%% choose_usualORhighORveryhigh_freqres   %% iUsualORHigh = -1 or -2
 
 ee = exist(dirout);
 if ee == 0

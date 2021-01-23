@@ -8,9 +8,12 @@ gases = [7 22];
 gases = [3 6];
 
 gases = [2 3];
-
 fchunks = 605 : 05 : 855;
 fchunks = 855 : 05 : 1205;
+
+gases = [2 3];
+fchunks = 605 : 05 : 1200;
+
 dtype = 'ieee-le';
 
 for gg = 1 : length(gases)
@@ -33,6 +36,12 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/kcomp/';
     fdir = '/asl/data/kcarta_sergio/H2012.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
 
+    %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
+    %% H2016
+    gdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/abs.dat/'; 
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/kcomp/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
+
   elseif gid == 3
     %%  >>> made by UMBC LBL w/o basement
     cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g3.dat/WOBASEMENT/kcomp/';
@@ -49,6 +58,12 @@ for gg = 1 : length(gases)
     %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
     cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/kcomp/';
     fdir = '/asl/data/kcarta_sergio/H2012.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
+
+    %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
+    %% H2016
+    gdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/abs.dat/'; 
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/kcomp/';
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
 
   elseif gid == 5
     %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2

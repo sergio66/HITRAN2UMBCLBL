@@ -114,9 +114,11 @@ end
 %% http://shadow.eas.gatech.edu/~vvt/lblrtm/lblrtm_inst.html
 fid = fopen('TAPE5','w');
 
+%% RECORD 1.1
 str = '$ one layer only, ONE gas + everything else in N2 like UMBC-LBL  ';
   fprintf(fid,'%s \n',str);
 
+%% RECORD 1.2
 %% Rayleigh extinction not calculated, all other continua calculated
 %  str = ' HI=1 F4=1 CN=5 AE=0 EM=0 SC=0 FI=0 PL=0 TS=0 AM=0 MG=1 LA=0 OD=1 XS=0    0    0';   
 %  fprintf(fid,'%s \n',str);
@@ -132,6 +134,8 @@ str = '$ one layer only, ONE gas + everything else in N2 like UMBC-LBL  ';
   %%           XO2CN  O2 continuum absorption multiplicative factor
   %%           XN2CN  N2 continuum absorption multiplicative factor
   %%             XRAYL  Rayleigh extinction multiplicative factor
+
+%% RECORD 1.2a
   str = ' 1.0 1.0 1.0 1.0 0.0 0.0 0.0';  %% ORIG
   if gidIN == 1
     str = ' 0.0 0.0 0.0 0.0 1.0 1.0 0.0';  %% only want lines, and N2/O2 continuum
@@ -154,7 +158,19 @@ str = '$ one layer only, ONE gas + everything else in N2 like UMBC-LBL  ';
   end
   fprintf(fid,'%s \n',str);
 
+%% RECORD 1.3
+%%             V1,     V2,   SAMPLE,   DVSET,  ALFAL0,   AVMASS,   DPTMIN,   DPTFAC,   ILNFLG,     DVOUT,   NMOL_SCAL
+%%           1-10,  11-20,    21-30,   31-40,   41-50,    51-60,    61-70,    71-80,     85,      90-100,         105
+%%          E10.3,  E10.3,    E10.3,   E10.3,   E10.3,    E10.3,    E10.3,    E10.3,    4X,I1,  5X,E10.3,       3x,I2 
+%% dvx = input/out res for LBLRTM .. this is BEFORE the final boxcar integration over 5 points
+
+%%%    0        1         2         3         4         5         6         7         8         9
+%%%    1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 str = '  2080.000  2180.000                                                                          0.0005';
+
+%% but fprintf(fid,' %9.3f %9.3f  %s \n',v1,v2,str1); means we are pre-loading with two f10.3 so that is already starting at 21
+%%%       2        3         4         5         6         7         8         9         10         11
+%%%       1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
 if dvx == 0.0005
   str1 = '                                                                        0.0005';
   str1 = '                                            0.00                        0.0005';
@@ -173,6 +189,12 @@ elseif dvx == 0.0015
 elseif dvx == 0.0001
   str1 = '                                                                        0.0001';
   str1 = '                                            0.00                        0.0001';
+elseif dvx == 0.0002/5
+  str1 = '                                                                       0.00004';
+  str1 = '                                            0.00                       0.00004';
+elseif dvx == 0.0001/5
+  str1 = '                                                                       0.00002';
+  str1 = '                                            0.00                       0.00002';
 elseif dvx == 1/5   %% for continuum
   str1 = '                                                                        0.2000';
   str1 = '                                            0.00                        0.2000';

@@ -33,5 +33,32 @@
 ###SBATCH --mem-per-cpu=24000
 
 #  Specify the job array (format:  start-stop:step)
-srun matlab -nodisplay -r "clust_runXtopts_savegasN_file; exit"
-## srun matlab -nodisplay -r "clust_runXtopts_savegasN_fileHIGHRES; exit"
+## orig code
+## srun matlab -nodisplay -r "clust_runXtopts_savegasN_file; exit"
+
+if [ $# -gt 0 ]; then
+  echo "Your command line contains $# arguments"
+elif [ $# -eq 0 ]; then
+  echo "Your command line contains no arguments"
+fi
+
+if [[ "$1" -eq "" ]]; then
+  echo "cmd line arg = DNE, clust_runXtopts_savegasN_file"
+  srun matlab -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
+elif [[ "$1" -eq "1" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasN_file"
+  srun matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
+elif [[ "$1" -eq "2" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_2"
+  srun matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_2; exit"
+elif [[ "$1" -eq "3" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_3"
+  srun matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_3; exit"
+elif [[ "$1" -eq "4" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_4"
+  srun matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_4; exit"
+elif [[ "$1" -eq "5" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_5"
+  srun matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_5; exit"
+fi
+

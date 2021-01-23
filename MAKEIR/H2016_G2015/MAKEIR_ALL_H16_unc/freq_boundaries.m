@@ -4,7 +4,7 @@ dirout = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/g' num2str(gid)
 
 topts = runXtopts_params_smart(2000);
 %topts.str_unc = '+';
-set_str_unc
+set_str_unc   %%%%%%%%%%%%%%%%%% <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 dv = topts.ffin*nbox*pointsPerChunk;
 

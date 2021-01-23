@@ -15,6 +15,7 @@
 *.core
 *.rtp
 *ugh*
+*.tmp
 
 # tex work files
 *.aux

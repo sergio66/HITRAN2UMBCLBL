@@ -1,3 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% USE THIS TO MAKE FIR1 IR database 500-805 cm-1 at kCARTA 0.0005 cm-1 resolution
+%% edit choose_usualORhighORveryhigh_freqres.m so iUsualORHigh == -1
+%% with iUsualORHigh == -1 and iUseOldWay = +2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% this simply does all wavenumbers for gN
 
 %% run with sergio_matlab_mkgNvfiles.sbatch
@@ -33,7 +39,11 @@ load /home/sergio/HITRAN2UMBCLBL/refproTRUE.mat
 
 nbox = 5;
 pointsPerChunk = 10000;
-freq_boundariesLBL
+iUsualORHigh = -1;    %%% these are high res, using 0.0005 cm-1 output
+
+%% freq_boundaries                        %% these are standard, using 0.0025 cm-1 output
+%% freq_boundariesLBL                     %% these are high res, using 0.0005 cm-1 output
+choose_usualORhighORveryhigh_freqres      %% iUsualORHigh = -1 or -2
 
 figure(1); clf
 addpath /home/sergio/SPECTRA
@@ -90,7 +100,17 @@ end
 
 %% want to stop two slashes before
 slash = findstr(dirout,'/');
-diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat'];
+if iUsualORHigh > 0
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat'];
+elseif iUsualORHigh == -1
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat0.0005/'];
+elseif iUsualORHigh == -2
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat0.0001/'];
+elseif iUsualORHigh == -3
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat0.0002/'];
+else
+  error('unknown option iUsualORHigh')
+end
 
 ee = exist(diroutXN,'dir');
 if ee == 0
@@ -173,7 +193,7 @@ while fmin <= iaChunk(end)
       eval(saver);
     else
       fin
-      fprintf(1,'file(s) too small : gasID freq size = %3i %6i %8i iSave = %2i \n',gid,fmin,lser.bytes,iSave);
+      fprintf(1,'file(s) too small : gasID freq size = %3i %6i %8i iSaved successfully = %2i \n',gid,fmin,lser.bytes,iSave);
       error('ooo')
     end  %% if
   else
@@ -184,3 +204,6 @@ while fmin <= iaChunk(end)
 end                   %% loop over freq
 
 figure(2); hold off;
+
+%% now compress the data!!
+disp('now compress the data by going to ../../../CMPRUN and the ../../../FORTRAN')

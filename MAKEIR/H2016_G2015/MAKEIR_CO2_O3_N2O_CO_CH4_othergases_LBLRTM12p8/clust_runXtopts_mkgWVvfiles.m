@@ -1,4 +1,4 @@
-%% this simply does all wavenumbers for gN
+%% this simply does all wavenumbers for g1
 
 %% make sure you do have directory [diroutXN /abs.dat] available
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
@@ -60,7 +60,8 @@ load /home/sergio/HITRAN2UMBCLBL/refproTRUE.mat
 
 nbox = 5;
 pointsPerChunk = 10000;
-freq_boundaries
+
+choose_usualORhighORveryhigh_freqres   %% iUsualORHigh = -1 or -2
 
 figure(1); clf
 addpath /home/sergio/SPECTRA
@@ -109,6 +110,18 @@ end
 %% want to stop two slashes before
 slash = findstr(dirout,'/');
 diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat'];
+
+%% want to stop two slashes before
+slash = findstr(dirout,'/');
+if iUsualORHigh > 0
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat'];
+elseif iUsualORHigh == -1
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat0.0005/'];
+elseif iUsualORHigh == -2
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat0.0001/'];
+elseif iUsualORHigh == -3
+  diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat0.0002/'];
+end
 
 ee = exist(diroutXN,'dir');
 if ee == 0

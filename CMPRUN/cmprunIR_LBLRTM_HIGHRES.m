@@ -1,6 +1,7 @@
 function cmprunIR_LBLRTM_HIGHRES(glist, vlist, HITRAN)
 
 %% call with cmprunIR_LBLRTM_HIGHRES([2 3],605:5:855,2012);
+%% call with cmprunIR_LBLRTM_HIGHRES([2  ],605:5:1200,2016);
 
 addpath /asl/matlib/science
 addpath /asl/matlib/aslutil
@@ -14,13 +15,17 @@ addpath /asl/matlib/aslutil
 
 if nargin < 3
   HITRAN = 2012;
+  HITRAN = 2016;
 end
 
 if nargin < 2
   vlist = 605:25:2830; % default to all frequency chunks
+  vlist = 605:05:2830; % default to all frequency chunks
 end
 if nargin < 1
   glist = [2 3 5 6 7 22];	     % default to some molgas
+  glist = [2     6     ];	     % default to some molgas
+  glist = [2 3   6     ];	     % default to some molgas
 end
 
 %% assume we are only dealing with H2000 onwards here
@@ -71,6 +76,15 @@ for gid00 = 1 : length(glist)
        disp('and run find_nan_put_zeros.m')
        disp('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
+       %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
+       %% 2016 was saved in /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat0.0005//
+       %% so make a symbolic link
+       %% cd /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//g2.dat/lblrtm0.0005/
+       %% ln -s /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat0.0005// abs.dat
+       %% mkdir kcomp
+       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/abs.dat/']; 
+       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm0.0005/kcomp/'];
+
      case 3
        %%% >>>>>>>>>>>>> done with UMBC-LBL NOBASEMENT
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/WOBASEMENT/abs.dat/']; 
@@ -85,6 +99,15 @@ for gid00 = 1 : length(glist)
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm2/kcomp/'];
 
        %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
+       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/abs.dat/']; 
+       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/kcomp/'];
+
+       %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
+       %% 2016 was saved in /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat0.0005//
+       %% so make a symbolic link
+       %% cd /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//g3.dat/lblrtm0.0005/
+       %% ln -s /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat0.0005// abs.dat
+       %% mkdir kcomp
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g3.dat/lblrtm0.0005/kcomp/'];
 
@@ -186,3 +209,4 @@ fprintf(1,'cdir = %s \n',cdir)
 end % gid loop
 
 disp('Now go to the "fortran" directory and make the ieee-le files ...')
+disp(' run loop_mat2forIR_LBLRTM_HIGHRES.m')

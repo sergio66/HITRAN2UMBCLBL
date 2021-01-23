@@ -1,3 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% USE THIS TO MAKE FIR1 IR database 500-805 cm-1 at kCARTA 0.0005 cm-1 resolution
+%% edit choose_usualORhighORveryhigh_freqres.m so iUsualORHigh == -1
+%% with iUsualORHigh == -1 and iUseOldWay = +2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% same as clust_runXtopts_savegasN_file_2.m except it goes to "Toff_" subdirs ....
 
 %% this simply does all wavenumbers for gN
@@ -11,17 +17,32 @@
 
 %% test eg JOB='020223005'; clust_runXtopts_savegasN_file
 
+addpath /home/sergio/MATLABCODE
+system_slurm_stats
+
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+
+%%%% if file_parallelprocess_gas_2_3_6.txt         then JOB = 1 .. 11 for CO2, 12 .. 22 for O3, 23 .. 33 for CH4
+%%%% if file_parallelprocess_gas_2_6_500_805.txt   then JOB = 1 .. 11 for CO2, 12 .. 22 for CH4
+
 % JOB = getenv('SLURM_ARRAY_TASK_ID');
 % JOB = '020060506';
-theJOB = load('file_parallelprocess_CO2.txt');
-theJOB = load('file_parallelprocess_O3.txt');
+% JOB = 2+11
+
+%theJOB = load('file_parallelprocess_CO2.txt');
+%theJOB = load('file_parallelprocess_O3.txt');
+%theJOB = load('file_parallelprocess_gas_2_6.txt');         %% first 11 are CO2, next 11 are CH4
+theJOB = load('file_parallelprocess_gas_2_3_6.txt');        %% first 11 are CO2, next 11 are O3, next 11 are CH4
+theJOB = load('file_parallelprocess_gas_2_6_500_805.txt');  %% first 11 are CO2, next 11 are CH4
+
 JOB = theJOB(JOB);
 JOB = ['0' num2str(JOB)];
 
 Sgid     = str2num(JOB(1:2));
 Schunk   = str2num(JOB(3:7));  
 Stoffset = str2num(JOB(8:9)); Stt = Stoffset - 6;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 fprintf(1,'JOB String = %s    parsed to gid = %2i chunk = %5i Stoffset = %2i \n',JOB,Sgid,Schunk,Stoffset);
 
@@ -36,17 +57,35 @@ load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
 addpath /home/sergio/SPECTRA
 addpath /asl/matlib/science
 addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(addpather);
+addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(addpather);
 addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
 
 gg    = Sgid;
 gasid = Sgid;  
 gid   = Sgid;
-%%% freq_boundaries       %%% these are standard, using 0.0025 cm-1 output
-freq_boundariesLBL    %%% these are high res, using 0.0005 cm-1 output
+
+choose_usualORhighORveryhigh_freqres   %% iUsualORHigh = -1 or -2
+
+%% set LBLRTM res before 5 point boxcar (so final res is x5 higher)
+if iUsualORHigh >= 0
+  dvLBLRTM = 0.0005;    %% 0.0005 x 5 pt boxcar = 0.0025
+elseif iUsualORHigh == -1
+  dvLBLRTM = 0.0001;    %% 0.0001 x 5 pt boxcar = 0.0005
+elseif iUsualORHigh == -2
+  dvLBLRTM = 0.0001/5;  %% 0.0001/5 x 5 pt boxcar = 0.0001 but this is too high for LBLRTM oops
+elseif iUsualORHigh == -3
+  dvLBLRTM = 0.0002/5;  %% 0.0002/5 x 5 pt boxcar = 0.0002 is limit of LBLRTM
+end
 
 if gid == 7 | gid == 22
   error('this is NOT for gid = 7,22')
+end
+
+ee = exist(dirout);
+if ee == 0
+  mker = ['!mkdir -p ' dirout];
+  eval(mker);
+  fprintf(1,'made dir = %s \n',dirout);
 end
 
 cd /home/sergio/SPECTRA
@@ -68,12 +107,13 @@ end
 iUseOldWay = +1;  %% this uses old way, which calls driver_glab_lblrtm_forn_MANYLAY (gasN + N2/O2 od)
                   %%                    then calls  driver_glab_lblrtm_forn_MANYLAY_N2O2_fake (N2/O2 od)
                   %% finally gasN is the difference between the two
+iUseOldWay = +3;  %% this uses new way, which calls driver_glab_lblrtm_forn_MANYLAY_WV_noN2con (gasN, includes effects of US Std WV)
 iUseOldWay = +2;  %% this uses new way, which calls driver_glab_lblrtm_forn_MANYLAY_noN2con (gasN)
 
 while fmin <= wn2
   fmax = fmin + dv;
 
-  fprintf(1,'gas freq = %3i %6i \n',gg,fmin);
+  fprintf(1,'gasID %3i : freq1, freq2, dv = %8.2f %8.2f %8.6f\n',gg,fmin,fmax,dv);
 
   for tt = Stt
     tprof = refpro.mtemp + tt*10;
@@ -94,28 +134,57 @@ while fmin <= wn2
       fprintf(fid,'%3i %10.8e %10.8e %7.3f %10.8e \n',profile);
       fclose(fid);
 
+      if gid == 2
+        %% also need wv
+        profile = [(1:100)' refpro.mpres refpro.gpart(:,1) tprof refpro.gamnt(:,1)]';
+        fipw = ['IPFILES/std_gx' num2str(1) 'x_co2_wv_' num2str(tt+6)];
+        fid = fopen(fipw,'w');
+        fprintf(fid,'%3i %10.8e %10.8e %7.3f %10.8e \n',profile);
+        fclose(fid);
+      end
+
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(cder);
+      pwd
 
       if iUseOldWay == +1
-        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,0.0001);
+        
+        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,dvLBLRTM);
         dall = dlblrtm;
 
         %% compute ODs due to other gases (O2+N2) by putting current gas conribution = 0
-        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_N2O2fake(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,0.0001);
+        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_N2O2fake(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,dvLBLRTM);
         dN2O2 = dlblrtm;
 
         d = dall - dN2O2;
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+        % cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/
         saver = ['save ' fout ' w d dall dN2O2'];
+
       elseif iUseOldWay == +2
-        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_noN2con(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,0.0001);
+        [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_noN2con(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,dvLBLRTM);
         d = dlblrtm;
         %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+        %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/
+        saver = ['save ' fout ' w d'];
+
+      elseif iUseOldWay == +3 
+        if gasid == 2
+
+          [w,dglab,dlblrtm_co2_wv] = driver_glab_lblrtm_forn_MANYLAY_WVeffects_noN2con(gasid,fmin,fmax,...
+                                     ['/home/sergio/SPECTRA/' fip],['/home/sergio/SPECTRA/' fipw],-1,-1,-1,dvLBLRTM);
+          [w,dglab,dlblrtm_wv] = driver_glab_lblrtm_forn_MANYLAY_noN2con(1,fmin,fmax,['/home/sergio/SPECTRA/' fipw],-1,-1,-1,dvLBLRTM);
+          dlblrtm = dlblrtm_co2_wv - dlblrtm_wv;
+        else
+          [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_noN2con(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,-1,dvLBLRTM);
+        end
+        d = dlblrtm;
+        %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+        %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/
         saver = ['save ' fout ' w d'];
       end
-
       eval(saver);
     elseif exist(fout,'file') > 0 & iYes > 0
       fprintf(1,'file %s already exists \n',fout);
@@ -127,8 +196,10 @@ while fmin <= wn2
 %  %% one chunk is enough
 %  return
 %  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+%  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/
 end                 %% loop over freq
 
 % cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+% cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/

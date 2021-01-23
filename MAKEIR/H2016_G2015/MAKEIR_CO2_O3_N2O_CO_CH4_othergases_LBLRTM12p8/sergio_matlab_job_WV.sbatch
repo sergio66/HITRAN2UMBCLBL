@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# run this with /bin/rm slurm*.out; sbatch --array=1-11 sergio_matlab_jobB.sbatch 
+# run this with /bin/rm slurm*.out; sbatch --array=1-11 sergio_matlab_jobB_WV.sbatch 
 
 #  Name of the job:
 #SBATCH --job-name=RUN_WV_LBLRTM
@@ -29,6 +29,31 @@
 ##  This is in MB, very aggressive but I have been running outta memory
 ###SBATCH --mem-per-cpu=24000
 
-#  Specify the job array (format:  start-stop:step)
-srun matlab -nodisplay -r "clust_runXtopts_savegasWV_file; exit"
+if [ $# -gt 0 ]; then
+  echo "Your command line contains $# arguments"
+elif [ $# -eq 0 ]; then
+  echo "Your command line contains no arguments"
+fi
 
+##### ORIG Specify the job array (format:  start-stop:step)
+##### ORIG srun matlab -nodisplay -r "clust_runXtopts_savegasWV_file; exit"
+
+if [[ "$1" -eq "" ]]; then
+  echo "cmd line arg = DNE, clust_runXtopts_savegasWV_file"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file; exit"
+elif [[ "$1" -eq "1" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasWV_file"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file; exit"
+elif [[ "$1" -eq "2" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasWV_file_2"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_2; exit"
+elif [[ "$1" -eq "3" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasWV_file_3"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_3; exit"
+elif [[ "$1" -eq "4" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasWV_file_4"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_4; exit"
+elif [[ "$1" -eq "5" ]]; then
+  echo "cmd line arg = 1, clust_runXtopts_savegasWV_file_5"
+  srun matlab -nojvm -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_5; exit"
+fi

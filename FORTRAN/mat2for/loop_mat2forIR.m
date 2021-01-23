@@ -6,6 +6,7 @@ gases = [3 4 5 6 9 12];  %% for uncertainty
 gases = [[3 : 42] [51 : 81]];
 gases = 2;
 gases = [7 22];   %% ew MT CKD3.2 version
+gases = 3;
 
 fchunks = 605 : 25 : 2830;
 dtype = 'ieee-le';
@@ -56,6 +57,15 @@ for gg = 1 : length(gases)
     fdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/fbin/etc.ieee-le/';   
     fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/';
 
+    %% G2015
+    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
+    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/etc.ieee-le/';
+
+    %% H2016
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
+    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
+
+
     %% H2016 uncertainty
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/kcomp/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S-/';  %% strength min
@@ -66,14 +76,6 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_P+/';  %% pressure shift max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S+/';  %% strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_Rn/';  %% randomize all    
-
-    %% G2015
-    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/etc.ieee-le/';
-
-    %% H2016
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
 
   end
 

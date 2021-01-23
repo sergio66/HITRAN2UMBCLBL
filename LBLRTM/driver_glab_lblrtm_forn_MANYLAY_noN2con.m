@@ -71,8 +71,8 @@ if (gid == 111 | gid == 101 | gid == 102)
   iType = 605;
   disp('  ----->>>>>>>> WATER CONTINUUM : dv = 0.0025')
 
-  dvx = 0.0025;
-  dvx = 0.0005;
+  dv5pt = 0.0025;
+  dvx   = 0.0005;
 
   dvx = 1/5;  %% so you output at 1 cm-1 resolution
 
@@ -93,8 +93,8 @@ elseif v1 >= 604.999 & v2 <= 3500
   iType = 605;
   disp('  ----->>>>>>>> v1 >= 605 & v2 <= 3500 : dv = 0.0025')
 
-  dvx = 0.0025;
-  dvx = 0.0005;
+  dv5pt = 0.0025;
+  dvx   = 0.0005;
 
   if exist('rRes')
     dvx = rRes;
@@ -108,19 +108,43 @@ elseif v1 >= 604.999 & v2 <= 3500
 
   w = v1 : dvx*5 : v2 - dvx*5;
   w = v1 + dvx*5 * bwop;
-  
-elseif v1 >= 499.999 & v2 <= 655
-  !! hm could be problems making the last 605-620 cm-1 chunk!!!
-  iType = 500;
-  disp('  ----->>>>>>>> v1 >= 500 & v2 <= 650 : dv = 0.0015')
 
-  dvx = 0.0015;
-  dvx = 0.0003;
+%% this was for FIR1 before Oct 2019
+%% elseif v1 >= 499.999 & v2 <= 605
+%%   %% hmm could be problems making the last 605-620 cm-1 chunk%%!
+%%   iType = 500;
+%%   disp('  ----->>>>>>>> v1 >= 500 & v2 <= 650 : dv = 0.0015')
+%% 
+%%   dv5pt = 0.0015;
+%%   dvx  = 0.0003;
+%% 
+%%   if exist('rRes')
+%%     dvx = rRes;
+%%   else
+%%     dvx = 0.0003;
+%%   end
+%% 
+%%   bwop = (v2-v1+2*eps)/(5*dvx);
+%%   bwop = 1 : bwop;
+%%   bwop = bwop - 1;
+%% 
+%%   w = v1 : 5*dvx : v2 - 5*dvx;
+%%   w = v1 + 5*dvx * bwop;
+%% 
+
+%% this was for FIR1 after Oct 2019
+elseif v1 >= 499.999-25 & v2 <= 825
+  %% hmm could be problems making the last 605-620 cm-1 chunk!!!
+  iType = 500;
+  disp('  ----->>>>>>>> v1 >= 500 & v2 <= 825 : dv = 0.0005')
+
+  dv5pt = 0.0005;
+  dvx   = 0.0001;
 
   if exist('rRes')
     dvx = rRes;
   else
-    dvx = 0.0003;
+    dvx = 0.0001;
   end
 
   bwop = (v2-v1+2*eps)/(5*dvx);
@@ -148,7 +172,7 @@ if iDoGlab > -2
     %makeTAPE5(gid,v1-01,v2+01,ipfile,dvx,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
     %makeTAPE5(gid,v1-10,v2+10,ipfile,dvx,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
 
-    %%%%%%%%makeTAPE5(gid,v1-25,v2+25,ipfile,dvx,ii,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
+    %%%%%%% %makeTAPE5(gid,v1-25,v2+25,ipfile,dvx,ii,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
     if gid <= 47 
       if iType == 605
         qfactor = makeTAPE5_noN2con(gid,v1-25,v2+25,ipfile,dvx,ii,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
@@ -174,6 +198,7 @@ if iDoGlab > -2
       error('huh gid in driver_glab_lblrtm_forn_MANYLAY_noN2con.m')
     end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     disp('  running !lblrtm >& ugh ....')
       %lbler = ['!lblrtm >& ugh']; eval(lbler)
       command = ['lblrtm >& ugh'];
@@ -181,10 +206,7 @@ if iDoGlab > -2
       [status,cmdout] = system(command,'-echo');
     %disp('  catting ugh ....')
     %catter = ['!more ugh'];    eval(catter)
-
-%pwd
-%!more TAPE5
-%pause
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     disp('  reading ODint_001 ...')
     [vx, OD, v] = lblrtm_tape11_reader_ODint('ODint_001','d');   %% lblrtm compiled with double
@@ -264,39 +286,82 @@ if iDoGlab > -2
       % format
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
-    elseif dvx == 0.0015 & iType == 500
-      woop = find(vx >= v1 - 0.001 & vx <= v2 - 0.0015 + 0.001);
+
+    % this was FIR1 before Oct 2019
+    %elseif dvx == 0.0015 & iType == 500
+    %  woop = find(vx >= v1 - 0.001 & vx <= v2 - 0.0015 + 0.001);
+    %  vxx = vx(woop)';
+    %  ODD = OD(woop)';
+
+    % this is FIR1 after Oct 2019
+    elseif dvx == 0.0001 & iType == 500
+      %% LBLRTM for heating rate 0.0001 cm-1 ---> 0.0005 cm-1 after boxcar    
+      woop = find(vx >= v1 - 2.0000001*0.0001 & vx <= v2 - 0.0001*5 + 2.00001*0.0001); 
+      if mod(length(woop),5) ~= 0
+        disp('WARNING : OHOH maybe LBLRTM output res changed!!!! suddenly no longer multiple of 5')
+        junk = [length(woop) v1 v2 dvx v2-dvx min(vx(woop)) max(vx(woop)) mean(diff(vx))];
+        fprintf(1,'%5i %20.12f %20.12f %20.12f %20.12f %20.12f %20.12f %20.12f \n',junk)
+        disp('hope this quick fix works')
+        woop = woop(1:end-mod(length(woop),5));
+      end
       vxx = vx(woop)';
       ODD = OD(woop)';
-    elseif dvx == 0.0001 & iType == 605
-      woop = find(vx >= v1 - 2.001*0.0001 & vx <= v2 - 0.0005 + 2.001*0.0001); 
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
+
+    %% these set of 4 are when I was testing LBLRTM vs kCARTA for AMT paper
+    %% test 1 : after boxcar 0.0005 cm-1 res
+    elseif dvx == 0.0001 & iType == 605
+      woop = find(vx >= v1 - 2.001*0.0001 & vx <= v2 - 0.0001 + 2.001*0.0001); 
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    %% these set of 4 are when I was testing LBLRTM vs kCARTA for AMT paper
+    %% test 2 : after boxcar 0.0001 cm-1 res, but this is way too high for LBLRTM
+    elseif dvx == 0.0001/5 & iType == 605
+      woop = find(vx >= v1 - 2.001*0.0001/5 & vx <= v2 - 0.0005/5 + 2.001*0.0001/5); 
+      woop = find(vx >= v1 - 2.001*0.0001/5 & vx <= v2 - 0.0001/5 + 2.001*0.0001/5); 
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    %% these set of 4 are when I was testing LBLRTM vs kCARTA for AMT paper
+    %% test 3 : after boxcar 0.0002 cm-1 res, just about can handle
+    elseif dvx == 0.0002/5 & iType == 605
+      woop = find(vx >= v1 - 2.001*0.0002/5 & vx <= v2 - 2.95 * 0.0002/5); 
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    %% these set of 4 are when I was testing LBLRTM vs kCARTA for AMT paper
+    %% test 4 : after boxcar 0.0015 cm-1 res, did not really test this recently
     elseif dvx == 0.0003 & iType == 605
       woop = find(vx >= v1 - 2.001*0.0003*1.5 & vx <= v2 - 0.0015 + 2.001*0.0003);
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
+
     elseif dvx == 1/5 & iType == 605
-%      whos vx
-%      [vx(1:3) vx(end-2:end)]
-%%keyboard      
       woop = find(vx >= v1 - 2.001*1/5*0.9855 & vx <= v2 - 1/5 + 2.001*1/5);
       woop = find(vx >= v1 - 2*1/5 & vx <= v2 - 1 + 2*1/5);        
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
+
     else
-      error('huh??')
+      fprintf(1,'OHOH problems dvx = %20.12f v1 = %20.12f v2 = %20.12f iType = %4i \n',dvx,v1,v2,iType)
+      fprintf(1,'OHOH problems dvx - 0.0001 = %20.12f \n',dvx-0.0001)
+      
+      error('huh?? error in figuring out boxcar limits')
     end
 
     if length(vxx) ~= length(w)
-      [vxx(1:3) vxx(end-2:end) w(1:3) w(end-2:end)]      
-      [length(vxx)  length(w)]
+      fprintf(1,' \n');
+      fprintf(1,'vxx(1:3) = %10.5e %10.5e %10.5e vxx(end-2:end) = %10.5e %10.5e %10.5e \n',vxx(1:3),vxx(end-2:end))
+      fprintf(1,'  w(1:3) = %10.5e %10.5e %10.5e   w(end-2:end) = %10.5e %10.5e %10.5e \n',w(1:3),w(end-2:end))
+      fprintf(1,' [length(vxx)  length(w)] = %6i %6i \n',[length(vxx)  length(w)])
       error('length(vxx) ~= length(w)')
     end
 
    if sum(abs(vxx-w))/length(w) > 0.0001
-     keyboard
-     error('hmm size of arrays matches, but vxx, w seem different')
+     %keyboard
+     disp('WARNING hmm size of arrays matches, but vxx, w seem different')
     end
 
     %%dlblrtm = interp1(vxx,ODD,w);

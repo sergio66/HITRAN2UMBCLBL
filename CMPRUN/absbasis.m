@@ -48,7 +48,8 @@ end
 
 % default parameters
 d = 2;	        % initial dimension
-dmax = 50;      % max saved dimension
+dmax = 50;      % max saved dimension DEFAULT
+dmax = 100;     % max saved dimension DEFAULT
 tmax = 0.002;   % max layer transmittance error
 lmax = 0.003;   % max layer-to-space transmittance error
 bmax = 0.1;     % max brightness temperature error

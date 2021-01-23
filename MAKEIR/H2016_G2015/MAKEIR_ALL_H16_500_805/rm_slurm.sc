@@ -1,0 +1,1 @@
+/bin/rm /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_H16/slurm-*

@@ -41,9 +41,9 @@ toff=-50.0:10.0:50.0;
 
 fid=fopen(fname, 'w' ,dtype);
 if fid == -1
+  fprintf(1,'trying to open %s \n',fname);
   error('can''t open output file')
 end
-
 
 % Write header info
 filemark= 4 + 8 + 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;

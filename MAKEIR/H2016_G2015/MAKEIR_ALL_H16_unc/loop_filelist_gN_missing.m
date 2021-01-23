@@ -25,6 +25,7 @@ gids = setdiff(gids,[30 35 42]);  %% those 3 gases NOT present in breakout of HI
 
 gids = [3 4 5 6 9 12];
 gids = [3 4 5 6 9];
+gids = [3];
 
 fid = fopen('gN_ir_list2.txt','w');
 nbox = 5;
@@ -47,7 +48,7 @@ for ii = 1 : length(gids)
   %disp('<RET> to continue');
   pause(0.1)
 
-  cd ~/HITRAN2UMBCLBL/MAKEIR//H2016/MAKEIR_ALL_H16_unc/
+  cd ~/HITRAN2UMBCLBL/MAKEIR/H2016_G2015/MAKEIR_ALL_H16_unc/
 
   freq_boundaries
 

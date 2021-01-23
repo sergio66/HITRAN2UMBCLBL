@@ -8,8 +8,11 @@ dovers=128
 
 compiler=20  ## pgi   sgl
 compiler=21  ## pgi   dbl  gives EXIT error and does not work well with Matlab
-compiler=01  ## gnu   dbl
+
+compiler=01  ## gnu   dbl/sng
+
 compiler=11  ## intel dbl
+compiler=10  ## intel dbl,gnu sgl
 
 if [ $dovers -eq 122 ]
 then
@@ -70,11 +73,16 @@ then
     echo 'see lner.sc .... linking to LBLRTM 12.8 ...gnu dbl sgl'
     ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_gnu_dbl                                  lblrtm
     ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_gnu_sgl                                  slblrtm
+  elif [ $compiler -eq 10 ]
+  then
+    echo 'see lner.sc .... linking to LBLRTM 12.8 ...intel ifort sgl and dbl'
+    ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_intel_dbl                                lblrtm
+    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_intel_sgl                                slblrtm
+    ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_gnu_sgl                                  slblrtm    
   elif [ $compiler -eq 11 ]
   then
     echo 'see lner.sc .... linking to LBLRTM 12.8 ...intel ifort dbl / gnu sgl'
     ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_intel_dbl                                lblrtm
-    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_intel_sgl                                slblrtm
     ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_gnu_sgl                                  slblrtm    
   elif [ $compiler -eq 21 ]
   then

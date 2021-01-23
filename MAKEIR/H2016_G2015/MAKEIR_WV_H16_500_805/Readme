@@ -1,0 +1,107 @@
+GAS 1
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+%% for high res heating rates ....
+Set dirnames in freq_boundaries_g1_LBL.m
+                freq_boundaries_g103_LBL.m
+and have moved them to
+
+[sergio@maya-usr1 MAKEIR_WV_H16]$ ls -lt HIGHRES_LBL/
+total 24
+-rw-rw-r-- 1 sergio pi_strow  872 Nov 23 03:45 freq_boundaries_g1_LBL.m
+-rw-rw-r-- 1 sergio pi_strow 2083 Feb 29  2016 runXtopts_mkg103vfilesLBL.m
+-rw-rw-r-- 1 sergio pi_strow 3758 Feb 29  2016 clust_runXtopts_savegas103_file_HIGHRES.m
+-rw-rw-r-- 1 sergio pi_strow  752 Feb 29  2016 freq_boundaries_g103_LBL.m
+-rw-rw-r-- 1 sergio pi_strow 2055 Feb 28  2016 runXtopts_mkg1vfilesLBL.m
+-rw-rw-r-- 1 sergio pi_strow 3479 Feb 28  2016 clust_runXtopts_savegas1_file_HIGHRES.m
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Set dirnames in freq_boundaries_g1.m
+                freq_boundaries_g103.m
+                freq_boundaries_g110.m		
+
+Basically first run loop_filelist_gN.m which generates a list of
+  ~20000 gas =  90 freqchunk x 11 Toffsets x 5 PPoffsets to be done
+
+Then edit H12 --> H16
+   filelist_g1.m
+   filelist_g103.m
+no need for filelist_g110.m since it is same as filelist_g1.m
+and run the above two files to make the file lists
+
+And use the HPC cluster to run sergio_matlab_makegas1_103.sbatch
+  sbatch --array=1-990%128 --output='/dev/null' sergio_matlab_makegas1_103.sbatch
+which calls one of
+  clust_runXtopts_savegas1_file.m
+  clust_runXtopts_savegas103_file.m
+  clust_runXtopts_savegas110_file.m
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+then can check the ODs
+addpath /home/sergio/KCARTA/MATLAB
+[d12x,w] = readkcstd('/home/sergio/KCARTA/UTILITY/l2s_kc120_H12.dat');
+[d16x,w] = readkcstd('/home/sergio/KCARTA/UTILITY/l2s_kc120_H16.dat');
+for ii = 1 : 70; 
+  figure(1); semilogy(w,d12x(:,ii),w,d16x(:,ii)); title(num2str(ii));
+  figure(2); plot(w,d12x(:,ii)-d16x(:,ii)); title(num2str(ii));  
+  disp(;ret to continue'); pause
+end
+
+%% raw data from run8water
+chunk = 2530;
+
+g110  = load(['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g110.dat/stdH2OALL' num2str(chunk) '_1_6_2.mat']);
+g1    = load(['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/stdH2O' num2str(chunk) '_1_6_2.mat']);
+g103  = load(['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat/stdHDO' num2str(chunk) '_1_6_2.mat']);
+plot(g1.w,(g1.d + g103.d) - g110.d)
+semilogy(g1.w,g1.d(1,:),'b.',g1.w,g103.d(1,:),'g',g1.w,g110.d(1,:),'r',g1.w,g1.d(1,:)+g103.d(1,:),'m.')
+
+%% compressed data
+cg1   = load(['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/cg1v' num2str(chunk) '.mat']);
+cg103 = load(['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat/kcomp.h2o/cg103v' num2str(chunk) '.mat']);
+cg1x   = squeeze(cg1.kcomp(:,:,6,2));   cg1x   = (cg1.B   * cg1x).^4;   cg1x = cg1x';
+cg103x = squeeze(cg103.kcomp(:,:,6,2)); cg103x = (cg103.B * cg103x).^4; cg103x = cg103x';
+
+%% compare raw against compressed
+semilogy(g1.w,g1.d(1,:),'bo-',g1.w,cg1x(1,:),'r',g1.w,g103.d(1,:),'cx-',g1.w,cg103x(1,:),'m')
+semilogy(g1.w,(g1.d(1,:)+g103.d(1,:)),'bo-',g1.w,(cg1x(1,:)+cg103x(1,:)),'rx-',g1.w,g110.d(1,:),'k')
+wah = find(w >= min(g1.w-0.0025/2) & w <= max(g1.w+0.0025/2)); whos wah
+semilogy(g1.w,sum(g110.d(4:100,:)),'bx-',g1.w,d16x(wah,1)+d16x(wah,70),'r')
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+update "gas_done_already_g1_OR_g103.m" so
+  it gets the correct dirout; (actually no need to do this as correctly set in freq_boundaries_gX)
+  H12 --> H16     lines = show_vis_ir_lines_wavenumber_water(2016,7,gasidx,iso);
+  gas_done_already_g1_OR_g103(1,-1); to keep the empty files
+  gas_done_already_g1_OR_g103(1,+1); to rm   the empty files  
+
+  gas_done_already_g1_OR_g103(103,-1); to keep the empty files
+  gas_done_already_g1_OR_g103(103,+1); to rm   the empty files  
+
+  gas_done_already_g1_OR_g103(110,-1); to keep the empty files
+  gas_done_already_g1_OR_g103(110,+1); to rm   the empty files  
+
+runXtopts_mkg1vfiles.m   puts together eveything for g1
+runXtopts_mkg103vfiles.m puts together eveything for g103
+runXtopts_mkg110vfiles.m puts together eveything for g110
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+COMPRESS
+cd /home/sergio/HITRAN2UMBCLBL/CMPRUN
+cp cmprunIR_WV_H12.m cmprunIR_WV_H16.m and heavily edited so can do one or all of g1,103,110 as wanted
+ln -s cmprunIR_WV_H16.m cmprunIR_WV.m
+
+cmprunIR_WV(1,605:25:2830,1);
+  %% will mkdir making  /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/
+  %% and then compress g1 and put there
+cmprunIR_WV([1 103],605:25:2830);
+  %% will mkdir making  /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/
+  %% will mkdir making  /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/  
+  %% and then compress g1 and put there
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CONVERT TO F77 files
+cd /home/sergio/HITRAN2UMBCLBL/fortran/mat2for
+cp loop_mat2forIR_WV_H12.m loop_mat2forIR_WV_H16.m
+  cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat/kcomp.h2o/';    
+  fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/hdo.ieee-le/';

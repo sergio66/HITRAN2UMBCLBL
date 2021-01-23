@@ -1,24 +1,24 @@
 chunkprefix = 'q';
-gases = [[1 : 42] [51 : 81]];
-fchunks = 500 : 15 : 605;
+gases = [[1 : 42] [51 : 81] [103]];
+%gases = [[103]];
+fchunks = 500 : 5 : 805;
+fchunks = 500 : 5 : 880;
 dtype = 'ieee-le';
 
 for gg = 1 : length(gases)
   gid = gases(gg);
   if gid == 1
-    cdir = '/spinach/s6/sergio/RUN8_NIRDATABASE/FIR500_605/kcomp.h2o/';
-    fdir = '/spinach/s6/sergio/RUN8_NIRDATABASE/FIR500_605/fbin/h2o.ieee-le/';
-
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR500_605/g1.dat/kcomp/';
-    fdir = '/asl/data/kcarta/H2012.ieee-le/FIR500_605/h2o.ieee-le/';
+    gdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/g1.dat/abs.dat/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/g1.dat/kcomp/';    
+    fdir = '/asl/data/kcarta/H2016.ieee-le/FIR500_805/hdo.ieee-le/';  %%%% <<<< note how G1 and G103 go into hdo.ieee-le
+  elseif gid == 103
+    gdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/g103.dat/abs.dat/';
+    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/g103.dat/kcomp/';    
+    fdir = '/asl/data/kcarta/H2016.ieee-le/FIR500_805/hdo.ieee-le/';  %%%% <<<< note how G1 and G103 go into hdo.ieee-le
   else
-    cdir = '/spinach/s6/sergio/RUN8_NIRDATABASE/FIR500_605/kcomp/';
-    fdir = '/spinach/s6/sergio/RUN8_NIRDATABASE/FIR500_605/fbin/etc.ieee-le/';
-
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR500_605/kcomp/';
-    fdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/FIR500_605/fbin/etc.ieee-le/';
-    fdir = '/asl/data/kcarta/H2012.ieee-le/FIR500_605/etc.ieee-le/';
-
+     gdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/abs.dat/';
+     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/IR_500_805/kcomp/';
+     fdir = '/asl/data/kcarta/H2016.ieee-le/FIR500_805/etc.ieee-le/'
   end
 
   for ff = 1 : length(fchunks);

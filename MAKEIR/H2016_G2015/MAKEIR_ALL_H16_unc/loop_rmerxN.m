@@ -12,6 +12,7 @@ end
 
 gids = [3 4 5 6 9 12];
 gids = [3 4 5 6 9];
+gids = [3];
 
 for gg = 1 : length(gids)
   iaCnt(gg) = 0;
