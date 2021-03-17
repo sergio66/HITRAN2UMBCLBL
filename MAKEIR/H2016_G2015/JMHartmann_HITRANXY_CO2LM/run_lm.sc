@@ -25,19 +25,22 @@ then
   llmin=1
   llmax=10
 
-  llmin=9
-  llmax=9
-  
+  llmin=7
+  llmax=10
+
   ll=$(expr $llmin)
   
   echo 'version 2 : why worry be happy? just dump them all and go relax'
   while test $ll -le $llmax
   do
     echo $ll
-###### need to edit this correctly to select him many you are running      
-#    sbatch --array=1-990%512 sergio_lm_makegas2.sbatch $ll
+###### need to edit this correctly to select how many you are running      
+## this is all 990 = 11 T * 90 chunks
+    sbatch --array=1-990%512 sergio_lm_makegas2.sbatch $ll
+## this is first 64
 #    sbatch --array=1-64 sergio_lm_makegas2.sbatch $ll
-    sbatch --array=1 sergio_lm_makegas2.sbatch $ll
+## this is testing, first run
+#    sbatch --array=1 sergio_lm_makegas2.sbatch $ll
 ###### need to edit this correctly to select him many you are running          
     #ll=`expr $ll + 1`
     ll=$(expr $ll + 1)

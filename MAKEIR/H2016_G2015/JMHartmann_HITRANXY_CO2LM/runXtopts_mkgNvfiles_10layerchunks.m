@@ -125,6 +125,8 @@ else
   disp('proceeding ...')
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 iShape = input('for LM ods enter (-1) voigt (0) first (+1) full : ');
 if iShape == -1
   fout = [diroutXN '/abs.dat/voigt/'];

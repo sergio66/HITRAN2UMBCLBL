@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# see run_lm.sc
+# see run_lm.sc
+# see run_lm.sc
+
 # run this with sbatch --array=1-48%128 --output='testslurm' sergio_lm_makegas2.sbatch INTEGER ARGUMENT 1-10 for LAYER BLOCK
 # run this with sbatch --array=1-990%512 sergio_lm_makegas2.sbatch INTEGER ARGUMENT 1-10 for LAYER BLOCK
 # run this with sbatch --array=1-990%256 --output='/dev/null' sergio_lm_makegas2.sbatch INTEGER ARGUMENT 1-10 for LAYER BLOCK
@@ -16,7 +20,8 @@
 #SBATCH --cpus-per-task 1
 
 #  Specify the desired partition develop/batch/prod
-#SBATCH --partition=batch
+###SBATCH --partition=batch
+#SBATCH --partition=high_mem
 
 #### clust_runXtopts_mkgNvfiles : puts together the Toffset files so you can start compressing, pretty fast
 ##SBATCH --qos=short

@@ -1,0 +1,63 @@
+Need to run executable fortran code from /asl/data/hitran/H2016/LineMix_MainCode/driver_LM_calc_CO2_modified_gascell.for
+This code dumps temporary output at 0.0005 cm-1 res (raF,raVoigt,raFirst,raFull) into 
+          caFname =
+     $ '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' //
+     $    'g2.dat_LM5ptbox_Mar2021_400ppm/std' // ca4 // '_2_' // ca2 // '_' // ca3
+
+and this has to be matched by outputdir.m which sets 
+     output_dir5 = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/';          %% try this!
+
+Main driver code for making the compressed database is 
+  cluster_run_lm_5ptboxcar_laychunk.m
+    make sure you set 
+      useCO2ppm to eg 400 
+    Code works by breaking the US STd profile
+      /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+    into Toffset, with the 100 layers subdivided for running purposes into 10 sets 1-1..10,2=11-20,3=31-40 .. 10=91-100
+    and so tales the temporary output from the fortran code, boxcar intergrates to 0.0025 cm-1 and then dumps the final output into 
+        /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/1
+        /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/2
+        /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/3 ...
+        /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/10 ...
+    so make sure you make those 10 dirs
+
+Main sbatch script is 
+  sergio_lm_makegas2.sbatch
+but best to run it using
+  run_lm.sc
+  where I have edited it to use
+    dovers=2
+    llmin=1
+    llmax=10
+    sbatch --array=1-990%512 sergio_lm_makegas2.sbatch $ll  
+  We make 90 chunks from 605-2830 cm-1, and are 11 Toffsets per chunk .. so in each of the 10 dirs there should be 11*90 = 990 mat files  
+  for a grand total of 9990 mat files
+
+Check progress using
+  quick_plot_progress_cluster_run_lm_5ptboxcar_laychunk.m
+    this first looks at the individual 10 dires to see how many files have been made (should be 990 in each dir)
+    and then asks user to choose one of the 10 laychunks, and goes through to load in each 25 cm-1 chunk
+
+Put the files togther into 
+        /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/abs.dat
+  using runXtopts_mkgNvfiles_10layerchunks.m
+        
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Now go compress the files
+  cd /home/sergio/HITRAN2UMBCLBL/CMPRUN
+  edit cmprunIR_HITRAN_CO2LM.m so it points to 
+    f77_LMvers = 'g2.dat_LM5ptbox_Mar2021_400ppm';   %% Mar 2021  
+  mkdir /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/kcomp
+  mkdir /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/kcomp/full
+
+  then in matlab
+    cmprunIR_HITRAN_CO2LM;  (so this is same as cmprunIR_HITRAN_CO2LM(2,605:25:2830,2016);
+
+Now go change them to f77/f70 binary
+  cd /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+  edit loop_mat2forIR_HITRAN_CO2LM.m
+    %%% these are the 2020 tries
+    gdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/abs.dat/full/'];
+    cdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/kcomp/full/'];
+    fdir = ['/asl/data/kcarta/H2016.ieee-le/IR605/HITRAN_LM/etc.ieee-le/Mar2021/fullCO2_400ppmv/'];

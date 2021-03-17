@@ -1,4 +1,4 @@
-function cmprunIR_LBLRTM(glist, vlist, HITRAN)
+function cmprunIR_HITRAN_CO2LM(glist, vlist, HITRAN)
 
 addpath /asl/matlib/science
 addpath /asl/matlib/aslutil
@@ -24,6 +24,10 @@ end
 %% assume we are only dealing with H2000 onwards here
 HITRANvers = HITRAN - 2000;
 
+f77_LMvers = ' ';
+f77_LMvers = 'g2.dat_LM5ptbox_newOct18_400ppm';  %% Oct 2018
+f77_LMvers = 'g2.dat_LM5ptbox_Mar2021_400ppm';   %% Mar 2021
+
 abseps = 1e-8;
 
 % load reference profile to check gasses available
@@ -34,30 +38,25 @@ load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
 glist = intersect(glist, refpro.glist);
 clear refpro
 
-glist
 %vlist
-
-whos glist
-
 
 % loop on gas IDs
 for gid00 = 1 : length(glist)
-   gid = glist(gid00)
+   gid = glist(gid00);
    if gid == 1
      error('use cmprunIR_WV')
      end
    % set directories, depending on gas ID
    switch gid
      case 2
-       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/abs.dat/voigt/']; 
-       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/kcomp/voigt'];
+       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/abs.dat/voigt/']; 
+       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/kcomp/voigt'];
      
-       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/abs.dat/firstorder/']; 
-       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/kcomp/firstorder/'];
+       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/abs.dat/firstorder/']; 
+       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/kcomp/firstorder/'];
 
-       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/abs.dat/full/']; 
-       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM/kcomp/full'];
-
+       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/abs.dat/full/']; 
+       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2_LM/' f77_LMvers '/kcomp/full'];
    end
 
 disp(' ')

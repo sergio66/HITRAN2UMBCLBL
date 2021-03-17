@@ -1,5 +1,6 @@
 addpath /home/sergio/SPECTRA
 
+%% JOB can vary between 1 and length(g2_ir_list.txt) = 990 == 11 T offsets * 90 chunks = from 020060501 to 020283011
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %JOB = 23
 
@@ -8,10 +9,24 @@ JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %% where gasID = 02 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('g2_ir_list.txt');
+%% gasIDlist = load('g2_ir_list_notdone.txt');  %% see runXtopts_mkgNvfiles_10layerchunks
+
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
 end
+fprintf(1,'JOB = %2i XJOB = %s \n',JOB,XJOB);
+
+
+
+
+
+
+
+
+
+
+
 
 useCO2ppm = 385;  %% mistakenly used this for first set of runs
 useCO2ppm = 400;  %% let us fix this
