@@ -61,3 +61,14 @@ Now go change them to f77/f70 binary
     gdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/abs.dat/full/'];
     cdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2_LM/g2.dat_LM5ptbox_Mar2021_400ppm/kcomp/full/'];
     fdir = ['/asl/data/kcarta/H2016.ieee-le/IR605/HITRAN_LM/etc.ieee-le/Mar2021/fullCO2_400ppmv/'];
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Can compare the files! use compare_CO2_LBLRTM_LM.m
+
+/home/sergio/KCARTA/WORK/reset_nm_spectra.nml
+ ! Iouli Gordon LM
+ caaAltComprDirs(1)= '/asl/data/kcarta/H2016.ieee-le/IR605/HITRAN_LM/etc.ieee-le/Mar2021/fullCO2_400ppmv/'
+ ! LBLRTM
+ caaAltComprDirs(1)= '/asl/data/kcarta/H2012.ieee-le/IR605/lblrtm12.4/etc.ieee-le/CO2_400ppmv/'
+ caaAltComprDirs(1)= '/asl/data/kcarta/H2016.ieee-le/IR605/lblrtm12.8/etc.ieee-le/CO2_400ppmv/'

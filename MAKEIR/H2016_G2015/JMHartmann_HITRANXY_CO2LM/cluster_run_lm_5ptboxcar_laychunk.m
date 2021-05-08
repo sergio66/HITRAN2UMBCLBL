@@ -38,7 +38,7 @@ Stoffset = str2num(XJOB(8:9));    %Stt = Stoffset - 6;
 %%% junkstr = [num2str(Schunk,'%04d') '_2_' num2str(Stoffset,'%02d') '.mat'];
 junkstr = [num2str(Schunk) '_2_' num2str(Stoffset) '_laychunk_' num2str(laychunk) '.mat'];  %% should have been this, have to rename things
 
-outputdir
+outputdir   %%% NEED THIS TO SET THE DIRS
 
 if ~exist(output_dir5)
   output_dir5
