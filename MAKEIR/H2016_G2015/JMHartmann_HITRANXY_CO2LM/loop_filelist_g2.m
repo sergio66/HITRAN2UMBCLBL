@@ -71,6 +71,8 @@ for ii = 1 : length(gids)
       end
     end
   fprintf(1,'  >>> need to make %3i chunks for gas %2i \n',iCnt,gid)
+  fprintf(1,'  >>>    %3i x 11 T offsets = %3i runs \n',iCnt,iCnt*11)
+  fprintf(1,'  >>>    and these are 100 layers, but we do 10 layers at a time, so 10 singleton jobs on computer\n')
   end
 
 end

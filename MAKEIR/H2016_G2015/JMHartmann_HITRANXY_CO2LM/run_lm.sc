@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## see /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/run_big_script.sc
-
+## remember each code set makes 10 layers, and there are 100 layers to be made .. so need 10 singleton chunks
 /bin/rm slurm*.out
 
 dovers=1
@@ -22,10 +22,10 @@ then
   sbatch --array=1-990%512 -d singleton sergio_lm_makegas2.sbatch 10
 elif [ $dovers -eq 2 ]
 then
-  llmin=1
+  llmin=7
   llmax=10
 
-  llmin=7
+  llmin=1
   llmax=10
 
   ll=$(expr $llmin)

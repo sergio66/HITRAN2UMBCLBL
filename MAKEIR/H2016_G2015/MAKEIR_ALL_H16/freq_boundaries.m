@@ -9,6 +9,10 @@ wn1 = 605;
 wn2 = 2855-25;   %% when checking against Howards results
 wn2 = 2855-dv;   %% when checking against Howards results
 
+%%% testing the JClim 2021 paper
+%wn1 = 405;
+%wn2 = 630;
+
 %% these may be overwritten by the code that actually calls this
 %% subroutine
 fmin = wn1; 

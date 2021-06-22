@@ -133,7 +133,8 @@ elseif v1 >= 604.999 & v2 <= 3500
 %% 
 
 %% this was for FIR1 after Oct 2019
-elseif v1 >= 499.999-25 & v2 <= 825
+%% I made the end 1825 temporarily when doing the JClim 2021
+elseif v1 >= 499.999-25 & v2 <= 1825
   %% hmm could be problems making the last 605-620 cm-1 chunk!!!
   iType = 500;
   disp('  ----->>>>>>>> v1 >= 500 & v2 <= 825 : dv = 0.0005')
@@ -211,12 +212,13 @@ if iDoGlab > -2
     disp('  reading ODint_001 ...')
     [vx, OD, v] = lblrtm_tape11_reader_ODint('ODint_001','d');   %% lblrtm compiled with double
     fprintf(1,'     read ODint_001 ... vx(1),vx(end),mean(diff(vx)) = %8.6f %8.6f %8.6f \n',vx(1),vx(end),mean(diff(vx)));
+    fprintf(1,'     dvx = %8.6f iType = %4i \n',dvx,iType)
     if abs(qfactor-1) > eps
       OD = OD * qfactor;
       fprintf(1,'looks like gas amount in molecules/cm2 was < 1 ... qfactor = %8.6e \n',qfactor);
     end
     
-    if dvx == 0.0005 & iType == 605
+    if dvx == 0.0005 & (iType == 605 | iType == 500)
       %% DEFAULT 0.0005 cm-1 ---> 0.0025 cm-1 after boxcar
       %whos woop vx OD v
       %format long e
@@ -339,8 +341,26 @@ if iDoGlab > -2
       ODD = boxint(OD(woop),5);
 
     elseif dvx == 1/5 & iType == 605
-      woop = find(vx >= v1 - 2.001*1/5*0.9855 & vx <= v2 - 1/5 + 2.001*1/5);
+      woop = find(vx >= v1 - 2.001*1/5*0.9855 & vx <= v2 - 0.1 + 2.001*1/5); %% oooeer -0.1 or -0.2
       woop = find(vx >= v1 - 2*1/5 & vx <= v2 - 1 + 2*1/5);        
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    elseif dvx == 1/50 & iType == 500
+      %% very lowres for JClim 2021 (1/50 * 5 = 0.1 cm-1 after 5 point boxcar)
+      woop = find(vx >= v1 - 2*1/50 & vx <= v2 - 0.1 + 2.1*1/50);        
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    elseif dvx == 1/100 & iType == 500
+      %% quite lowres for JClim 2021 (1/50 * 5 = 0.1 cm-1 after 5 point boxcar)
+      woop = find(vx >= v1 - 2*1/100 & vx <= v2 - 0.05 + 2.1*1/100);        
+      vxx = boxint(vx(woop),5);
+      ODD = boxint(OD(woop),5);
+
+    elseif dvx == 1/200 & (iType == 500 | iType == 605)
+      %% lowres for JClim 2021 (1/50 * 5 = 0.1 cm-1 after 5 point boxcar)
+      woop = find(vx >= v1 - 2*1/200 & vx <= v2 - 0.025 + 2.1*1/200);        
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
 

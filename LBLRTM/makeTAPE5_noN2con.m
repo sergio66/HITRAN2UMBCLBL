@@ -198,6 +198,15 @@ elseif dvx == 0.0001/5
 elseif dvx == 1/5   %% for continuum
   str1 = '                                                                        0.2000';
   str1 = '                                            0.00                        0.2000';
+elseif dvx == 1/50   %% for very low res JClim 20201 test
+  str1 = '                                                                        0.0200';
+  str1 = '                                            0.00                        0.0200';
+elseif dvx == 1/100   %% for low res JClim 20201 test
+  str1 = '                                                                        0.0100';
+  str1 = '                                            0.00                        0.0100';
+elseif dvx == 1/200   %% for low res JClim 20201 test
+  str1 = '                                                                        0.0050';
+  str1 = '                                            0.00                        0.0050';
 else
   dvx
   error('huh unknown dvx')

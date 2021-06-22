@@ -65,8 +65,16 @@ then
 
 ### v12.8 from what I downloaded from AER in June 2016
   ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LNFL/lnfl/run_examples/run_example_infrared_sergio/TAPE3_aer_v_3.6         TAPE3
-  ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/xs                                    xs
-  ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/FSCDXS                                FSCDXS 
+  #orig
+    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/xs                                    xs
+    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/FSCDXS                                FSCDXS 
+  #from ~/IR_NIR_VIS_UV_RTcodes/RRTM/v3.3/rrtm_lw/LBLRTMvsKCARTA_varyemiss/lner.sc, 2019
+    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/xs                                    xs
+    #ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LINEDATAFILE/aer_v_3.6/xs_files_v3.6/FSCDXS                                FSCDXS
+  #from ~/IR_NIR_VIS_UV_RTcodes/RRTM/v3.3/rrtm_lw/LBLRTMvsKCARTA_varyemiss/lner.sc, 2021
+    ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LNFL/aer_v_3.6/xs_files_v3.6/xs                                             xs
+    ln -s /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LNFL/aer_v_3.6/xs_files_v3.6/FSCDXS                                         FSCDXS
+
 
   if [ $compiler -eq 01 ]
   then
