@@ -14,7 +14,7 @@ fchunks = 855 : 01 : 1204;
 
 gases = [2 3];
 fchunks = 0605 : 01 : 1205; fx = 0;     %% ALL  0.0001 cm-1 res
-fchunks = 0605 : 02 : 1205; fx = 0;     %% ALL  0.0002 cm-1 res
+fchunks = 0605 : 02 : 1205; fx = 0;     %% ALL  0.0002 cm-1 res 
 
 dtype = 'ieee-le';
 
@@ -114,7 +114,7 @@ for gg = 1 : length(gases)
     ee = exist(fname);
     if ee > 0
       fprintf(1,'%s does exist, processing .... \n',fname);
-      mat2forGENERIC(chunkprefix, gid, vchunk, cdir, fdir, dtype)
+      mat2forGENERIC(chunkprefix, gid, vchunk, cdir, fdir, dtype, 0.0002);
     else
       fprintf(1,'%s does not exist, going to next .... \n',fname);
     end

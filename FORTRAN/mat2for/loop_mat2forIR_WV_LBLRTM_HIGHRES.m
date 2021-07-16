@@ -46,6 +46,7 @@ for gg = 1 : length(gases)
     gidx = gid;
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8//kcomp.h2o/0.0005/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
+    fdir = '/asl/rta/kcarta/H2016.ieee-le/IR605/etc.ieee-le/lblrtm0.0005/';
     gidxx = 1;
 
   end
@@ -73,9 +74,9 @@ for gg = 1 : length(gases)
       else
         chunkprefix = 's';
       end
-      chunkprefix = 'x';
+      chunkprefix = 'x';  %% 0.0005
       fprintf(1,'%s does exist, processing .... \n',fname);
-      mat2forGENERIC(chunkprefix, gidxx, vchunk, cdir, fdir, dtype)
+      mat2forGENERIC(chunkprefix, gidxx, vchunk, cdir, fdir, dtype, 0.0005)
     else
       fprintf(1,'%s does not exist, going to next .... \n',fname);
     end

@@ -1,9 +1,9 @@
 gases = [      110];
 gases = [1 103 110];
-gases = [1        ];
 gases = [1 103    ];
 gases = [      110];
 gases = [  103    ];
+gases = [1        ];
 
 fchunks = 1105 : 25 : 1705; fx = 1;     %% ISOTOPES + OTHERS
 fchunks = 0605 : 25 : 2805; fx = 0;     %% ALL

@@ -1,10 +1,11 @@
-function mat2forGENERIC(chunkprefix, gid0, vchunk, cdir, fdir, dtype)
+function mat2forGENERIC(chunkprefix, gid0, vchunk, cdir, fdir, dtype, fstep)
 
-% function mat2forGENERIC(gid0, vchunk, cdir, fdir, dtype)
+% function mat2forGENERIC(chunkprefix, gid0, vchunk, cdir, fdir, dtype, fstep)
 %
 % produce old-format fortran data for kcarta
 %
 % inputs
+%   chunkprefix - prefix name out output file
 %   gid0   -  gas ID
 %   vchunk -  wavenumber start of 25 1/cm chunk
 %   cdir   -  directory for matlab mat source files
@@ -13,12 +14,17 @@ function mat2forGENERIC(chunkprefix, gid0, vchunk, cdir, fdir, dtype)
 %
 
 % default output data type
-if nargin < 5
- dtype = 'ieee-be';
+if nargin < 7
+  disp('warning : 6 or less args, setting fstep = 0.0025')
+  fstep = 0.0025;
+end
+
+if nargin < 6
+  dtype = 'ieee-be';
 end
 
 % default dir's for fortran compressed data 
-if nargin < 4
+if nargin < 5
   if gid0 == 1 | gid0 == 103
     fdir = '/home/motteler/abstab/fbin/h2o.ieee-be';
   else
@@ -27,7 +33,7 @@ if nargin < 4
 end
 
 % default dir's for matlab compressed data
-if nargin < 3
+if nargin < 4
  if gid0 == 1 | gid0 == 103
    cdir = '/home/motteler/abstab/kcomp.h2o'; 
  elseif 1 < gid0  & gid0 <= 50
@@ -35,6 +41,10 @@ if nargin < 3
  else
    cdir = '/home/motteler/abstab/kcomp.xsec';
  end
+end
+
+if nargin < 3
+  error('mat2forGENERIC(chunkprefix, gid0, vchunk, [cdir, fdir, dtype, fstep]) : need at least 3 args')
 end
 
 % load the matlab variables:
@@ -66,15 +76,19 @@ eval(loader);
 %% make sure you edit fstep, and prefix for file in fname (r,s,v,w whatever)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 npts  = 10000;
-fstep = 0.0025;
+%fstep = 0.0025;
+
 %%%%fname = sprintf('s%d_g%d.dat', vchunk, gid0);   %%% VERY OLD, from Howard
 fname = sprintf('%s%d_g%d.dat', chunkprefix,vchunk, gid0);  %% NEWER, modified
 fname = [chunkprefix num2str(vchunk) '_g' num2str(gid0) '.dat'];    %%% NEWEST
 
-ktype=2;
+ktype = 2;
 
 nlay = 100;
+
+%% expect nd == ndk
 [npts,nd] = size(B);
+[ndk,~,~] = size(kcomp);
 
 % temperature offsets
 ntemp = 11;
@@ -92,12 +106,35 @@ if fid == -1
   error('can''t open output file')
 end
 
+ndmax = 100; %% EXCEPT very high res 650-1205 cm-1 CO2
+ndmax = 50; %% DEFAULT
+if nd > 100
+  [nd ndmax]
+  error('oops nd > ndmax == max size in kcarta ....')
+end
+if ntemp > 11
+  ntemp
+  error('oops ntemp > 11 == max size in kcarta ....')
+end
+if nlay > 100
+  nlay
+  error('oops nlay > 100 == max size in kcarta ....')
+end
+if npts > 10000
+  npts
+  error('oops npts > 10000 == max size in kcarta ....')
+end
+if nd ~= ndk
+  [nd ndk]
+  error('oops nd ~= ndk ....')
+end
+
 % Write header info
 filemark = 4 + 8 + 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
 fwrite(fid,filemark,'integer*4');
 fwrite(fid,gid0,'integer*4');
 fwrite(fid,[vchunk,fstep],'real*8');
-fwrite(fid,[npts,nlay,ktype,nd,ntemp,nlay,npts,nd],'integer*4');
+fwrite(fid,[npts,nlay,ktype,nd,ntemp,nlay,npts,ndk],'integer*4');    %%% now wy do we write nd twice? becuz it is also size of first dim of kcomp
 fwrite(fid,filemark,'integer*4');
 
 % Write the temperature offsets
