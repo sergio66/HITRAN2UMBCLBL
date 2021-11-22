@@ -47,7 +47,7 @@ gid = fread(fid, 1, 'integer*4');
 
 tmp = fread(fid, 2, 'real*8');
 vchunk = tmp(1); fstep2 = tmp(2);
-  fprintf(1,'reading in info for chunk = %8.3f \n',vchunk);
+  fprintf(1,'reading in info for chunk = %8.3f with fstep = %10.5f \n',vchunk,fstep2);
 
 tmp = fread(fid, 8, 'integer*4');
 npts = tmp(1); nd=tmp(4); ntemp2 = tmp(5);
@@ -105,6 +105,11 @@ fclose(fid);
 %   B     10000 x <d>             basis
 %   kcomp   <d> x 100 x 11 x <p>  tabulated absorptions
 %
+
+if abs(fstep2-fstep) > eps
+  fprintf(1,'oh oh the file says dfchunk is not %12.5f nut %12.5f \n',fstep,fstep2)
+  dfchunk = fstep2;
+end
 
 fr = vchunk + (0:9999)*dfchunk/10000;
 
