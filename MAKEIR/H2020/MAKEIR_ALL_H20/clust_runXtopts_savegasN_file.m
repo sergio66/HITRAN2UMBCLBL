@@ -8,6 +8,7 @@ JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('gN_ir_list.txt');
+gasIDlist = load('gN_ir_list2.txt');
 %gasIDlist = load('gN_ir_list_7_22.txt');
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8

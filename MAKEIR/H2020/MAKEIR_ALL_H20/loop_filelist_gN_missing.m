@@ -28,7 +28,6 @@ iaTotalNeed = [];
 iaTotalAll = zeros(1,length(gids));
 iaTotalNeed = zeros(1,length(gids));
 
-
 for ii = 1 : length(gids)
   gid = gids(ii);
   freq_boundaries
@@ -49,7 +48,7 @@ for ii = 1 : length(gids)
   %%                   12 34567 89
   %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-  fdir = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+  fdir = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
   ee = exist(fdir,'dir');
   if ee == 0
     fprintf(1,'%s does not exist \n',fdir);

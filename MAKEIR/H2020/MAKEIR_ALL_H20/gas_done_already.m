@@ -36,6 +36,13 @@ nbox = 5; pointsPerChunk = 10000;
 gid = gasid;
 if iWhichFreqBoundaries == -1
   freq_boundaries
+elseif iWhichFreqBoundaries == 2020
+  freq_boundaries
+  lala = strfind(dirout,'H2020_RUN8_NIRDATABASE');
+  lenx = length('H2020_RUN8_NIRDATABASE');
+  diroutX = dirout;
+  diroutX(lala:lala+lenx-1) = 'H2020_RUN8_NIRDATABASE';
+  dirout = diroutX;
 elseif iWhichFreqBoundaries == 2016
   freq_boundaries
   lala = strfind(dirout,'H2016_RUN8_NIRDATABASE');

@@ -2,7 +2,7 @@
 
 # run this with sbatch --array=1-48%128 --output='testslurm' sergio_matlab_makegas3_42.sbatch
 # run this with sbatch --array=1-48%128 sergio_matlab_makegas3_42.sbatch 
-# run this with sbatch --array=1-3000%256 --output='/dev/null' sergio_matlab_makegas3_42.sbatch
+# run this with sbatch --array=1-20000%256 --output='/dev/null' sergio_matlab_makegas3_42.sbatch
 
 #  Name of the job:
 #SBATCH --job-name=RUN8_gas3_42

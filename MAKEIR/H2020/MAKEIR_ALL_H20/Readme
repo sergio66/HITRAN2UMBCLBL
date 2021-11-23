@@ -45,7 +45,7 @@ clust_runXtopts_savegasN_file.m : change theJOB from slurm so it makes sense
   end
 
 sergio_matlab_makegas3_42.sbatch : calls the previous file
-gas_done_already.m               : included if iWhichFreqBoundaries == 2016
+gas_done_already.m               : included if iWhichFreqBoundaries == 2020 (edit file as needed)
 loop_gas_done_already.m          : 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
