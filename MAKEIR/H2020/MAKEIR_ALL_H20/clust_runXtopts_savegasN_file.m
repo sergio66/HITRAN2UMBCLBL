@@ -1,4 +1,18 @@
 %% this simply does all wavenumbers for gN
+%% to make the individual chuncks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
+%%   sbatch --array=1-20000%256 --output='/dev/null' sergio_matlab_makegas3_42.sbatch     or
+%%   sbatch --array=1-20000%256                      sergio_matlab_makegas3_42.sbatch 1    or
+%% but first make sure you run
+%%  loop_filelist_gN             to make initial filelist for all gases 
+%% then as time goes on run
+%%  loop_filelist_gN_missing     to make missing filelist
+%% 
+%% and check progress using
+%%  loop_gas_done_already
+%%
+%% compare against previous database using eg
+%%  compare_mol_H2016_H2020_indchunks.m    for individual chunks
+%%  compare_mol_H2016_H2020_allchunks.m    for allchunks chunks
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %JOB = 1
@@ -64,6 +78,7 @@ while fmin <= wn2
     fout = [dirout '/std' num2str(fmin)];
     fout = [fout '_' num2str(gg) '_' num2str(tt+6) '.mat'];
     if exist(fout,'file') == 0 & iYes > 0
+      fprintf(1,'% making %s \n',fout)
       toucher = ['!touch ' fout]; %% do this so other runs go to diff chunk 
       eval(toucher);
       profile = [(1:100)' refpro.mpres refpro.gpart(:,gg) tprof refpro.gamnt(:,gg)]';

@@ -1,13 +1,6 @@
 %% this simply does all wavenumbers for gN
-
-% local running to test
-% clustcmd -L clust_runXtopts_mkgNvfiles.m 2:42
-%
-% otherwise when happy
-% clustcmd -q medium -n 32 clust_runXtopts_mkgNvfiles.m 2:42
-%
-% or
-% clustcmd -q long_contrib -n 32 clust_runXtopts_mkgNvfiles.m 2:42
+%% to put the Toffset chunks together before compression into /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/abs.dat, run this with
+%%   sbatch --array=1-42 sergio_matlab_makegas3_42.sbatch 2
 
 %% make sure you do have directory [dirout /abs.dat] available
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)

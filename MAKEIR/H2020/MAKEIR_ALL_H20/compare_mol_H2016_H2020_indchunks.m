@@ -16,6 +16,6 @@ f = x2016.fr;
 k2016 = squeeze(x2016.k(:,:,6))';
 k2020 = x2020.d;
 
-figure(1); clf; semilogy(f,sum(k2016,1),f,sum(k2020,1)); title([num2str(boo)])
+figure(1); clf; semilogy(f,sum(k2016,1),f,sum(k2020,1)); title([num2str(boo)]); ylabel(['(b) H2016 (r) H2020']);
 figure(2); clf; plot(f,sum(k2020,1)./sum(k2016,1));  ylabel('k2020/k2016'); title([num2str(boo)])
 

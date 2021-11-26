@@ -1,13 +1,16 @@
 %% this simply does all wavenumbers for g1
-
-% local running to test
-% clustcmd -L clust_runXtopts_savexsecN_file.m '510173001'
-%
-% otherwise when happy
-% clustcmd -q medium -n 64 clust_runXtopts_savexsecN_file.m gN_ir_xseclist.txt
-%
-% or
-% clustcmd -q long_contrib -n 64 clust_runXtopts_savexsecN_file.m gN_ir_xseclist.txt
+%% to make the individual chuncks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
+%%   sbatch --array=1-8492%256 --output='/dev/null' sergio_matlab_makegas3_42.sbatch     or
+%%   sbatch --array=1-8492%256                      sergio_matlab_makegas3_42.sbatch 1    or
+%% but first make sure you run
+%%  loop_filelist_xsecN.m             to make initial filelist for all gases 
+%% 
+%% and check progress using
+%%  loop_gas_done_already
+%%
+%% compare against previous database using eg
+%%  compare_mol_H2016_H2020_indchunks.m    for individual chunks
+%%  compare_mol_H2016_H2020_allchunks.m    for allchunks chunks
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %JOB = 586
@@ -83,18 +86,15 @@ while fmin <= wn2
 
       iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
       iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
+      iSwitchXsecDataBase = 9999;  %% now we have       H2020 for g51-81
       if gasid <= iSwitchXsecDataBase
-        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2016);
+        %[iYes,gf] = findxsec_plot(fmin,fmax,gasid,2016);
+        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2020);
       else
         [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2012);
       end
       fprintf(1,'gas freq = %3i %6i %3i %3i\n',gasid,fmin,iYes,tt);
       fout = [dirout '/std' num2str(fmin) '_' num2str(refpro.glist(gq)) '_' num2str(tt+6) '.mat'];
-
-      ee = exist(fout,'file');
-      if ee > 0
-        fprintf(1,'%s already exists \n',fout);
-      end
 
       %% see abscmp/xsectab25.m
       gamnt = profile(5,:);
@@ -102,7 +102,8 @@ while fmin <= wn2
       tp = profile(4,:);
       pL = profile(2,:);
       d = zeros(100,10000);
-      if iYes > 0 & ee == 0
+      if exist(fout,'file') == 0 & iYes > 0
+        fprintf(1,'% making %s \n',fout)
         toucher = ['!touch ' fout]; %% do this so other runs go to diff chunk  
         eval(toucher); 
         %[w,d] = calc_xsec(gf,fmin,fmax-dv,dv,tp,pL,1);  
@@ -113,12 +114,22 @@ while fmin <= wn2
         %[d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,1);
 	figno = 1;
 	if gasid <= iSwitchXsecDataBase
-          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2016);
+          %[d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2016);
+          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2020);
 	else
           [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2012);
 	end
         d = d.*gamnt2d;
         d = d';    %%% need same dimensions as rest of gases!
+      elseif exist(fout,'file') > 0 & iYes > 0
+        fprintf(1,'file %s already exists \n',fout);
+      elseif exist(fout,'file') == 0 & iYes < 0
+        fprintf(1,'no lines for chunk starting %8.6f \n',fmin);
+      end
+
+      ee = exist(fout,'file');
+      if ee > 0
+        fprintf(1,'%s already exists \n',fout);
       end
 
       if iYes > 0 & ee == 0
@@ -134,4 +145,4 @@ while fmin <= wn2
   return
 end                   %% loop over freq
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20

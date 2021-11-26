@@ -309,11 +309,23 @@ if jjx > 0
   end
   figure(2); clf; bar(iaChunk,iaChunkNum);
   figure(2); title(num2str(gasid));
+  if iaChunk(1) < 605
+    xxlim(1) = 605;
+  else
+    xxlim(1) = min(iaChunk);
+  end
+  if iaChunk(end) < 2830
+    xxlim(2) = 2830;
+  else
+    xxlim(2) = max(iaChunk);
+  end
+  xlim(xxlim);
 
   figure(4); clf
   oo  = find(lines.wnum >= fA-dfx   &  lines.wnum <= fB+df+dfx);
   yyaxis left; semilogy(lines.wnum(oo),lines.stren(oo));
   yyaxis right; bar(iaChunk,iaChunkNum);
+  xlim(xxlim);
   title(num2str(gasid));  
   pause(0.1)
  

@@ -1,13 +1,6 @@
-%% this simply does all wavenumbers for g1
-
-% local running to test
-% clustcmd -L clust_runXtopts_mkxsecNvfiles.m 51:81
-%
-% otherwise when happy
-% clustcmd -q medium -n 32 clust_runXtopts_mkxsecNvfiles.m 51:81
-%
-% or
-% clustcmd -q long_contrib -n 32 clust_runXtopts_mkxsecNvfiles.m 51:81
+%% this simply does all wavenumbers for gN
+%% to put the Toffset chunks together before compression into /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/abs.dat, run this with
+%%   sbatch --array=51-81 sergio_matlab_makegas51_81.sbatch 2
 
 %% make sure you do have directory [dirout /abs.dat] available
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
@@ -17,7 +10,7 @@ addpath /home/sergio/SPECTRA
 addpath /asl/matlib/aslutil
 addpath /asl/matlib/science
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
@@ -41,8 +34,9 @@ addpath /home/sergio/SPECTRA/READ_XSEC
 
 iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
+iSwitchXsecDataBase = 9999;  %% now we have       H2020 for g51-81
 if gid <= iSwitchXsecDataBase
-  bands = list_bands(gid,2016);
+  bands = list_bands(gid,2020);
 else
   bands = list_bands(gid,2012);
 end  
@@ -59,7 +53,7 @@ for wn = wn1 : dv : wn2
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
 
 slash = findstr(dirout,'/');
 diroutXN = dirout(1:slash(end)-1);

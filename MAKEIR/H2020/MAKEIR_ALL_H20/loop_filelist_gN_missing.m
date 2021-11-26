@@ -6,6 +6,12 @@
 
 clear all
 
+iRemoveEmptyFiles = input('Enter (-1/+1) to remove empty files (default no -1) : ');
+if length(iRemoveEmptyFiles) == 0
+  iRemoveEmptyFiles = -1;
+end
+iEmpty = 0;
+
 addpath /home/sergio/SPECTRA
 addpath /asl/matlib/science
 addpath /asl/matlib/aslutil
@@ -73,11 +79,23 @@ for ii = 1 : length(gids)
 	  thefile = [fdir '/' wah];
 	  if exist(thefile)
 	    xdir = dir(thefile);
+
+            %% check to see if file has finite size, remove if iRemoveEmptyFiles == 1
 	    if xdir.bytes == 0
               iaTotalNeed(ii) = iaTotalNeed(ii) + 1;	  
               str = [num2str(gg,'%02d') num2str(wn,'%05d') num2str(tt,'%02d')];
               fprintf(fid,'%s\n',str);
+              if iRemoveEmptyFiles == +1
+                rmer = ['!/bin/rm ' thefile];
+                fprintf(1,'%s is empty file, removing \n',thefile);
+                eval(rmer)
+              end
+              iEmpty = iEmpty + 1;
+              emptyname.name{iEmpty} = thefile;
+              emptyname.gas(iEmpty) = gg;
+              emptyname.wn(iEmpty) = wn;
             end
+
 	  end
 	  if ~exist(thefile)
             iaTotalNeed(ii) = iaTotalNeed(ii) + 1;	  
@@ -97,3 +115,10 @@ end
 fclose(fid);
 
 fprintf(1,'still need to make %5i out of %5i total files that need to be made \n',sum(iaTotalNeed),sum(iaTotalAll)*11);
+fprintf(1,'found %4i empty files \n',iEmpty);
+if iEmpty > 0
+  disp('there are missing files .. maybe short+ is not enough time (one hour) and you need 4 hours/medium+')
+  figure(5); hist(emptyname.gas); xlabel('gasID'); ylabel('Histogram'); title('Empty Files')
+  figure(6); plot(emptyname.gas,emptyname.wn,'+'); xlabel('gasID'); ylabel('Chunk cm-1'); title('Empty Files')
+end
+

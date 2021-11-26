@@ -12,6 +12,9 @@ gidlist = setdiff(2:47,[30 35 42]);   %% those last 3 are NOT in the breakout, a
 gidlist = setdiff(2:42,[30 35 42]);   %% those last 3 are NOT in the breakout
 
 iX = input('Enter gas list (-1 for all from 2 to 47, [a b] to choose, and +N to specify ONE) : ');
+if length(iX) == 0
+  iX = -1;
+end
 if length(iX) == 1 & iX == -1
   gidlist = 2 : 47;
 elseif length(iX) == 1 & iX > 0
@@ -23,7 +26,10 @@ end
 gidlist = setdiff(gidlist,[30 35 42]);   %% last 3 are NOT in the breakout, 
                                          %% and OOPS no profiles for 43,44,45,46,47
 
-iY = input('Enter year (-1) for this one, or 2008 or 2012 or 2016 : ');
+iY = input('Enter year (-1) for this one, or 2008 or 2012 or 2016 or 2020 : ');
+if length(iY) == 0
+ iY = -1;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -40,6 +46,7 @@ for gidxx = 1 : length(gidlist)
 
   pause(0.1);
   %disp('<RET> to continue'); pause
+  cd ~/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20/
 end
 
 figure(2);
