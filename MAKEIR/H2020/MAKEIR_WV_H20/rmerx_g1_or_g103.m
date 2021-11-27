@@ -1,11 +1,11 @@
-dir0 = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_2405_3005_WV/g103.dat/';
+dir0 = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_2405_3005_WV/g103.dat/';
 thedir = dir([dir0 'stdHDO*.mat']);
 
-dir0 = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_2405_3005_WV/g1.dat/';
+dir0 = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_2405_3005_WV/g1.dat/';
 thedir = dir([dir0 'stdH2O*.mat']);
 
-dir0 = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_2405_3005_WV/g110.dat/';
-dir0 = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g110.dat/';
+dir0 = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_2405_3005_WV/g110.dat/';
+dir0 = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g110.dat/';
 thedir = dir([dir0 'stdH2OALL*.mat']);
 
 for ii = 1 : length(thedir)

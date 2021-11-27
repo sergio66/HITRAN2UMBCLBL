@@ -24,12 +24,12 @@
 #  Specify the desired partition develop/batch/prod
 #SBATCH --partition=batch
 
-#### clust_runXtopts_savegasN_file : actually does the whole /home/sergio/SPECTRA/run8 shebang, slow and tedious
+#### clust_runXtopts_savexsecN_file : actually does the whole /home/sergio/SPECTRA/run8 shebang, slow and tedious
 #SBATCH --qos=medium_prod
 #SBATCH --time=11:59:00 
 #SBATCH --mem-per-cpu=12000
 
-#### clust_runXtopts_mkgNvfiles : puts together the Toffset files so you can start compressing, pretty fast
+#### clust_runXtopts_mkxsecNvfiles : puts together the Toffset files so you can start compressing, pretty fast
 ##SBATCH --qos=short
 ##SBATCH --time=0:59:00 
 ##SBATCH --mem-per-cpu=12000

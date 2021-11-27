@@ -21,6 +21,7 @@ JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('gN_ir_xseclist.txt');
+gasIDlist = load('gN_ir_xseclist2.txt');
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
@@ -121,22 +122,23 @@ while fmin <= wn2
 	end
         d = d.*gamnt2d;
         d = d';    %%% need same dimensions as rest of gases!
+
+        saver = ['save ' fout ' w d '];
+        eval(saver);
+	fprintf(1,'saved %s \n',fout);
+
       elseif exist(fout,'file') > 0 & iYes > 0
         fprintf(1,'file %s already exists \n',fout);
       elseif exist(fout,'file') == 0 & iYes < 0
         fprintf(1,'no lines for chunk starting %8.6f \n',fmin);
       end
 
-      ee = exist(fout,'file');
-      if ee > 0
-        fprintf(1,'%s already exists \n',fout);
-      end
-
-      if iYes > 0 & ee == 0
-        saver = ['save ' fout ' w d '];
-        eval(saver);
-	fprintf(1,'saved %s \n',fout);
-      end
+      %ee = exist(fout,'file');
+      %if ee > 0
+      %  fprintf(1,'%s already exists \n',fout);
+      %end
+      %if iYes > 0 & ee == 0
+      %end
 
     end               %% loop over gas
   end                 %% loop over temperature (1..11)

@@ -24,20 +24,12 @@ nbox = 5; pointsPerChunk = 10000;
 %% dirout is correctly set in freq_boundaries_gX
 if gasid == 1
   freq_boundaries_g1
-  %dirout = '/spinach/s6/sergio/RUN8_NIRDATABASE/IR_2405_3005_WV/';
-  %dirout = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_2405_3005_WV/g1.dat/';
-  %dirout = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat';   
 elseif gasid == 103
   freq_boundaries_g103
-  %dirout = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_2405_3005_WV/g103.dat/';
-  %dirout = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat';
 elseif gasid == 110
   freq_boundaries_g1
-  %dirout = '/spinach/s6/sergio/RUN8_NIRDATABASE/IR_2405_3005_WV/';
-  %dirout = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_2405_3005_WV/g1.dat/';
-  %dirout = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g1.dat';     
 else
-  error('hmm ... not doing ALL isotoptes for H2016')
+  error('hmm ... not doing ALL isotoptes for H2020')
 end
 
 fA = wn1; fB = wn2; df = dv;
@@ -60,7 +52,7 @@ else
 end
 
 gasidx = 1;
-lines = show_vis_ir_lines_wavenumber_water(2016,7,gasidx,iso);
+lines = show_vis_ir_lines_wavenumber_water(2020,7,gasidx,iso);
 
 [mm,nn] = size(lines.iso);
 if nn > 0
@@ -126,6 +118,8 @@ if gasid == 11111
   end 
 end
 %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% water, all isotopes
 if gasid == 110
@@ -223,6 +217,7 @@ if gasid == +1
     numchunk(fchunk) = ifound;
   end 
 end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% ----------------------------------------------
@@ -237,10 +232,14 @@ pwd
 
 cder = ['cd ' homedir]; eval(cder);
 fprintf(1,'found %5i files for gasid %3i \n',jj,gasid);
+iLocalPrint = -1;
 if  jj > 0
-  for kk = 1 : jj
-   fprintf(1,'%4i %3i %s %s\n',kk,gasid,foundname(kk).name,foundname(kk).date);
- end
+  if iLocalPrint > 0
+    for kk = 1 : jj
+      fprintf(1,'%4i %3i %s %s\n',kk,gasid,foundname(kk).name,foundname(kk).date);
+    end
+  end
+
   for mm = 1 : length(freqchunk)
     if hitlinesfound(mm) > 0 & numchunk(mm) == 55
       yesno(mm) = +1;  %% all 55 done for water
@@ -286,9 +285,12 @@ if  jj > 0
   disp(' ')
   disp('gid  freqchunk hitlinesfound numchunk chunkdone(Y/N/M)')
   disp('------------------------------------------------------')
-  [gasid*ones(1,length(freqchunk)); freqchunk; hitlinesfound; numchunk; yesno]'
+  junk = [gasid*ones(1,length(freqchunk)); freqchunk; hitlinesfound; numchunk; yesno]';
+  fprintf(1,'%5i  %5i  %5i %5i  %5i \n',junk');
   fprintf(1,'found %5i lines between fA & fB cm-1 \n',length(oo))
   figure(1); title(num2str(gasid));
+
+  figure(2); plot(freqchunk,numchunk,'+'); title(num2str(gasid))
 end
 
 if iZeroCnt > 0
@@ -300,7 +302,8 @@ if length(oo) > 0 & jjx == 0
     fprintf(1,'%4i  %3i %s %s \n',kk,gasid,foundname(kk).name,foundname(kk).date);
   end
   disp('gid  freqchunk hitlinesfound numchunk')
-  [gasid*ones(1,length(freqchunk)); freqchunk; hitlinesfound; numchunk]'
+  junk = [gasid*ones(1,length(freqchunk)); freqchunk; hitlinesfound; numchunk]';
+  fprintf(1,'%5i  %5i  %5i %5i  %5i \n',junk');
   fprintf(1,'found %5i lines between fA & fB cm-1 \n',length(oo))
   figure(1); title(num2str(gasid));
 
