@@ -3,10 +3,10 @@ gases = 51 : 81;
 gases = [3 : 42];
 gases = [[51 : 81]];
 gases = [3 4 5 6 9 12];  %% for uncertainty
-gases = [[3 : 42] [51 : 81]];
 gases = 2;
 gases = [7 22];   %% ew MT CKD3.2 version
 gases = 3;
+gases = [[3 : 42] [51 : 81]];
 
 fchunks = 605 : 25 : 2830;
 dtype = 'ieee-le';
@@ -17,6 +17,7 @@ for gg = 1 : length(gases)
     error('use loop_mat2forIR_WV.m AND BE REALLY CAREFUL WITH ISO dirs')
     cdir = ' ';
     fdir = ' ';
+
   elseif gid == 2
     cdir = '/asl/s1/sergio/RUN8_NIRDATABASE/IR_605_2830_H08_CO2/kcomp/';
     fdir = '/asl/s1/sergio/RUN8_NIRDATABASE/IR_605_2830_H08_CO2/fbin/etc.ieee-le/';
@@ -65,7 +66,6 @@ for gg = 1 : length(gases)
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
 
-
     %% H2016 uncertainty
     cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/kcomp/';
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S-/';  %% strength min
@@ -76,6 +76,10 @@ for gg = 1 : length(gases)
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_P+/';  %% pressure shift max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S+/';  %% strength max
     fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_Rn/';  %% randomize all    
+
+    %% H2020
+    cdir = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
+    fdir = '/asl/data/kcarta/H2020.ieee-le/IR605/etc.ieee-le/';
 
   end
 
@@ -105,6 +109,6 @@ for gg = 1 : length(gases)
   end
 end
 
-disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
-disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
-disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2016.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2020.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2020.sc <<<')
+disp('>>> now go to /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC and run eg comp_IRdatabase_H2020.sc <<<')
