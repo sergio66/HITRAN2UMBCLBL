@@ -1,3 +1,5 @@
+copied from /home/sergio/HITRAN2UMBCLBL/HITRAN_REFPROFS/ which is what Larrabee gave me after chip/xfs3crashed in Nov 2025
+
 lrwxrwxrwx 1 sergio pi_strow     39 Jun 19  2013 refproTRUE_OLD.x2.mat -> /asl/data/kcarta/v24.matlab/refpro3.mat
 lrwxrwxrwx 1 sergio pi_strow     40 Jun 19  2013 refproTRUE_OLD.x.mat -> /home/motteler/abstab/refpro/refpro3.mat
 lrwxrwxrwx 1 sergio pi_strow     11 Jun 19  2013 refproTRUE_OLD.mat -> refpro3.mat

@@ -1,0 +1,17 @@
+02/10/2026    Making MAKEIR/H2024
+              Look at eg MAKEIR/H2024/MAKEIR_WV_H24/Readme
+
+01/22/2026    Added in HITRAN_REFPROFS which has reference profiles
+              to make kCARTA database
+
+11/27/2021    Ready for H2020
+
+07/16/2021    Checks on sizes of array (for veryhighres) that can cause crashes
+
+05/28/2021    CIA lineshapes from JM Hartmann
+
+03/17/2021    LM CO2 code from HITRAN
+
+08/25/2018    GIESA subroutines added
+
+07/25/2018    Initial git commit of HITRAN2UMBCLBL
