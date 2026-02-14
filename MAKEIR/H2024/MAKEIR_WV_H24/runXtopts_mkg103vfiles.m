@@ -2,6 +2,8 @@
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
 %% after the compression, you may want to delete this [dirout /abs.dat] dir
 
+addpath0
+
 nbox = 5;
 pointsPerChunk = 10000;
 gases = [1];
@@ -30,6 +32,7 @@ if ee == 0
 end
 
 while fmin <= wn2
+  disp(' ')
   fmin;
   fmax = fmin + dv;
   gg = 1;   %%gasID = 1

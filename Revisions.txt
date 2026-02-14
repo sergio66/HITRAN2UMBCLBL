@@ -1,5 +1,5 @@
 02/10/2026    Making MAKEIR/H2024
-              Look at eg MAKEIR/H2024/MAKEIR_WV_H24/Readme
+              Look at eg MAKEIR/H2024/MAKEIR_WV_H24/Readme, duplicated here as symlink
 
 01/22/2026    Added in HITRAN_REFPROFS which has reference profiles
               to make kCARTA database

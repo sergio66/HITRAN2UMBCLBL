@@ -2,9 +2,9 @@
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+disp(' you may want to "clear all" '); disp('RET to continue'); pause
+
+addpath0
 
 waterlines_plot
 
@@ -25,11 +25,16 @@ freq_boundaries_g1
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
+iNotFound = 0;
+iCnt = 0;
+iAllFound = 0;
+
 fid = fopen('g1_ir_list2.txt','w');
 for gg = 01 : 01
   for wn = wn1:25:wn2
     for tt = 1 : 11
       iFound = 0;
+      iCnt = iCnt + 1;
       for pp = 1 : 5
         fout = [dirout '/stdH2O' num2str(wn) '_1_' num2str(tt) '_' num2str(pp) '.mat'];
         if exist(fout)
@@ -41,10 +46,13 @@ for gg = 01 : 01
           end
         end
       end
+      iAllFound = iAllFound + iFound;
       if iFound < 5
-        fprintf(1,'found %2i press_offset files for H2O w/o HDO wn = %4i toffset = %2i \n',iFound,wn,tt);
+        fprintf(1,'found few %2i press_offset files for H2O w/o HDO wn = %4i toffset = %2i \n',iFound,wn,tt);
         str = [num2str(gg,'%02d') num2str(wn,'%05d') num2str(tt,'%02d')];
         fprintf(fid,'%s\n',str);
+        iNotFound = iNotFound + 1;
+	iaNotFound(iNotFound) = iCnt;
       else
         fprintf(1,'found all %2i press_offset files for H2O w/o HDO wn = %4i toffset = %2i \n',iFound,wn,tt);
       end
@@ -53,4 +61,41 @@ for gg = 01 : 01
 end
 fclose(fid);
 
-disp('90 chunks, 11 Toffsets, 5 press offsets .. so expect to make 90*11*5 = 4950 files')
+junk = iAllFound/4950 * 100;
+fprintf(1,'90 chunks, 11 Toffsets, 5 press offsets .. so expect to make 90*11*5 = 4950 files --- found %4i or %9.5f percent \n',iAllFound,junk)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if iNotFound > 0
+  %% when you first run this, should do cp g1_ir_list.txt g1_ir_list_ALL.txt
+  %% when you first run this, should do cp g1_ir_list.txt g1_ir_list_ALL.txt
+  %% when you first run this, should do cp g1_ir_list.txt g1_ir_list_ALL.txt  
+
+  if length(iaNotFound) <= 10
+    disp('  ')
+    catter = ['!cat g1_ir_list2.txt'];
+    eval(catter)
+  end
+  
+  if length(iaNotFound) <= 10
+    iaMax = 1:length(iaNotFound);
+    disp('  showing all job arrays that are not done')
+  else
+    iaMax = 1 : 10;
+    disp('  showing first ten job arrays that are not done')    
+  end
+  disp(' ')
+  printarray(iaNotFound(iaMax))
+  kapoo = load('g1_ir_list.txt');
+  printarray(kapoo(iaNotFound(iaMax)));       %% this should reproduce g1_ir_list2.txt above !!!!!
+  
+  disp(' ')
+  disp('if you want, can     cp g1_ir_list2.txt g1_ir_list0.txt; mv g1_ir_list2.txt g1_ir_list.txt')
+  
+  disp(' ')  
+  disp('  But much beter to edit/run "jobs_not_done.sc" output from write_out_jobsnotdone_for_cluster')
+  disp('XYZ should be set to 1')  
+  if iNotFound > 0
+    write_out_jobsnotdone_for_cluster(iaNotFound,1:990);
+  end  
+end

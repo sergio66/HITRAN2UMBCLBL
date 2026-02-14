@@ -28,20 +28,22 @@ if fid == -1
   error('can''t open input file')
 end
 
-ktype=2;
-npts=10000;
-fstep=0.0025;
-nlay = 100;
-% [npts,nd]=size(B);
+ktype = 2;
+npts = 10000;
+fstep = 0.0025;
+nlay  =  100;
+% [npts,nd] = size(B);
 
 % temperature offsets
-ntemp=11;
-toff=-50.0:10.0:50.0;
+ntemp = 11;
+toff = -50.0:10.0:50.0;
 
 % read header info
-filemark= 4 + 8 + 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
+filemark =  4 + 8 + 8 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4;
 filemark2 = fread(fid, 1, 'integer*4');
-if filemark ~= filemark2, error('header read format error'), end
+if filemark ~= filemark2,
+  error('header read format error'),
+end
 gid = fread(fid, 1, 'integer*4');
   fprintf(1,'reading in info for gid = %3i \n',gid);
 
@@ -50,25 +52,31 @@ vchunk = tmp(1); fstep2 = tmp(2);
   fprintf(1,'reading in info for chunk = %8.3f with fstep = %10.5f \n',vchunk,fstep2);
 
 tmp = fread(fid, 8, 'integer*4');
-npts = tmp(1); nd=tmp(4); ntemp2 = tmp(5);
-if ntemp ~= ntemp2, error('ntemp mismatch'), end
+npts = tmp(1); nd = tmp(4); ntemp2 = tmp(5);
+if ntemp ~= ntemp2,
+  error('ntemp mismatch'),
+end
 filemark2 = fread(fid, 1, 'integer*4');
 
 % read the temperature offsets
-filemark= 8 * ntemp;
+filemark =  8 * ntemp;
 filemark2 = fread(fid, 1, 'integer*4');
-if filemark ~= filemark2, error('temperature offset read format error'), end
+if filemark ~= filemark2,
+  error('temperature offset read format error'),
+end
 toff2 = fread(fid,ntemp,'real*8');
 filemark2 = fread(fid, 1, 'integer*4');
 
 % read the compressed absorptions
-if gid > 1
+if gid > 1 & gid < 101
   % do anything but water
   kcomp = zeros(nd,nlay,ntemp);
-  filemark= 8 * ntemp * nlay;
+  filemark =  8 * ntemp * nlay;
   for i = 1:nd
     filemark2 = fread(fid, 1, 'integer*4');
-    if filemark ~= filemark2, error('absorption read format error'), end
+    if filemark ~= filemark2,
+      error('absorption read format error'),
+    end
     kcomp(i,:,:) = fread(fid, [nlay,ntemp], 'real*8');
     filemark2 = fread(fid, 1, 'integer*4');
   end
@@ -76,10 +84,12 @@ else
   % do 5 partial pressures, for water
   kcomp = zeros(nd,nlay,ntemp,5);
   for pi = 1 : 5
-    filemark= 8 * ntemp * nlay;
+    filemark =  8 * ntemp * nlay;
     for i = 1:nd
       filemark2 = fread(fid, 1, 'integer*4');
-      if filemark ~= filemark2, error('absorption read format error'), end
+      if filemark ~= filemark2,
+	error('absorption read format error'),
+      end
       kcomp(i,:,:,pi) = fread(fid, [nlay,ntemp], 'real*8');
       filemark2 = fread(fid, 1, 'integer*4');
     end
@@ -88,10 +98,12 @@ end
 
 % read the basis set 
 B = zeros(npts, nd);
-filemark= 8 * npts;
+filemark =  8 * npts;
 for i = 1:nd
    filemark2 = fread(fid, 1, 'integer*4');
-   if filemark ~= filemark2, error('basis read format error'), end
+   if filemark ~= filemark2,
+     error('basis read format error'),
+   end
    B(:,i) = fread(fid, npts, 'real*8');
    filemark2 = fread(fid, 1, 'integer*4');
 end

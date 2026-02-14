@@ -1,15 +1,21 @@
 %% this simply does all wavenumbers for g1
 
+%% run with sbatch --array=1-990%256                      sergio_matlab_chip_makegas1_103.sbatch 1
+%%   there are 90 25 cm-1 chunks from 605 o 2830 cm-1, 11 T ofsets, 5 pressures
+%%   so a total of 90*5*11 = 4950 files should be made
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 if length(JOB) == 0
   JOB = 1;
+  JOB = 115;
+  JOB = 203;
 end
 
 %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-gasIDlist = load('g1_ir_list.txt');
+gasIDlist = load('g1_ir_list.txt'); %% there are 990 entries in here, made by filelist_g1.m
+                                    %% can rerun to make missing chunks
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
