@@ -6,10 +6,7 @@ clear all
 
 for ii = 1 : 6; figure(ii); clf; end
 
-addpath /home/sergio/SPECTRA
-addpath /home/sergio/SPECTRA/READ_XSEC
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+addpath0
 
 iRemoveEmptyFiles = input('Enter (-1/+1) to remove empty files (default no -1) : ');
 if length(iRemoveEmptyFiles) == 0
@@ -29,8 +26,7 @@ end
 nbox = 5;
 pointsPerChunk = 10000;
 
-%cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
+cder_home
 
 iaTotalAll = [];
 iaTotalNeed = [];

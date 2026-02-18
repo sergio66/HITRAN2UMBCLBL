@@ -2,10 +2,7 @@
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-addpath /home/sergio/SPECTRA
-addpath /home/sergio/SPECTRA/READ_XSEC
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+addpath0
 
 gids = input('Enter gasID list (or -1 to prompt for start/stop gasID) : ');
 if gids == -1
@@ -19,8 +16,7 @@ fid = fopen('gN_ir_xseclist.txt','w');
 nbox = 5;
 pointsPerChunk = 10000;
 
-%cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
+cder_home
 
 for ii = 1 : length(gids)
   gid = gids(ii);

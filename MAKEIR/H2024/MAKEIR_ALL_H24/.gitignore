@@ -1,0 +1,8 @@
+# these are made by      filelist_gN.m --> loop_find_individual_gas_made.m
+gN_ir_listN.txt
+gN_ir_listN_T11.txt
+
+# these made by loop_filelist_gN_missing.m
+gN_ir_listMissingALL.txt
+jobs_not_done.sc
+notdone.txt

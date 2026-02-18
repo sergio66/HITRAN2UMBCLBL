@@ -4,11 +4,11 @@
 
 %% >>> do gases 1-47 <<<
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+clear all
 
-gids = input('Enter gasID list (or -1 to prompt for start/stop gasID) : ');
+addpath0
+
+gids = input('Enter gasID list (or -1 to prompt for start/stop gasID, typically [3 49] since gid2 (CO2) made by LBLRTM ) : ');
 if gids == -1
   iA = input('Enter Start and Stop gasIDs : ');
   gids = iA(1) : iA(2);
@@ -16,31 +16,47 @@ end
 
 gids = setdiff(gids,[30 35 42]);  %% those 3 gases NOT present in breakout of HITRAN
 
-fid = fopen('gN_ir_list.txt','w');
 nbox = 5;
 pointsPerChunk = 10000;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% make directories
+iMakeOutputDirs = +1;
+if iMakeOutputDirs >= 0
+  make_output_dirs_for_molgas_3_42
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% now make gN_ir_list2.txt which is list of all gaes/ 11 T that should be made
+
+fid = fopen('gN_ir_list2.txt','w');
 
 for ii = 1 : length(gids)
   gid = gids(ii);
   freq_boundaries
 
   fprintf(1,'gasID = %2i \n',gid);
-
+  figure(1);  
   [iYes,line] = findlines_plot(605-dv,2830+dv,gid);
 
   %disp('<RET> to continue');
   pause(0.1)
 
   %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2016/MAKEIR_ALL_H16/
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2020/MAKEIR_ALL_H20/
-
-  freq_boundaries
-
+  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2020/MAKEIR_ALL_H20/
+  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+  
   %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
   %%                   12 34567 89
   %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
   fdir = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+  fdir = dirout;
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%
+  %{
+  %% already made above
   ee = exist(fdir,'dir');
   if ee == 0
     fprintf(1,'%s does not exist \n',fdir);
@@ -51,6 +67,8 @@ for ii = 1 : length(gids)
       eval(mker);
     end
   end
+  %}
+  %%%%%%%%%%%%%%%%%%%%%%%%%
 
   iCnt = 0;
   for gg = gid : gid
@@ -70,4 +88,9 @@ for ii = 1 : length(gids)
 
 end
 fclose(fid);
+
+disp('to keep a copy of H2020 list, now do eg  cp -a gN_ir_list.txt gN_ir_list2020.txt');
+disp('  followed by                            cp gN_ir_list2.txt gN_ir_list.txt')
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

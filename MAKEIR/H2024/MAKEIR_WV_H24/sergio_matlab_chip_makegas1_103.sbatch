@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# when making the spectra for pp,Toffset 
-# run this with     sbatch --array=1-990%256 --output='testslurm' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3
-# run this with     sbatch --array=1-990%256                      sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3
+# when making the spectra for pp,Toffset
+# run this with     sbatch --array=1-990%256 --output='/dev/null/' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  BEST since making slurm files kills disks, ls
+# run this with     sbatch --array=1-990%256 --output='testslurm'  sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  might be ok but ignore this option
+# run this with     sbatch --array=1-990%256                       sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  KILLS the cluster writing slurm_JOBIS_pid.out
 #
 # when putting pp,Toffset together
 # run this with     sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 4,5 or 6

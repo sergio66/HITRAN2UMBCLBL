@@ -1,14 +1,12 @@
 %% this simply does all wavenumbers for gN
 %% to put the Toffset chunks together before compression into /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/abs.dat, run this with
-%%   sbatch --array=1-42 sergio_matlab_makegas3_42.sbatch 2
+%%   sbatch --array=1-42 sergio_matlab_makegas3_42.sbatch 3
 
 %% make sure you do have directory [dirout /abs.dat] available
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
 %% after the compression, you may want to delete this [dirout /abs.dat] dir
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/aslutil
-addpath /asl/matlib/science
+addpath0
 
 home = pwd;
 

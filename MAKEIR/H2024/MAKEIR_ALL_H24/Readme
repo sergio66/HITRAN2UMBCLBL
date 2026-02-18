@@ -1,24 +1,136 @@
+GASES 3-42 : Contents
+---------------------
+1) Running eg clust_runXtopts_savegasN_file.m :
+   multiple steps such as
+     edit freq_boundaries.m to set output dir name for gas gid
+     edit and run loop_filelist_gN.m to make the output dirs for all gases,
+       and list of gid/chunk/toffset to be made .. see gN_ir_list2.txt
+     submit job using    sbatch --array=1-2800%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1
+     check progress of individual gases using                         filelist_gN.m                  to see which fles of gis still need to be done
+     when happy with what you see, and jobs have ended, run           loop_filelist_gN_missing.m     to remove empty files
+     
+GASES 51-81 : Contents
+----------------------
+1)
+
+COMMON
+-------
+
+MISC
+----
+
+If you have just cloned UMBC_LBL and HITRAN2UMBCLBL, make sure you
+  mkdir /home/sergio/git/UMBC_LBL/IPFILES
+since the profile files are written there
+
+Also edit
+  addpath0.m
+since it does this
+  addpath /home/sergio/SPECTRA
+  addpath /home/sergio/git/matlabcode/matlibSergio/matlib/science
+  addpath /home/sergio/git/matlabcode/matlibSergio/matlib/aslutil
+
+Also edit
+  cder_home.m
+since it does this  
+  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16/
+  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20/
+  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 GASES 3-42
 
-Basically first edit 
-   loop_filelist_gN.m to point to H2020 dirs including to write to 
-   loop_filelist_gN_missing.m
-       fdir = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
-then run loop_filelist_gN.m
-  which generates a list of  ~20000 gas x freqchunk x 11 Toffsets to be done
-  use -1 to enter gid Start/Stop = [3 49] 
-     
-Then edit/set dir name in freq_boundaries.m to point to H2020
-  dirout = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+1) Running eg clust_runXtopts_savegasN_file.m
+-----------------------------------------------
 
-And use the HPC cluster to run sergio_matlab_makegas3_42.sbatch
-  sbatch --array=1-1800%128 --output='/dev/null' sergio_matlab_makegas3_42.sbatch
-After that run loop_rmerxN.m to get rid of bempty files
-           run loop_filelist_gN_missing.m
-	   cp gN_ir_list2.txt gN_ir_list.txt; X is the number of files to be made here (cat gN_ir_list2.txt | wc -l)
-           sbatch --array=1-X%128 --output='/dev/null' sergio_matlab_makegas3_42.sbatch
-   and so on
+1) Set 2024 dirnames in freq_boundaries.m    this does 605-2830 cm-1
+Edit it so we are putting data into
+  /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g' numstr(gid) '.dat'
+
+2) <<< loop_filelist_gN.m   --->>> this make the original list gN_ir_list0.txt >>>
+
+Before you start, since this is for H2024,
+  then ('to keep a copy of H2020 list, now do eg  cp -a gN_ir_list.txt gN_ir_list2020.txt');
+
+edit and run this file.
+(a) first check the files to make sure they call       cder_home    instead of
+  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16/
+  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20/
+  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+Always answer -1 to the question
+    gids = input('Enter gasID list (or -1 to prompt for start/stop gasID, typically [3 49] since gid2 (CO2) made by LBLRTM ) : ');
+Always answer [3 49] to the question
+    iA = input('Enter Start and Stop gasIDs : ');
+so it is trying to make about 47 gases. We use LBLRTM to make CO2 and CH4 so we skip gasID 2,
+and technically can skip CH4 but the code runs fast on multiple processors    
+(b) then you have already edited "freq_boundaries.m" so it knows where the output dirs should be [dirout]. So now set
+      iMakeOoutputDirs = +1
+    and it will make all output dirs [dirout /g' num2str(gid) '.dat']  if they don't already exisst
+      /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g' numstr(gid) '.dat'      
+(c) then it enters main loop, going over gases --> 605:25:2830 to see which chunks need to be made
+    An encoded text list which is about 25000 entries long, 40 gasIDs x 90 freqchunk x 11 Toffsets to be done
+    (47*90*11 = 46530 but since it is always reading the HITRAN database for each gas and figuring out if there lines for
+    gas GID at chunk WNUM, it says some gases/chunks need not be done
+(d) the list is saved into gN_ir_list2.txt
+      cp gN_ir_list2.txt gN_ir_list.txt'  and you are ready to put jobs on cluster
+
+      X is the number of files to be made here (cat gN_ir_list2.txt | wc -l)
+        sbatch --array=1-X%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch    ----->>>> USE THIS OPTION else cluster hangs
+
+THERE ARE 25179 files in here!!!!
+
+3) Use the HPC cluster to run sergio_matlab_makegas3_42.sbatch
+    sbatch --array=1-2800%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1      is a bit much
+  So have to do
+    sbatch --array=1-2000%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1
+  Note you need   /dev/null else you kill the cluster     
+  Then run        loop_filelist_gN_missing.m
+  which alls      write_out_jobsnotdone_for_cluster.m
+  and writes out  jobs_not_done.sc
+  which is a much smaller list of jobs to be done, that can be put on cluster and run
+
+  Note that    sergio_matlab_chip_makegas3_42.sbatch 1      calls      clust_runXtopts_savegasN_file.m which reads in gN_ir_list.txt
+
+  Not possible to call   clust_runXtopts_savegasN_file.sc    since it calls Paul clustcmd  that DNE anymore
+  
+4) Then edit      filelist_gN.m         so you can check which files of a particular gas have been made
+      filelist_gN.m       output into gN_ir_listN.txt      into individual T/wn job array IDs so you run clust_runXtopts_savegasN_file 
+                          outout into gN_ir_listN_T11.txt  into T11 chunks so you can call    so you run clust_runXtopts_savegasN_file_11T
+			  
+   ie edit these out and call cder_home   
+     %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16/
+     %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20/
+     cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/     
+   and once it tells you haw many chunks do not have 11 T offset files eg 25 out of 90, you can do
+      sbatch --array=1-Nall --exclude c24-13  sergio_matlab_chip_makegas3_42.sbatch   (assuming you get processors, need many of those)   
+      sbatch --array=1-N11  --exclude c24-13  sergio_matlab_chip_makegas3_42.sbatch 2 (assuming you get processors, need about Nall/11)
+
+  filelist_xsecN.m    output into gN_ir_xseclist.txtN  whichever gasID you are trying to figure out if completely or partially made
+
+5) When there are NO MORE JOBS running,
+   you can check ALLLLLLLL GASESES by running      loop_rmerxN.m to              get rid of empty files
+   THEN                                   Run      loop_filelist_gN_missing.m    when you want to see what is missing and needs to be run << deleting empty files >>
+<< very importantly, makes   jobs_not_done.sc  >>
+<<    so you can very easily checks which files have been run and just run the jobs you need to complete all files, >>
+<<    rather than all 990 jobs submitted >>
+
+6) IF CLUSTER IS FINE,
+   the smart way is to run    loop_filelist_gN_missing.m     ... it can do everything
    
+   IF CLUSTER IS STUCK
+   the smart way is to run    loop_filelist_gN_missing.m     and     filelist_gN.m
+   first run  loop_filelist_gN_missing.m to see which gases have not completed
+   then rerun loop_filelist_gN_missing.m to zoom into a region of gases where things are not done (eg 10-20) .. or just zoom into Figure 4 of first run
+   Suppose gases 10,14,15,18,19 are not done
+     So run filelist_gN.m for g10, open file ugh and cp   gN_ir_listN_T11.txt   into it
+     So run filelist_gN.m for g14, open file ugh and add  gN_ir_listN_T11.txt   into it
+     So run filelist_gN.m for g15, open file ugh and add  gN_ir_listN_T11.txt   into it
+     So run filelist_gN.m for g18, open file ugh and add  gN_ir_listN_T11.txt   into it
+     So run filelist_gN.m for g19, open file ugh and add  gN_ir_listN_T11.txt   into it
+   See how many total jobs NX need to run
+   Then      cp ugh gN_ir_listN_T11.txt      and do    sbatch --array=1-NX --exclude c24-13  sergio_matlab_chip_makegas3_42.sbatch 2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%  
 -rw-rw-r-- 1 sergio pi_strow  2957 Nov 14 16:50 loop_filelist_gN_missing.m   --- makes a list od missing files for next run trhough of
                                                                                  clust_runXtopts_savegasN_file.m/sergio_matlab_makegas3_42.sbatch
 -rw-r--r-- 1 sergio pi_strow  1182 Nov 15 12:56 loop_rmerxN.m										 
@@ -37,16 +149,16 @@ loop_filelist_gN.m -- make the looooog list of ~20000 gas x freqchunk x 11 Toffs
            gN_ir_list.txt is from the above (assumes NOTHING has been done)
 loop_filelist_gN_missing.m -- make the looooog list of ~20000 gas x freqchunk x 11 Toffsets to be done 
            gN_ir_list2.txt is from the above (assumes SOME have been done)
-clust_runXtopts_savegasN_file.m : change theJOB from slurm so it makes sense
+clust_runXtopts_savegasN_file.m : change the JOB from slurm so it makes sense
   gasIDlist = load('gN_ir_list.txt');
   XJOB = num2str(gasIDlist(JOB));
   if length(XJOB) == 8
     XJOB = ['0' num2str(gasIDlist(JOB))];
   end
 
-sergio_matlab_makegas3_42.sbatch : calls the previous file
-gas_done_already.m               : included if iWhichFreqBoundaries == 2020 (edit file as needed)
-loop_gas_done_already.m          : 
+sergio_matlab_chip_makegas3_42.sbatch : calls the matlab source code "clust_runXtopts_savegasN_file.m"
+gas_done_already.m                    : included if iWhichFreqBoundaries == 2020 (edit file as needed)
+loop_gas_done_already.m               : 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 GASES 51-81

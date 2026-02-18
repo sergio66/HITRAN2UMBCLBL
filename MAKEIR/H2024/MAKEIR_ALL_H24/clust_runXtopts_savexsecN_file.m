@@ -149,9 +149,8 @@ while fmin <= wn2
   return
 end                   %% loop over freq
 
-fprintf(1,'clust_runXtopts_savexsecN_file.m : JOB = %4i done, used hitran_fname = %s \n',hitran_fname);
+fprintf(1,'FINISHED clust_runXtopts_savexsecN_file.m : JOB = %4i done, used hitran_fname = %s \n',hitran_fname);
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_ALL_H16
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H24
+cder_home
+
 

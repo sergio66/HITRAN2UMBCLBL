@@ -11,6 +11,10 @@ If you have just cloned UMBC_LBL and HITRAN2UMBCLBL, make sure you
   mkdir /home/sergio/git/UMBC_LBL/IPFILES
 since the profile files are written there
 
+Note just make g1,g103 ... g110 is a waste of time and space unless you really are not confident g1+g103=g110
+Note just make g1,g103 ... g110 is a waste of time and space unless you really are not confident g1+g103=g110
+Note just make g1,g103 ... g110 is a waste of time and space unless you really are not confident g1+g103=g110
+
 Also edit
   addpath0.m
 since it does this
@@ -44,7 +48,7 @@ total 24
 1) Set 2024 dirnames in freq_boundaries_g1.m    this does 605-2830 cm-1
                         freq_boundaries_g103.m  this does 2 main bands, mid wave and SWIR so you have to run twice
                         freq_boundaries_g110.m  this does 605-2830 cm-1
-We are putting data into
+Edt them so we are putting data into
   /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g1.dat
   /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g103.dat
   /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g110.dat
@@ -52,7 +56,8 @@ We are putting data into
 2) Then edit H12 --> H16 --> H20 --> H24 in 
    filelist_g1.m
    filelist_g103.m
-   filelist_g110.m 
+   filelist_g110.m   ... doing this gas is a waste
+   
 namely
   %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2016/MAKEIR_WV_H16/
   %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_WV_H20/
@@ -69,11 +74,11 @@ namely
 3) NO NEED NO NEED NO NEED >>>>>>>>>>>>>>>>>>>>>>>>>
 
 4) Use the HPC cluster to run sergio_matlab_chip_makegas1_103.sbatch
-  sbatch --array=1-990%128 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch
+  sbatch --array=1-990%128 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch  1,2 or 3           need /dev/null else you kill the cluster
 which calls one of
   clust_runXtopts_savegas1_file.m
   clust_runXtopts_savegas103_file.m
-  clust_runXtopts_savegas110_file.m
+  clust_runXtopts_savegas110_file.m   NO NEED NO NEED doing this is a waste of time and space
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

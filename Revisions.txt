@@ -1,17 +1,25 @@
-02/10/2026    Making MAKEIR/H2024
-              Look at eg MAKEIR/H2024/MAKEIR_WV_H24/Readme, duplicated here as symlink
+02/14/26    Make sure you dump slurm output to /dev/null eg 
+              sbatch --array=1-990%256 --output='/dev/null/' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3
+	      
+02/10/26    Making MAKEIR/H2024
+            Look at eg MAKEIR/H2024/MAKEIR_WV_H24/Readme
+                     Note making g110 is a wste of time and space unlessyou are worried g1+g103 is not g110
+                      MAKEIR/H2024/MAKEIR_ALL_H24/Readme	      
+            since these two have detaild info how to run HITRAN2UMBCLBL
+	      (for WV make 10000x100x11x5 ODs, for othes make 10000x100x11 ODs)
+	    then compress into matfiles, then make f77 binary files for kCARTA
 
-01/22/2026    Added in HITRAN_REFPROFS which has reference profiles
-              to make kCARTA database
+01/22/26    Added in HITRAN_REFPROFS which has reference profiles
+            to make kCARTA database
 
-11/27/2021    Ready for H2020
+11/27/21    Ready for H2020
 
-07/16/2021    Checks on sizes of array (for veryhighres) that can cause crashes
+07/16/21    Checks on sizes of array (for veryhighres) that can cause crashes
 
-05/28/2021    CIA lineshapes from JM Hartmann
+05/28/21    CIA lineshapes from JM Hartmann
 
-03/17/2021    LM CO2 code from HITRAN
+03/17/21    LM CO2 code from HITRAN
 
-08/25/2018    GIESA subroutines added
+08/25/18    GIESA subroutines added
 
-07/25/2018    Initial git commit of HITRAN2UMBCLBL
+07/25/18    Initial git commit of HITRAN2UMBCLBL

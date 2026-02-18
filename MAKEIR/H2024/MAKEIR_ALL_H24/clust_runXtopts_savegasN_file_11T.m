@@ -1,3 +1,8 @@
+%% this simply does all wavenumbers for gN, loops over 11 T and reads  gN_ir_listN_T11.txt instead of gN_ir_list.txt
+%% so it only does one gas, one chunk, all 11 Toffset
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% this simply does all wavenumbers for gN
 %% to make the individual chuncks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
 %%   sbatch --array=1-20000%256 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch     or
@@ -17,30 +22,29 @@
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 if length(JOB) == 0
   JOB = 1;
-  JOB = 3202;
 end
 
 %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-gasIDlist = load('gN_ir_list.txt');
-%gasIDlist = load('gN_ir_list2.txt');
-%gasIDlist = load('gN_ir_list_7_22.txt');
+gasIDlist = load('gN_ir_listN_T11.txt');
+%% this should be 7 digit code  (gasID=2digit,wavenumberchunk=5digit)
 XJOB = num2str(gasIDlist(JOB));
-if length(XJOB) == 8
+if length(XJOB) == 6
   XJOB = ['0' num2str(gasIDlist(JOB))];
 end
+fprintf(1,'JOB = %3i XJOB = %s \n',JOB,XJOB);
 
 Sgid     = str2num(XJOB(1:2));
 Schunk   = str2num(XJOB(3:7));  
-Stoffset = str2num(XJOB(8:9)); Stt = Stoffset - 6;
-
-fprintf(1,'JOB String = %s    parsed to gid = %2i chunk = %5i Stoffset = %2i \n',XJOB,Sgid,Schunk,Stoffset);
+%% Stoffset = str2num(XJOB(8:9)); Stt = Stoffset - 6;
 
 nbox = 5;
 pointsPerChunk = 10000;
 gases = Sgid;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
 %% load /home/sergio/abscmp/refproTRUE.mat
@@ -66,18 +70,24 @@ else
   return
 end
 
-while fmin <= wn2
+%while fmin <= fmax
+fminxyz = fmin;
+while fmin <= fminxyz
   fmax = fmin + dv;
 
   fprintf(1,'gas freq = %3i %6i \n',gg,fmin);
 
-  for tt = Stt
+  for xtt = 1 : 11
+    fprintf(1,'JOB String = %s    parsed to gid = %2i chunk = %5i .. doing T offset %2i of 11 \n',XJOB,Sgid,Schunk,xtt);
+
+    tt = xtt - 6;
     tprof = refpro.mtemp + tt*10;
 
-    iYes = findlines_plot(fmin-dv,fmax+dv,1); 
+    iYes = findlines_plot(fmin-dv,fmax+dv,gasid); 
 
     fout = [dirout '/std' num2str(fmin)];
     fout = [fout '_' num2str(gg) '_' num2str(tt+6) '.mat'];
+
     if exist(fout,'file') == 0 & iYes > 0
       fprintf(1,'% making %s \n',fout)
       toucher = ['!touch ' fout]; %% do this so other runs go to diff chunk 
@@ -98,12 +108,9 @@ while fmin <= wn2
       fprintf(1,'no lines for chunk starting %8.6f \n',fmin);
     end
   end               %% loop over temperature (1..11)
-  fmin = fmin + dv;
-  %% one chunk is enough
-  return
+  fmin = fmin + dv; %% this is a bit irrelevant since ff loop is fmin : fmin 
 end                 %% loop over freq
 
-fprintf(1,'FINISHED clust_runXtopts_savegasN_file.m : JOB = %4i done, used hitran_fname = %s \n',hitran_fname);
+fprintf(1,'FINISHED clust_runXtopts_savegasN_file_11T.m : JOB = %4i done, used hitran_fname = %s \n',hitran_fname);
 
 cder_home
-

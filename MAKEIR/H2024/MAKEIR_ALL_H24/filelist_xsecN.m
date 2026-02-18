@@ -2,18 +2,15 @@
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
 
-gid = input('Enter gasID : ');
-
-addpath /home/sergio/SPECTRA
+addpath0
 
 nbox = 5;
 pointsPerChunk = 10000;
 
-cd ~/HITRAN2UMBCLBL/MAKEIR_ALL_H12/
+cder_home
+
+gid = input('Enter gasID : ');
 
 freq_boundaries
 
@@ -22,6 +19,10 @@ freq_boundaries
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 fdir = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+fdir = dirout;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 ee = exist(fdir,'dir');
 if ee == 0
   fprintf(1,'%s does not exist \n',fdir);
@@ -32,7 +33,9 @@ if ee == 0
   end
 end
 
-fid = fopen('gN_ir_xseclist.txt','w');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+fid = fopen('gN_ir_xseclist.txtN','w');
 iCnt = 0;
 for gg = gid : gid
   for wn = wn1 : dv : wn2
@@ -53,3 +56,5 @@ end
 fclose(fid);
 
 fprintf(1,'need to make %3i chunks for gas %2i \n',iCnt,gid)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
