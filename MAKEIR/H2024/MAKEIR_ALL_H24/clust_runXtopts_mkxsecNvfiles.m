@@ -6,14 +6,18 @@
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
 %% after the compression, you may want to delete this [dirout /abs.dat] dir
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/aslutil
-addpath /asl/matlib/science
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
+addpath0
+
+homedir = pwd;
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+if length(JOB) == 0
+  JOB = 51;
+end
+
 gid = JOB;
 if gid < 51
   error('not for MOL GAS IDs')
@@ -25,6 +29,8 @@ end
 load /home/sergio/HITRAN2UMBCLBL/refproTRUE.mat
 %}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 nbox = 5;
 pointsPerChunk = 10000;
 freq_boundaries
@@ -35,8 +41,11 @@ addpath /home/sergio/SPECTRA/READ_XSEC
 iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2020 for g51-81
+
+set_yy0
+
 if gid <= iSwitchXsecDataBase
-  bands = list_bands(gid,2020);
+  bands = list_bands(gid,YY0);
 else
   bands = list_bands(gid,2012);
 end  
@@ -53,7 +62,8 @@ for wn = wn1 : dv : wn2
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_ALL_H20
+cder = ['cd ' homedir];
+eval(cder);
 
 slash = findstr(dirout,'/');
 diroutXN = dirout(1:slash(end)-1);
@@ -71,6 +81,8 @@ if ee == 0
     error('cannot proceed');
   end
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(2); clf;
 fmin = wn1; 

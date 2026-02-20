@@ -4,5 +4,6 @@ gN_ir_listN_T11.txt
 
 # these made by loop_filelist_gN_missing.m
 gN_ir_listMissingALL.txt
+gN_ir_xseclistMissingALL.txt
 jobs_not_done.sc
 notdone.txt

@@ -170,7 +170,12 @@ cp /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/a
   fix the paths there if needed
   
 cp cmprunIR_WV_H20.m cmprunIR_WV_H24.m
-  heavily edit so can do one or all of g1,103,110 as wanted
+  heavily edit so can do one or all of g1,103,110 as wanted eg
+    dir0 = '/umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/';
+    cder = ['cd ' dir0]; eval(cder);
+      freq_boundaries_g1
+    cdirALL = [dirout '/kcomp.h2o/'];
+    fprintf(1,'cdirALL = %s \n',cdirALL)    
 
 ls -lt cmprunIR_WV.m (hopefully a symbolic link)
 rm cmprunIR_WV.m (hopefully a symbolic link)

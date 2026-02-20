@@ -6,13 +6,19 @@
 %% to save the concatted abs coeffs (biiiiiiiiiiiiiiig files)
 %% after the compression, you may want to delete this [dirout /abs.dat] dir
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 addpath0
 
 home = pwd;
 
 %gid = input('Enter gasID : ');
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-%JOB = 22
+if length(JOB) == 0
+  JOB = 15;  
+  JOB = 3;
+end
+
 gid = JOB;
 if gid == 1
   error('not for WV')
@@ -28,6 +34,8 @@ end
 %% load /home/sergio/HITRAN2UMBCLBL/refproTRUE.mat
 load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
 %}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 nbox = 5;
 pointsPerChunk = 10000;
@@ -73,6 +81,7 @@ else
   diroutXN = dirout(1:slash(end)-1);
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fout = [diroutXN '/abs.dat'];
 ee = exist(fout,'dir');
 if ee == 0
@@ -85,6 +94,7 @@ if ee == 0
     error('cannot proceed');
   end
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(2); clf;
 fmin = wn1; 

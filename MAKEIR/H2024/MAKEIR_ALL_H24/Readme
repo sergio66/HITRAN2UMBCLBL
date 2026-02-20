@@ -8,13 +8,31 @@ GASES 3-42 : Contents
      submit job using    sbatch --array=1-2800%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1
      check progress of individual gases using                         filelist_gN.m                  to see which fles of gis still need to be done
      when happy with what you see, and jobs have ended, run           loop_filelist_gN_missing.m     to remove empty files
+     Note things are gonna fail past job ID 20000  : so at that point when first 20000 are made, edit
+       clust_runXtopts_savegasN_file
+     so it processes job+20000, and appropriately edit
+       bobs_not_done.sc
+     so the jobsIDs are 20000 less
      
 GASES 51-81 : Contents
 ----------------------
-1)
+1) Basics only needed since all effort spent on gases3-42
+   multiple (simpler) steps and this should really run very fast
+     edit freq_boundaries.m to set output dir name for gas gid (already done for molgas)
+     edit and run loop_filelist_xsecN.m to make the output dirs for all gases,
+       and list of gid/chunk/toffset to be made .. see gN_ir_xseclist2.txt
+     submit job using    sbatch --array=1-900%128 --output='/dev/null' sergio_matlab_chip_makegas51_81.sbatch 1
+     check progress of individual gases using                         filelist_xsecgN.m                  to see which fles of gis still need to be done
+     when happy with what you see, and jobs have ended, run           loop_filelist_xsecN_missing.m     to remove empty files
+     
 
-COMMON
--------
+COMMON : PUTTING CHUNKS TOGETHER, COMPRESS, TURN INTO F77 BIN FILES, MAKE list of files for kcarta
+---------------------------------------------------------------------------------------------------
+1) Putting the molgas (gid 3-42,43-59) chunks together
+2) Putting the xscgas (gid 51-81) chunks together
+3) compress the files
+4) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
+5) need to get the list of files ready for kCARTA
 
 MISC
 ----
@@ -79,7 +97,10 @@ and technically can skip CH4 but the code runs fast on multiple processors
 
 THERE ARE 25179 files in here!!!!
 
-3) Use the HPC cluster to run sergio_matlab_makegas3_42.sbatch
+3) Run      clust_runXtopts_savegasN_file    to make sure everything is OK
+       iX2000 = -1;   %% DEFAULT VALUE< do not add 20000 to JOB
+
+  Use the HPC cluster to run sergio_matlab_makegas3_42.sbatch
     sbatch --array=1-2800%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1      is a bit much
   So have to do
     sbatch --array=1-2000%128 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch 1
@@ -130,6 +151,25 @@ THERE ARE 25179 files in here!!!!
    See how many total jobs NX need to run
    Then      cp ugh gN_ir_listN_T11.txt      and do    sbatch --array=1-NX --exclude c24-13  sergio_matlab_chip_makegas3_42.sbatch 2
 
+7) Note things are gonna fail past job ID 20000  : so at that point when first 20000 are made, edit
+     clust_runXtopts_savegasN_file
+       iX2000 = +1;
+   so it processes job+20000,
+   
+   also appropriately edit
+     jobs_not_done.sc
+   so the jobsIDs are 20000 less
+
+   Note g49 has 100,000s of lines and is sooooooooooooooooooooooooo sloooooooooooooooooow
+  h04    h08    h12    h16    h20    h24
+  gid = 49 found   1221 lines in chunk  755
+  gid = 49 found  45445 lines in chunk  780
+  gid = 49 found 216828 lines in chunk  805
+  gid = 49 found 302123 lines in chunk  830
+  gid = 49 found 264469 lines in chunk  855
+  gid = 49 found  93086 lines in chunk  880
+  gid = 49 found   6570 lines in chunk  905
+      
 %%%%%%%%%%%%%%%%%%%%%%%%%  
 -rw-rw-r-- 1 sergio pi_strow  2957 Nov 14 16:50 loop_filelist_gN_missing.m   --- makes a list od missing files for next run trhough of
                                                                                  clust_runXtopts_savegasN_file.m/sergio_matlab_makegas3_42.sbatch
@@ -162,26 +202,65 @@ loop_gas_done_already.m               :
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 GASES 51-81
+------------
 
-loop_filelist_xsecN.m
+1) Basics only needed since all effort spent on gases3-42
+---------------------------------------------------------
 
-edit loop_filelist_xsecN.m : change 2012 to 2016 to 2020
-  /home/sergio/SPECTRA/READ_XSEC/read_xsec.m : need to fix that so default = 2016
+0) edit set_yy0.m
+    YY0 = 2012;
+    YY0 = 2016;
+    YY0 = 2020;
+    YY0 = 2024;
 
-sergio_matlab_makegas51_81.sbatch : calls clust_runXtopts_savexsecN_file
+1) loop_filelist_xsecN.m
+  edit loop_filelist_xsecN.m : no need to change 2012 to 2016 to 2020 to 2024  ... have done cder_home.m 
+  plus freq_boundaries.m is edited for
+    |dirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
 
+2) edit /home/sergio/SPECTRA/READ_XSEC/read_xsec.m : need to fix that so default = 2024
+
+3) edit clust_runXtopts_savexsecN_file.m
+    set_yy0
+    [iYes,gf] = findxsec_plot(fmin,fmax,gasid,YY0);
+	
+sergio_matlab_chip_makegas51_81.sbatch : calls clust_runXtopts_savexsecN_file
+  gases 75-81 have lotsa chunks, take a while
+  especially g74 and g80 takes forever to read in the xsecdata file
+  
 Note : have to be careful about iSwitchXsecDataBase
   originally I used the H12 xsec database so did nothing
   then I downloaded H2016 for gases 51-63, so had     to switch to H2012 for gases 64-81
   now  I downloaded H2016 for gases 51-81, so no need to switch to H2012
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-PUTTING CHUNKS TOGETHER
+% 4) Checking things out  WORKS,
+%    but better do loop_filelist_xsecN_missing.m since it calls write_out_jobsnotdone_for_cluster
+%    (a) edit xsec_done_already.m
+%        set_yy0
+%        bands = list_bands(gasid,YY0);    
+%     (b) run   loop_xsec_done_already.m
 
--rw-r--r-- 1 sergio pi_strow 3462 Nov 23 02:52 clust_runXtopts_mkgNvfiles.m
-edit that so that you run it ONCE to make /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/abs.dat/
-then edit sergio_matlab_makegas3_42.sbatch so that you use short queue, and call it as
-   sbatch --array=1-49 sergio_matlab_makegas3_42.sbatch
+4) Checking things out
+   Edit and run loop_filelist_xsecN_missing.m
+    set_yy0   
+  Run    loop_filelist_xsecN_missing.m
+  Then it calls write_out_jobsnotdone_for_cluster  so you can re-run/newly run what is needed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+COMMON : PUTTING CHUNKS TOGETHER, COMPRESS, TURN INTO F77 BIN FILES, MAKE list of files for kcarta
+
+1) Putting the molgas (gid 3-42,43-59) chunks together
+-------------------------------------------------------
+
+clust_runXtopts_mkgNvfiles.m
+  run it ONCE to make /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/abs.dat/  and also it does the gas3 putting together
+   (t calls freq_boundaries, creates eg /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/abs.dat if needed)
+  then edit sergio_matlab_chip_makegas3_42.sbatch so that you use short queue, and call it as
+     sbatch --array=1-40 sergio_matlab_chip_makegas3_42.sbatch   3
+     sbatch --array=41-49 sergio_matlab_chip_makegas3_42.sbatch  3  
 
 it should fail on three gases that are not made by clust_runXtopts_savegasN_file.m
 [sergio@maya-usr1 MAKEIR_ALL_H16]$ grep -in error slurm-6515106_*
@@ -193,35 +272,84 @@ total 0
 [sergio@maya-usr1 MAKEIR_ALL_H16]$ ls -lt /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g37.dat/
 total 0
 [sergio@maya-usr1 MAKEIR_ALL_H16]$ ls -lt /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g48.dat/
+
 total 0
 
 grep -in small slurm-6515106_* | more
   tells you which chunks did not have enough files
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-COMPRESS
+2) Putting the xscgas (gid 51-81) chunks together
+--------------------------------------------------
+
+clust_runXtopts_mkxsecNvfiles.m
+   Edit and run clust_runXtopts_mkxsecNvfiles.m
+     set_yy0
+  run it ONCE to make /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/abs.dat/  and also it does the gas3 putting together
+   (t calls freq_boundaries, creates eg /asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/abs.dat if needed)
+  then edit sergio_matlab_chip_makegas51_81.sbatch so that you use short queue, and call it as
+     sbatch --array=51-81 sergio_matlab_chip_makegas51_81.sbatch 2
+
+3) compress the files
+----------------------
+
 cd /home/sergio/HITRAN2UMBCLBL/CMPRUN
-edit cmprunIR_OTHERS.m as needed  H2012 --> H2016 --> H2020
-  cmprunIR_OTHERS(3:42,605:25:2830,2020);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-CONVERT TO F77 files
-cd /home/sergio/HITRAN2UMBCLBL/fortran/mat2for
+## this has probably be done from MAKEIR_WV_H24
+cp /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/addpath0.m .
+  fix the paths there if needed
+
+edit cmprunIR_umbcLBL_all.m needed  H2012 --> H2016 --> H2020 --> H2024  
+  cmprunIR_umbcLBL_all([[3:42] [51:81],605:25:2830,2020,2024);
+
+edit dir0 in there and then it figuresout cdir, gdir
+      %% new way : set dir0, then it reads freq_boundaries and figures out gdir,cdir
+      dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H20/';
+      dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/';
+      dir0 = '/umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/';
+
+      cder = ['cd ' dir0]; eval(cder);
+        freq_boundaries
+      gdir = [dirout '/abs.dat/'];
+      cdir = [dirout '/kcomp/'];
+      
+or   clust_cmprunIR_UMBC_all.m --> calls cmprunIR_umbcLBL_all.m
+
+kleenslurm; sbatch --array=3-81 sergio_matlab_chip_cmprun.sbatch 1
+
+or 
+kleenslurm; sbatch --array=3-40  sergio_matlab_chip_cmprun.sbatch 1
+kleenslurm; sbatch --array=41-49 sergio_matlab_chip_cmprun.sbatch 1
+kleenslurm; sbatch --array=51-81 sergio_matlab_chip_cmprun.sbatch 1
+
+
+4) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
+--------------------------------------------------------------------------------------
+cd /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
 edit loop_mat2forIR.m
-  H2012 --> H2016 --> H2020
+  edit gasID_2_cdir_fdir
+  edit gasID_3_81_cdir_fdir
+    H2012 --> H2016 --> H2020 --> H2024
+    %% cdir = '/asl/s1/sergio/H2024_RUN8_NIRDATABASE/IR_605_2830/kcomp/';
+    cdir = '/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/kcomp/';    
+    %% fdir = '/asl/data/kcarta/H2024.ieee-le/IR605/etc.ieee-le/';
+    fdir = '/umbc/xfs3/strow/asl/rta/kcarta/H2024.ieee-le/IR605/etc.ieee-le/';
+Run the code!!!!!
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-then you need to get the list of files ready for kCARTA
-ls -lt /asl/data/kcarta/H2020.ieee-le/IR605/hdo.ieee-le/
-ls -lt /asl/data/kcarta/H2020.ieee-le/IR605/etc.ieee-le/
+5) need to get the list of files ready for kCARTA
+-------------------------------------------------
+
+ls -lt /asl/data/kcarta/H2024.ieee-le/IR605/hdo.ieee-le/
+ls -lt /asl/data/kcarta/H2024.ieee-le/IR605/etc.ieee-le/
 
 cd /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC
-edit comp_IRdatabase_H2020.sc
-  edit kWaterPath
-       kCO2Path
-       kCOmpPath
-       PARAM_HT2020/comp_ir605_2830.param
-run comp_IRdatabase_H2020.sc
+cp comp_IRdatabase_H2020.sc comp_IRdatabase_H2024.sc
+edit  comp_IRdatabase_H2024.sc
+        kWaterPath
+        kCO2Path
+        kCOmpPath
+        PARAM_HT2024/comp_ir605_2830.param
+mkdir PARAM_HT2024/       
+run   comp_IRdatabase_H2024.sc
 
 >>>>>>>>>>>>>
 NOTE : Nov 2017 been a bit lazy with XSC gases so use this script to copy or blow away xsc files
@@ -230,5 +358,14 @@ copy_xscHT2012_to_HT2020.sc   which contains these two simple lines
   cp -a /asl/data/kcarta/H2012_IR/etc/*g[678][0].dat /asl/data/kcarta/H2020.ieee-le/IR605/etc.ieee-le/.
 >>>>>>>>>>>>>
 
-then with Matlab you can run eg
-  compare_databases(1:81,'PARAM_HT2012/comp_ir605_2830.param','PARAM_HT2020/comp_ir605_2830.param')
+then with Matlab you MUST run the comparison eg
+  compare_databases(1:81,'PARAM_HT2020/comp_ir605_2830.param','PARAM_HT2024/comp_ir605_2830.param')
+  /home/sergio/git/kcarta_gen/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC/compare_databases.m
+eg gas 15 the /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/abs.dat/g15v*.mat
+   were barely made, so the compression was not done and then the binary files were not done and then the
+   comparison failed
+   So had to rerun clust_runXtopts_mkgNvfiles.m for JOB = 15 in /home/sergio/git/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+             rerun cmprunIR_umbcLBL_all(15)                  in /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/CMPRUN/
+	     rerun loop_mat2forIR.m                          in /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+	     rerun comp_IRdatabase_H2024.sc                  in /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

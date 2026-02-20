@@ -1,7 +1,12 @@
-%% this simply does all wavenumbers for g1
+%% this simply does all wavenumbers for xsecgN
+%%
+%% [sergio@c24-52 MAKEIR_ALL_H24]$ more gN_ir_xseclist.txt | wc -l
+%% 8492
+%%
 %% to make the individual chuncks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
 %%   sbatch --array=1-8492%256 --output='/dev/null' sergio_matlab_makegas3_42.sbatch     or
 %%   sbatch --array=1-8492%256                      sergio_matlab_makegas3_42.sbatch 1    or
+%%
 %% but first make sure you run
 %%  loop_filelist_xsecN.m             to make initial filelist for all gases 
 %% 
@@ -11,6 +16,8 @@
 %% compare against previous database using eg
 %%  compare_mol_H2016_H2020_indchunks.m    for individual chunks
 %%  compare_mol_H2016_H2020_allchunks.m    for allchunks chunks
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 %JOB = 586
@@ -24,7 +31,7 @@ end
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('gN_ir_xseclist.txt');
-gasIDlist = load('gN_ir_xseclist2.txt');
+% gasIDlist = load('gN_ir_xseclist2.txt');
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
@@ -47,17 +54,21 @@ gases = 51:81; %%%%%%% <<<<<<<< need to change this as needed!
 gases = Sgid;
 gid   = Sgid;
 
-%load /home/sergio/abscmp/refproTRUE.mat
-%load /home/sergio/HITRAN2UMBCLBL/refpro3.mat         %% ~2004 to Dec 2009
+%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
+% load /home/sergio/abscmp/refproTRUE.mat
+% load /home/sergio/HITRAN2UMBCLBL/refpro3.mat         %% ~2004 to Dec 2009
 %load /home/sergio/HITRAN2UMBCLBL/refprof_usstd2010_lbl.mat  %% July 2010 - 
   %% copied/massaged from /asl/packages/klayersV205/Data/refprof_usstd2010.mat
   %% see make_refprof2010.m
 load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat         %% symbolic link
 
-%addpath /home/sergio/HITRAN2UMBCLBL/READ_XSEC/
 addpath0
+%addpath /home/sergio/HITRAN2UMBCLBL/READ_XSEC/
 addpath /home/sergio/git/UMBC_LBL/READ_XSEC/
 
+gg    = Sgid;
+gasid = Sgid;  
+gid   = Sgid;
 freq_boundaries
 
 cd /home/sergio/SPECTRA
@@ -72,6 +83,10 @@ else
   disp('the start wavnumber is SMALLER than fmain = 1105 cm-1 so quit')
   return
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+set_yy0
 
 while fmin <= wn2
   fmax = fmin + dv;
@@ -90,14 +105,17 @@ while fmin <= wn2
       iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
       iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
       iSwitchXsecDataBase = 9999;  %% now we have       H2020 for g51-81
+      iSwitchXsecDataBase = 9999;  %% now we have       H2024 for g51-81      
       if gasid <= iSwitchXsecDataBase
         %[iYes,gf] = findxsec_plot(fmin,fmax,gasid,2016);
-        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2020);
+        [iYes,gf] = findxsec_plot(fmin,fmax,gasid,YY0);
       else
         [iYes,gf] = findxsec_plot(fmin,fmax,gasid,2012);
       end
       fprintf(1,'gas freq = %3i %6i %3i %3i\n',gasid,fmin,iYes,tt);
-      fout = [dirout '/std' num2str(fmin) '_' num2str(refpro.glist(gq)) '_' num2str(tt+6) '.mat'];
+      %fout = [dirout '/std' num2str(fmin) '_' num2str(refpro.glist(gq)) '_' num2str(tt+6) '.mat'];
+      fout = [dirout '/std' num2str(fmin)];
+      fout = [fout '_' num2str(gasid) '_' num2str(tt+6) '.mat'];
 
       %% see abscmp/xsectab25.m
       gamnt = profile(5,:);
@@ -118,7 +136,7 @@ while fmin <= wn2
 	figno = 1;
 	if gasid <= iSwitchXsecDataBase
           %[d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2016);
-          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2020);
+          [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,YY0);
 	else
           [d,w] = calc_xsec(gasid,fmin,fmax-dvv,dvv,tp,pL,figno,2012);
 	end

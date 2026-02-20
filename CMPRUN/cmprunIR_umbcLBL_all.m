@@ -1,7 +1,6 @@
 function cmprunIR_umbcLBL_all(glist, vlist, HITRAN)
 
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+addpath0
 
 % function cmprun(glist, vlist)
 %
@@ -12,6 +11,7 @@ addpath /asl/matlib/aslutil
 
 if nargin < 3
   HITRAN = 2020;
+  HITRAN = 2024;  
 end
 
 if nargin < 2
@@ -35,16 +35,19 @@ load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
 glist = intersect(glist, refpro.glist);
 clear refpro
 
-glist
-%vlist
+if length(glist) == 1
+  fprintf(1,'glist = %3i \n',glist)
+else  
+  printarray(glist)
+end
 
-whos glist
+%vlist
 
 % loop on gas IDs
 for gid00 = 1 : length(glist)
-  gid = glist(gid00)
+  gid = glist(gid00);
   if gid == 1
-    error('use eg cmprunIR_WV_H20.m')
+    error('use eg cmprunIR_WV_H20.m,cmprunIR_WV_H24.m')
   end
   % set directories, depending on gas ID
   switch gid
@@ -54,7 +57,8 @@ for gid00 = 1 : length(glist)
 
       gdir = ['/asl/s1/sergio/H20' num2str(HITRANvers,'%02d') '_RUN8_NIRDATABASE/IR_605_2830//lblrtm2/WV/abs.dat'];
       cdir = ['/asl/s1/sergio/H20' num2str(HITRANvers,'%02d') '_RUN8_NIRDATABASE/IR_605_2830//lblrtm2/WV/kcomp.h2o'];
-
+      error('wait, this should have crashed above ..... use eg cmprunIR_WV_H20.m,cmprunIR_WV_H24.m')
+      
     otherwise
       disp('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
       disp('WARNING!!!! NANs may show up in the abs.dat, which show up in the kcomp files')
@@ -62,8 +66,33 @@ for gid00 = 1 : length(glist)
       disp('and run find_nan_put_zeros.m')
       disp('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
+      %% old way of doing things
       gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/abs.dat/']; 
       cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/kcomp/'];
+
+      %% new way : set dir0, then it reads freq_boundaries and figures out gdir,cdir
+      dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H20/';            
+      dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/';      
+      dir0 = '/umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/';
+
+      homedir = pwd;
+      cder = ['cd ' dir0]; eval(cder);
+        nbox = 5;
+        pointsPerChunk = 10000;
+      freq_boundaries
+      if gid < 10	
+        diroutXYZ = dirout(1:end-6);
+      else
+        diroutXYZ = dirout(1:end-7);
+      end
+      gdir = [diroutXYZ '/abs.dat/'];
+      cdir = [diroutXYZ '/kcomp/'];
+      if ~exist(cdir)
+	mker = ['!mkdir -p ' cdir];
+	fprintf(1,'mker = %s \n',mker)
+	eval(mker)
+      end
+      cder = ['cd ' homedir]; eval(cder);      
     end
 
   disp(' ')

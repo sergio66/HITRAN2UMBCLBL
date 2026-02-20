@@ -7,6 +7,7 @@ gases = 2;
 gases = [7 22];   %% ew MT CKD3.2 version
 gases = 3;
 gases = [[3 : 42] [51 : 81]];
+gases = [[3 : 49] [51 : 81]];
 
 fchunks = 605 : 25 : 2830;
 dtype = 'ieee-le';
@@ -29,58 +30,12 @@ for gg = 1 : length(gases)
        disp('and run find_nan_put_zeros.m')
        disp('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/linemixUMBC/kcomp/'
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/linemixUMBC/kcompNOZEROS/'
-    fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/linemixUMBC/';
-
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/hartmann/kcomp/'
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g2.dat/hartmann/kcompNOZEROS/'
-    fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/hartmann/';
-
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_385ppm/kcomp/full/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_385ppm/';
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm/kcomp/full/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm/';
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed1/kcomp/full/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed1/';
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed2/kcomp/full/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed2/';
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g2.dat_LM5ptbox_newOct18_400ppm_fixed3/kcomp/full/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/co2_LM_HITRAN_400ppm_fixed3/';
+    gasID_2_cdir_fdir
 
   else
-    %% H2008
-    cdir = '/asl/s1/sergio/RUN8_NIRDATABASE/IR_605_2830_H08/kcomp/';
-    fdir = '/asl/s1/sergio/RUN8_NIRDATABASE/IR_605_2830_H08/fbin/etc.ieee-le/';
 
-    %% H2012
-    cdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/fbin/etc.ieee-le/';   
-    fdir = '/asl/data/kcarta/H2012.ieee-le/IR605/etc.ieee-le/';
-
-    %% G2015
-    cdir = '/asl/s1/sergio/G2015_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/G2015.ieee-le/IR605/etc.ieee-le/';
-
-    %% H2016
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/';
-
-    %% H2016 uncertainty
-    cdir = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830_unc/kcomp/';
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S-/';  %% strength min
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_Rn/';  %%%% <<<< note how G1 and G103 go into hdo.ieee-le, every perturbation randomized
+    gasID_3_81_cdir_fdir
     
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_W+/';  %% wavenumber max    
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_B+/';  %% broadening max
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_P+/';  %% pressure shift max
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_S+/';  %% strength max
-    fdir = '/asl/data/kcarta/H2016.ieee-le/IR605/etc.ieee-le/unc_Rn/';  %% randomize all    
-
-    %% H2020
-    cdir = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
-    fdir = '/asl/data/kcarta/H2020.ieee-le/IR605/etc.ieee-le/';
-
   end
 
   ee = exist(fdir);
@@ -101,10 +56,10 @@ for gg = 1 : length(gases)
 
     ee = exist(fname);
     if ee > 0
-      fprintf(1,'%s does exist, processing .... \n',fname);
+      %fprintf(1,'%s does exist, processing .... \n',fname);
       mat2forGENERIC(chunkprefix, gid, vchunk, cdir, fdir, dtype)
     else
-      fprintf(1,'%s does not exist, going to next .... \n',fname);
+      fprintf(1,'%s does not exist .... \n',fname);
     end
   end
 end

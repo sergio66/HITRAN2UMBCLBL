@@ -9,7 +9,7 @@
 #   run this with   sbatch --array=1-N --exclude c24-13  sergio_matlab_chip_makegas3_42.sbatch 2   to run an individual gas, individual chunk, loop over 11 T
 #   
 # to put the Toffset chunks together before compression into /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/abs.dat, run this with
-#   sbatch --array=1-42 sergio_matlab_chip_makegas3_42.sbatch 3
+#   sbatch --array=4-42 sergio_matlab_chip_makegas3_42.sbatch 3
 
 ########################################################################
 
@@ -22,8 +22,7 @@
 #  N specifies that 1 job step is to be allocated per instance of #matlab
 #SBATCH -N1
 
-#  This specifies the number of cores per matlab session will be
-#available for parallel jobs
+#  This specifies the number of cores per matlab session will be available for parallel jobs
 #SBATCH --cpus-per-task 1
 
 #SBATCH --account=pi_strow
@@ -42,16 +41,19 @@
 
 ########################################################################
 
-#### clust_runXtopts_savegas1_file : actually does the whole /home/sergio/SPECTRA/run8 shebang,
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
+
+#### clust_runXtopts_savegasN_file,clust_runXtopts_savegasN_file_11T : SLOW : does the whole /home/sergio/SPECTRA/run8 shebang,
 #### slow and tedious, g1 or g110
 #SBATCH --time=11:59:00 
 #SBATCH --mem-per-cpu=12000
 
-#### clust_runXtopts_savegas103_file : actually does the whole /home/sergio/SPECTRA/run8 shebang,
+#### clust_runXtopts_mkgNvfiles : FAST : puts the 11 T poffsets together into /abs.dat
 #### fast g103, or putting together the 5 pressures/11 Toffsets
 ##SBATCH --time=0:59:00 
 ##SBATCH --mem-per-cpu=12000
-
 
 ########################################################################
 

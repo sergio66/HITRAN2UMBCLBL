@@ -56,6 +56,9 @@ iaTotalChunksNeeded_PerGas = zeros(1,length(gids));
 iaTotalFiles_StillNeeded_PerGas = zeros(1,length(gids));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+cder_home
+
 fid = fopen('gN_ir_listMissingALL.txt','w');
 for ii = 1 : length(gids)
   gid = gids(ii);
@@ -68,9 +71,7 @@ for ii = 1 : length(gids)
   %disp('<RET> to continue');
   pause(0.1)
 
-  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2016/MAKEIR_ALL_H16/
-  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2020/MAKEIR_ALL_H20/
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+  cder_home
 
   %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
   %%                   12 34567 89
@@ -146,6 +147,8 @@ for ii = 1 : length(gids)
            'linewidth',2);
     hl = legend('total needed','done','still need to do','location','northeast'); set(hl,'fontsize',10);
   figure(1); pause(0.1);
+  %fprintf(1,'need to make %3i chunks for gas %2i \n',iCnt,gid)
+  %disp('ret'); pause  
 end            %% for ii = 1 : length(gids)
 fclose(fid);
 

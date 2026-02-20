@@ -15,7 +15,7 @@ function mat2forGENERIC(chunkprefix, gid0, vchunk, cdir, fdir, dtype, fstep)
 
 % default output data type
 if nargin < 7
-  disp('warning : 6 or less args, setting fstep = 0.0025')
+  % disp('warning : 6 or less args, setting fstep = 0.0025')
   fstep = 0.0025;
 end
 
@@ -56,8 +56,8 @@ end
 %
 
 %%% eval(sprintf('load %s/cg%dv%d.mat', cdir, gid0, vchunk));   %% orig, from Howard
-loader = [cdir '/cg' num2str(gid0) 'v' num2str(vchunk) '.mat'];
-loader = ['load ' loader];
+fIN_compressed_gas = [cdir '/cg' num2str(gid0) 'v' num2str(vchunk) '.mat'];
+loader = ['load ' fIN_compressed_gas];
 eval(loader);
 
 % 
@@ -81,6 +81,13 @@ npts  = 10000;
 %%%%fname = sprintf('s%d_g%d.dat', vchunk, gid0);   %%% VERY OLD, from Howard
 fname = sprintf('%s%d_g%d.dat', chunkprefix,vchunk, gid0);  %% NEWER, modified
 fname = [chunkprefix num2str(vchunk) '_g' num2str(gid0) '.dat'];    %%% NEWEST
+fnamex = [fdir,'/',fname];
+if exist(fnamex)
+  fprintf(1,'output f77bin file %s exists, please delete -- exiting \n',fnamex)
+  return
+else
+  fprintf(1,'%80s ---> %80s \n',fIN_compressed_gas,fnamex);  
+end
 
 ktype = 2;
 
@@ -93,12 +100,6 @@ nlay = 100;
 % temperature offsets
 ntemp = 11;
 toff  = -50.0:10.0:50.0;
-
-fnamex = [fdir,'/',fname];
-if exist(fnamex)
-  fprintf(1,'output f77bin file %s exists, please delete -- exiting \n',fnamex)
-  return
-end
 
 fid = fopen([fdir,'/',fname], 'w' ,dtype);
 if fid == -1

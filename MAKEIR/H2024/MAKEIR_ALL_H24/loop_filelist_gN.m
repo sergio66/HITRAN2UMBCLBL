@@ -28,7 +28,7 @@ if iMakeOutputDirs >= 0
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% now make gN_ir_list2.txt which is list of all gaes/ 11 T that should be made
+%% now make gN_ir_list2.txt which is list of all gases/ 11 T that should be made
 
 fid = fopen('gN_ir_list2.txt','w');
 
@@ -43,32 +43,11 @@ for ii = 1 : length(gids)
   %disp('<RET> to continue');
   pause(0.1)
 
-  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2016/MAKEIR_ALL_H16/
-  %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR//H2020/MAKEIR_ALL_H20/
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
+  cder_home
   
   %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
   %%                   12 34567 89
   %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
-
-  fdir = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
-  fdir = dirout;
-
-  %%%%%%%%%%%%%%%%%%%%%%%%%
-  %{
-  %% already made above
-  ee = exist(fdir,'dir');
-  if ee == 0
-    fprintf(1,'%s does not exist \n',fdir);
-    % iYes = input('make dir??? (-1/+1) : ');
-    iYes = 1
-    if iYes > 0
-      mker = ['!mkdir ' fdir];
-      eval(mker);
-    end
-  end
-  %}
-  %%%%%%%%%%%%%%%%%%%%%%%%%
 
   iCnt = 0;
   for gg = gid : gid

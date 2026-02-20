@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# run this with sbatch --array=1-48%128 --output='testslurm' sergio_matlab_makegas51_81.sbatch
-# run this with sbatch --array=1-48%128 sergio_matlab_makegas51_81.sbatch 
-# run this with sbatch --array=1-8074%256 --output='/dev/null' sergio_matlab_makegas51_81.sbatch
+# run this with sbatch --array=1-8492%256 --output='/dev/null' sergio_matlab_chip_makegas51_81.sbatch  BEST BEST BEST
+# run this with sbatch --array=1-8492%128 --output='testslurm' sergio_matlab_chip_makegas51_81.sbatch
+# run this with sbatch --array=1-8492%128                      sergio_matlab_chip_makegas51_81.sbatch  WORST WORST WORST
 #
 # to make the individual chunks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
-#   sbatch --array=1-8492%256 --output='/dev/null' sergio_matlab_makegas51_81.sbatch     or
-#   sbatch --array=1-8492%256                      sergio_matlab_makegas51_81.sbatch 1    or
+#   sbatch --array=1-8492%256 --output='/dev/null' sergio_matlab_chip_makegas51_81.sbatch     or
+#   sbatch --array=1-8492%256                      sergio_matlab_chip_makegas51_81.sbatch 1    or
 # to put the Toffset chunks together before compression into /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/abs.dat, run this with
-#   sbatch --array=51-81 sergio_matlab_makegas51_81.sbatch 2
+#   sbatch --array=51-81 sergio_matlab_chip_makegas51_81.sbatch 2
 
 ########################################################################
 
@@ -40,6 +40,10 @@
 ##SBATCH --partition=pi_strow
 
 ########################################################################
+
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
+#### use SBATCH --mem instead of SBATCH --mem-per-cpu
 
 #### clust_runXtopts_savegas1_file : actually does the whole /home/sergio/SPECTRA/run8 shebang,
 #### slow and tedious, g1 or g110

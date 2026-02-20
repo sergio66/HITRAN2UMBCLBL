@@ -1,11 +1,7 @@
 function  [freqchunk, numchunk, iCnt, iDone, Sremain] = xsec_done_already(gasid,iKeepEmpty);
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/rtptools
-addpath /asl/matlib/h4tools
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-
+addpath0
+  
 %gasid = input('enter gas id : ');
 if gasid == 1
   error('not for WV')
@@ -53,8 +49,11 @@ addpath /home/sergio/SPECTRA/READ_XSEC
 
 iSwitchXsecDataBase = 0063;  %% originally we had H2016 for g51-63 and H2012 for g64-81
 iSwitchXsecDataBase = 9999;  %% now we have       H2016 for g51-81
+
+set_yy0
+
 if gasid <= iSwitchXsecDataBase
-  bands = list_bands(gasid,2016);
+  bands = list_bands(gasid,YY0);
 else
   bands = list_bands(gasid,2012);
 end
@@ -134,7 +133,7 @@ if gasid > 1
     fchunk = fchunk + 1;  freqchunk(fchunk) = ff;
     ifound = 0;
     for kk = 1 : 11
-      fname = ['std' num2str(ff) '_' num2str(gasid) '_' num2str(kk) '.mat'];
+      fname = [dirout '/std' num2str(ff) '_' num2str(gasid) '_' num2str(kk) '.mat'];
       dirr = dir(fname);
       if length(dirr) == 1 & dirr.bytes > bytesMin
         jjx = +1;

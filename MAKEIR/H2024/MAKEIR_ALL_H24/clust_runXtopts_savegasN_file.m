@@ -1,7 +1,12 @@
 %% this simply does all wavenumbers for gN
+%%
+%% [sergio@c24-52 MAKEIR_ALL_H24]$ more gN_ir_list2024.txt | wc -l
+%% 25179
+%%
 %% to make the individual chuncks/gases into eg /asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/gX.dat, run this with 
-%%   sbatch --array=1-20000%256 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch     or
-%%   sbatch --array=1-20000%256                      sergio_matlab_chip_makegas3_42.sbatch 1    or
+%%   sbatch --array=1-25179%256 --output='/dev/null' sergio_matlab_chip_makegas3_42.sbatch     or
+%%   sbatch --array=1-25179%256                      sergio_matlab_chip_makegas3_42.sbatch 1    or
+%%
 %% but first make sure you run
 %%  loop_filelist_gN             to make initial filelist for all gases 
 %% then as time goes on run
@@ -13,11 +18,20 @@
 %% compare against previous database using eg
 %%  compare_mol_H2016_H2020_indchunks.m    for individual chunks
 %%  compare_mol_H2016_H2020_allchunks.m    for allchunks chunks
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 if length(JOB) == 0
   JOB = 1;
-  JOB = 3202;
+  JOB = 4000;  
+end
+
+iX2000 = +1;   %% to do gases 42-49, as these fall outside slurm job array 1-20000
+iX2000 = -1;   %% DEFAULT VALUE< do not add 20000 to JOB
+if iX2000 > 0
+  disp('WARNING : adding 20000 to job array so we can make gases 43-49')
+  JOB = JOB + 20000;
 end
 
 %% file will contain AB CDEFG HI  which are gasID, wavenumber, temp offset   
@@ -25,8 +39,8 @@ end
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
 gasIDlist = load('gN_ir_list.txt');
-%gasIDlist = load('gN_ir_list2.txt');
-%gasIDlist = load('gN_ir_list_7_22.txt');
+% gasIDlist = load('gN_ir_list2.txt');
+% gasIDlist = load('gN_ir_list_7_22.txt');
 XJOB = num2str(gasIDlist(JOB));
 if length(XJOB) == 8
   XJOB = ['0' num2str(gasIDlist(JOB))];
@@ -40,11 +54,19 @@ fprintf(1,'JOB String = %s    parsed to gid = %2i chunk = %5i Stoffset = %2i \n'
 
 nbox = 5;
 pointsPerChunk = 10000;
+
+gases = 3:42; %%%%%%% <<<<<<<< need to change this as needed!
+gases = 3:42; %%%%%%% <<<<<<<< need to change this as needed!
 gases = Sgid;
+gid   = Sgid;
 
 %% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
 %% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+% load /home/sergio/HITRAN2UMBCLBL/refpro3.mat         %% ~2004 to Dec 2009
+%load /home/sergio/HITRAN2UMBCLBL/refprof_usstd2010_lbl.mat  %% July 2010 - 
+  %% copied/massaged from /asl/packages/klayersV205/Data/refprof_usstd2010.mat
+  %% see make_refprof2010.m
+load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat         %% symbolic link
 
 addpath0
 
@@ -65,6 +87,8 @@ else
   disp('the start wavnumber is SMALLER than fmin0 = 1105 cm-1 so quit')
   return
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 while fmin <= wn2
   fmax = fmin + dv;
