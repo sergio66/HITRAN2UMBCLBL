@@ -33,6 +33,7 @@ COMMON : PUTTING CHUNKS TOGETHER, COMPRESS, TURN INTO F77 BIN FILES, MAKE list o
 3) compress the files
 4) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
 5) need to get the list of files ready for kCARTA
+6) For H2024, still need to go to /home/sergio/SPECTRA and hash the codes for CKDLINUX/MTCKD4.3
 
 MISC
 ----
@@ -321,7 +322,6 @@ kleenslurm; sbatch --array=3-40  sergio_matlab_chip_cmprun.sbatch 1
 kleenslurm; sbatch --array=41-49 sergio_matlab_chip_cmprun.sbatch 1
 kleenslurm; sbatch --array=51-81 sergio_matlab_chip_cmprun.sbatch 1
 
-
 4) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
 --------------------------------------------------------------------------------------
 cd /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
@@ -348,8 +348,12 @@ edit  comp_IRdatabase_H2024.sc
         kCO2Path
         kCOmpPath
         PARAM_HT2024/comp_ir605_2830.param
-mkdir PARAM_HT2024/       
-run   comp_IRdatabase_H2024.sc
+
+mkdir     PARAM_HT2024/       
+run       comp_IRdatabase_H2024.sc
+notes     Readme_H2024
+edit/run  cat_all_database_FIR_UV.sc to make all_15_450000_IRH2024.param which goes into
+            /home/sergio/KCARTA/INCLUDE/H2024/NCLUDE/Templates_V122/template_kcartaV122_400_H2024_NLTEH2016.param
 
 >>>>>>>>>>>>>
 NOTE : Nov 2017 been a bit lazy with XSC gases so use this script to copy or blow away xsc files
@@ -368,4 +372,17 @@ eg gas 15 the /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_28
              rerun cmprunIR_umbcLBL_all(15)                  in /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/CMPRUN/
 	     rerun loop_mat2forIR.m                          in /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
 	     rerun comp_IRdatabase_H2024.sc                  in /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC
+
+6) For H2024, still need to go to /home/sergio/SPECTRA and hash the codes for CKDLINUX/MTCKD4.3
+
+7) Then go to /home/sergio/KCARTA/SRCv1.22_f90
+     Edit /home/sergio/KCARTA/INCLUDE/H2024/NCLUDE/Templates_V122/template_kcartaV122_400_H2024_NLTEH2016.param
+     Edit datafix in /home/sergio/KCARTA/SRCv1.22_f90
+     Edit Makefile
+     make
+     cd TEST_JACS/Test_H12_H16_H20_H24
+     edit test_H12_H16_H20_f90.m so new version can run
+       time ../../BIN/kcarta.x90_v1.22_400ppmv_H24 quickuseF90.nml          junk24.dat
+     edit and run test_H12_H16_H20_f90.m
+     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
