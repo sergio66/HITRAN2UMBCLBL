@@ -1,4 +1,4 @@
-function cmprun(glist, vlist, HITRAN)
+function cmprunFIR1_LBLRTM(glist, vlist, HITRAN)
 
 addpath /asl/matlib/science
 addpath /asl/matlib/aslutil
@@ -26,9 +26,7 @@ HITRANvers = HITRAN - 2000;
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 %load /home/sergio/abscmp/refpro
 glist = intersect(glist, refpro.glist);

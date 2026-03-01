@@ -1,4 +1,4 @@
-function cmprunIR_WV(glist, vlist, iDo_g110)
+function cmprunIR_WV_H16(glist, vlist, iDo_g110)
 
 if nargin == 2
   iDo_g110 = +1;   %% do gases 1
@@ -140,9 +140,7 @@ end
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 if length(glist) == 1
   %% this is if we are only doing 1

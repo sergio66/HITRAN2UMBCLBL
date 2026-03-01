@@ -33,9 +33,7 @@ gases = [1];
 
 poffset = [0.1, 1.0, 3.3, 6.7, 10.0];
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_pfofile
 
 addpath0
 

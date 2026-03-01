@@ -69,9 +69,8 @@ toffset = [-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50];
 % pressure offsets (for H2O)
 poffset = [0.1, 1.0, 3.3, 6.7, 10.0];
 
-% load reference profile
-%load refpro
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
+
 plevs = refpro.mpres;
 ptemp = refpro.mtemp;
 clear refpro

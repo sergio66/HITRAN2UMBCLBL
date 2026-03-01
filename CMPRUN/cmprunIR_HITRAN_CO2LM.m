@@ -30,9 +30,7 @@ f77_LMvers = 'g2.dat_LM5ptbox_Mar2021_400ppm';   %% Mar 2021
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 %load /home/sergio/abscmp/refpro
 glist = intersect(glist, refpro.glist);

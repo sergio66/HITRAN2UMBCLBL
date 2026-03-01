@@ -10,11 +10,11 @@ wn1 = 0605;  wn2 = 0880-25;  %% so that we can use 15 um band as well
 wn1 = 2355;  wn2 = 2855-25;  %% so that we can use bands that TES uses
 wn1 = 2405;  wn2 = 2855-25;  %% so that we can use bands that TES uses
 
-dirout = '/spinach/s6/sergio/RUN8_NIRDATABASE/IR_2405_3005_WV/';
+dirout = '/spinach/s6/sergio/RUN8_NIRDATABASE/IR_2405_3005_WV/g103.dat/';
 dirout = '/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_2405_3005_WV/g103.dat/';
-dirout = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat';
-dirout = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g103.dat';
-dirout = '/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g103.dat';
+dirout = '/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g103.dat/';
+dirout = '/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g103.dat/;
+dirout = '/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g103.dat/';
 
 topts = runXtopts_params_smart(2000); 
 dv = topts.ffin*nbox*pointsPerChunk;

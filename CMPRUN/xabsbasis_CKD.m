@@ -1,6 +1,8 @@
-function [B,s] = absbasisCKD(gid, gdir, vchunk, CKD, bopts)
+function [B,s] = xabsbasis_CKD(gid0, gdir, vchunk, CKD, bopts)
 
-% function [B,s] = absbasisCKD(gid, gdir, vchunk, CKD, bopts)
+% fprintf(1,'absbasis.m gid0 = %2i \n',gid0);
+
+% function [B,s] = absbasis(gid, gdir, vchunk, bopts)
 %
 % find a basis for compression of monochromatic absorption coeff's
 %
@@ -38,15 +40,16 @@ function [B,s] = absbasisCKD(gid, gdir, vchunk, CKD, bopts)
 %
 
 % input defaults
-if nargin == 4
+if nargin == 3
   bopts.dummy = [];
-elseif nargin ~= 5
+elseif nargin ~= 4
   error('wrong number of arguments')
 end
 
 % default parameters
 d = 2;	        % initial dimension
-dmax = 50;      % max saved dimension
+dmax = 100;     % max saved dimension DEFAULT
+dmax = 50;      % max saved dimension DEFAULT
 tmax = 0.002;   % max layer transmittance error
 lmax = 0.003;   % max layer-to-space transmittance error
 bmax = 0.1;     % max brightness temperature error
@@ -72,9 +75,9 @@ plevs = refpro.mpres;
 ptemp = refpro.mtemp;
 clear refpro
 
-fprintf(1, '\ngas %d, vchunk %d\n', gid, vchunk);
+fprintf(1, '\ngas %d, vchunk %d\n', gid0, vchunk);
 
-if gid == 1 | gid == 103 | gid == 110
+if gid0 == 1 | gid0 == 103 | gid0 == 110
 
   % build SVD and test sets for H20
 
@@ -96,8 +99,8 @@ if gid == 1 | gid == 103 | gid == 110
   % Loop on partial pressure sets, build SVD and test arrays
   for pind = 1 : 5
 
-    %% eval(sprintf('load %s/g%dv%dp%d.mat', gdir, gid, vchunk, pind));
-    loader = [gdir '/g' num2str(gid) 'v' num2str(vchunk) 'p' num2str(pind) '.mat'];
+    %% eval(sprintf('load %s/g%dv%dp%d.mat', gdir, gid0, vchunk, pind));
+    loader = [gdir '/g' num2str(gid0) 'v' num2str(vchunk) 'p' num2str(pind) '.mat'];
     loader = ['load ' loader];
     eval(loader);
 
@@ -108,11 +111,11 @@ if gid == 1 | gid == 103 | gid == 110
     % build test set
     if tpprind == pind 
        ktrue = k(:,:,ttemind);
-    end
-    clear k
   end
+    clear k
+end
 
-elseif gid == 101 | gid == 102
+elseif gid0 == 101 | gid0 == 102
 
   % build SVD and test sets for other gasses
 
@@ -123,8 +126,9 @@ elseif gid == 101 | gid == 102
   % specify a test set for determining basis dimension
   ttemind = 5; % test set temperature offset index
 
-  %%% eval(sprintf('load %s/g%dv%d.mat', gdir, gid, vchunk));
-  loader = [gdir '/g' num2str(gid) 'v' num2str(vchunk) '_CKD_' num2str(CKD) '.mat'];
+  %%% eval(sprintf('load %s/g%dv%d.mat', gdir, gid0, vchunk));
+  loader = [gdir '/g' num2str(gid0) 'v' num2str(vchunk) '.mat'];  
+  loader = [gdir '/g' num2str(gid0) 'v' num2str(vchunk) '_CKD_' num2str(CKD) '.mat'];
   loader = ['load ' loader];
   eval(loader);
 
@@ -148,8 +152,8 @@ else  %% all other gases
   % specify a test set for determining basis dimension
   ttemind = 5; % test set temperature offset index
 
-  %%% eval(sprintf('load %s/g%dv%d.mat', gdir, gid, vchunk));
-  loader = [gdir '/g' num2str(gid) 'v' num2str(vchunk) '.mat'];
+  %%% eval(sprintf('load %s/g%dv%d.mat', gdir, gid0, vchunk));
+  loader = [gdir '/g' num2str(gid0) 'v' num2str(vchunk) '.mat'];
   loader = ['load ' loader];
   eval(loader);
 
@@ -190,13 +194,13 @@ boo = find(isnan(ksvd));
 if length(boo) > 0
   fprintf(1,' ... %8i ksvd out of %8i = NaN .. resetting to 0 \n',length(boo),length(ksvd(:)))
   ksvd(boo) = 0.0;
-  end
+end
 
 boo = find(isnan(ktrue));
 if length(boo) > 0
   fprintf(1,' ... %8i ktrue out of %8i = NaN .. resetting to 0 \n',length(boo),length(ktrue(:)))
   ktrue(boo) = 0.0;
-  end
+end
 
 [u,s,v] = svd(ksvd, 0);
 clear ksvd v

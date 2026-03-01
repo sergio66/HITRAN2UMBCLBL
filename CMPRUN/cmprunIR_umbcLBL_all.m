@@ -27,11 +27,16 @@ HITRANvers = HITRAN - 2000;
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
-%load /home/sergio/abscmp/refpro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+if length(intersect(glist,[101 102])) > 0
+  error('please use cmprunCKD.m')
+  CKD = input('enter CKD version (25,32,43) : ');
+end  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% load /home/sergio/abscmp/refpro
 glist = intersect(glist, refpro.glist);
 clear refpro
 
@@ -41,11 +46,13 @@ else
   printarray(glist)
 end
 
-%vlist
+glist
+vlist
 
 % loop on gas IDs
 for gid00 = 1 : length(glist)
   gid = glist(gid00);
+  
   if gid == 1
     error('use eg cmprunIR_WV_H20.m,cmprunIR_WV_H24.m')
   end
@@ -82,8 +89,10 @@ for gid00 = 1 : length(glist)
       freq_boundaries
       if gid < 10	
         diroutXYZ = dirout(1:end-6);
-      else
+      elseif gid < 100
         diroutXYZ = dirout(1:end-7);
+      elseif gid < 1000
+        diroutXYZ = dirout(1:end-8);
       end
       gdir = [diroutXYZ '/abs.dat/'];
       cdir = [diroutXYZ '/kcomp/'];
@@ -99,7 +108,9 @@ for gid00 = 1 : length(glist)
   fprintf(1,'gid = %2i \n',gid);
   fprintf(1,'gdir = %s \n',gdir)
   fprintf(1,'cdir = %s \n',cdir)
- 
+
+  gid
+  
   % loop on chunk start freq's
   for vchunk = vlist
 
@@ -109,12 +120,24 @@ for gid00 = 1 : length(glist)
       %% abscmp below are called, all 5 pressure offsets are read in and compressed
       fmon = sprintf('%s/g%dv%dp3.mat', gdir, gid, vchunk);
       fmon = [gdir '/g' num2str(gid) 'v' num2str(vchunk) 'p3.mat'];
-    else
+      error('this should have crashed above')
+      
+    elseif gid <= 99
       fmon = sprintf('%s/g%dv%d.mat', gdir, gid, vchunk);        
       fmon = [gdir '/g' num2str(gid) 'v' num2str(vchunk) '.mat'];
+
+      fcmp = sprintf('%s/cg%dv%d.mat', cdir, gid, vchunk);
+      fcmp = [cdir '/cg' num2str(gid) 'v' num2str(vchunk) '.mat'];
+      
+%    elseif gid == 101 | gid == 102
+%      
+%      fmon = sprintf('%s/g%dv%d.mat', gdir, gid, vchunk);        
+%      fmon = [gdir '/g' num2str(gid) 'v' num2str(vchunk) '_CKD_' num2str(CKD) '.mat'];
+%      
+%      fcmp = sprintf('%s/cg%dv%d.mat', cdir, gid, vchunk);
+%      fcmp = [cdir '/cg' num2str(gid) 'v' num2str(vchunk) '_CKD_' num2str(CKD) '.mat'];
+      
     end
-    fcmp = sprintf('%s/cg%dv%d.mat', cdir, gid, vchunk);
-    fcmp = [cdir '/cg' num2str(gid) 'v' num2str(vchunk) '.mat'];
 
     %vchunk
     %fmon
@@ -133,8 +156,8 @@ for gid00 = 1 : length(glist)
         % check for old data with max below abseps
         eval(['load ',fmon]);
         if max(max(max(k))) <= abseps
-	  fprintf(1, 'cmprun: WARNING gas %d chunk %d max k <= abseps\n', ...
-		  gid, vchunk);
+	  fprintf(1, 'cmprun: WARNING gas %d chunk %d max k <= abseps\n',gid, vchunk);
+	  fprintf(1,'  filename = %s \n',fmon)
 	end
 	clear k
 		  
@@ -144,10 +167,17 @@ for gid00 = 1 : length(glist)
           %%scott wants to make sure we can handle huge volcanic puffs of SO2
           %B = absbasis_gid9(gid, gdir, vchunk);
           B = absbasis(gid, gdir, vchunk);
+%	elseif gid == 101 | gid == 102
+%          B = xabsbasis_CKD(gid, gdir, vchunk, CKD);	  
         else
           B = absbasis(gid, gdir, vchunk);
-          end
-        absbcmp(gid, gdir, cdir, vchunk, B);
+        end
+        absbcmp(gid, gdir, cdir, vchunk, B);	
+%	if gid == 101 | gid == 102
+%          xabsbcmp_CKD(gid, gdir, cdir, vchunk, B, CKD);
+%	else
+%         absbcmp(gid, gdir, cdir, vchunk, B);
+%	end
       end
 
     end

@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# when making the spectra for pp,Toffset
+# when making the spectra for pp,Toffset for g1,103,110
 # run this with     sbatch --array=1-990%256 --output='/dev/null/' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  BEST since making slurm files kills disks, ls
 # run this with     sbatch --array=1-990%256 --output='testslurm'  sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  might be ok but ignore this option
 # run this with     sbatch --array=1-990%256                       sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3  KILLS the cluster writing slurm_JOBIS_pid.out
 #
-# when putting pp,Toffset together
+# when putting pp,Toffset together for g1,103,110
 # run this with     sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 4,5 or 6
 # run this with     sbatch --array=1-90                      sergio_matlab_chip_makegas1_103.sbatch 4,5 or 6
+#
+#########################
+#
+# when making self,forn continuum
+# run this with     sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 7 for SELF
+# run this with     sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 8 for FORN
 
 ########################################################################
 
@@ -85,5 +91,12 @@ elif [[ "$1" -eq "5" ]]; then
 elif [[ "$1" -eq "6" ]]; then
    echo "cmd line arg = 4  putting together Toffsets for g110"
   matlab -nodisplay -r clust_runXtopts_mkg110vfiles; exit
+###
+elif [[ "$1" -eq "7" ]]; then
+   echo "cmd line arg = 4  putting together Toffsets for g110"
+  matlab -nodisplay -r clust_runXtopts_savegas1SELF; exit
+elif [[ "$1" -eq "8" ]]; then
+   echo "cmd line arg = 4  putting together Toffsets for g110"
+  matlab -nodisplay -r clust_runXtopts_savegas1FORN; exit
 ###
 fi

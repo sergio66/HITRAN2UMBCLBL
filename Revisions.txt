@@ -1,3 +1,13 @@
+02/27/26    Reintroduced files to make FORN/SELF continuum : see MAKEIR/H2024/MAKEIR_WV_H24 and the Readme there
+
+              clust_runXtopts_savegas1FORN.m
+              clust_runXtopts_savegas1SELF.m
+              runXtopts_savegas1SELF.m
+              runXtopts_savegas1FORN.m
+
+            Also tweaked /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunCKD.m
+	                 /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forCKD.m
+
 02/14/26    Make sure you dump slurm output to /dev/null eg 
               sbatch --array=1-990%256 --output='/dev/null/' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3
 	      

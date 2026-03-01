@@ -150,9 +150,7 @@ end
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 if length(glist) == 1
   %% this is if we are only doing 1

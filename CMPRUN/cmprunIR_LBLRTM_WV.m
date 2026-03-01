@@ -1,4 +1,4 @@
-function cmprun(glist, vlist)
+function cmprunIR_LBLRTM_WV(glist, vlist)
 
 % compression script
 % existing data is not deleted, so if you want to
@@ -38,9 +38,7 @@ end
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 cder = ['cd ' homedir]; eval(cder);
 % loop on gas IDs

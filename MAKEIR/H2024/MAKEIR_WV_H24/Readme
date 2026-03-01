@@ -6,6 +6,7 @@ Contents
 4) Compress the files
 5) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
 6) Testing compressed H2020 vs H2024
+7) CKD 4.3
 
 If you have just cloned UMBC_LBL and HITRAN2UMBCLBL, make sure you
   mkdir /home/sergio/git/UMBC_LBL/IPFILES
@@ -63,7 +64,7 @@ namely
   %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2020/MAKEIR_WV_H20/
   cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/
 
-<< very importantly, makes   jobs_not_done.sc  >>
+<< very importantly, all three make   jobs_not_done.sc  >>
 <<    so you can very easily checks which files have been run and just run the jobs you need to complete all files, >>
 <<    rather than all 990 jobs submitted >>
 
@@ -209,3 +210,82 @@ cp loop_mat2forIR_WV_H20.m loop_mat2forIR_WV_H24.m
 
 Run
   test_HXYa_vs_HXYb_WV_HDO.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+7) CKD 4.3
+----------
+
+OH BOY THERE IS ALSO /home/sergio/HITRAN2UMBCLBL/MAKE_CKD but lets ignore that!!!!
+
+cp -a ../../H2008/MAKEIR_WV_H08/runXtopts_savegas1SELF.m .
+cp -a ../../H2008/MAKEIR_WV_H08/runXtopts_savegas1FORN.m .
+cp -a ../../H2008/MAKEIR_WV_H08/freq_boundaries_continuum.m .
+
+edit freq_boundaries_continuum.m so it
+  (a) looks like freq_boundaries_g1.m
+  (b) has CKD 43
+                     
+Very fast!! can run interactively on one processor, 0.5 min to do one chunk , 11 T offsets
+                                                    45 min to do 605:25:2830, 11 T offsets
+OR
+  sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 7 for SELF
+  sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 8 for FORN
+
+Then check for missing/empty/small files using
+  driver_cleanup_SELF_FORN.m
+    set iGasID = 101 or 102
+<<   which very importantly, makes   jobs_not_done.sc  >>
+<<    so you can very easily checks which files have been run and just run the jobs you need to complete all files, >>
+<<    rather than all 990 jobs submitted >>
+
+  ie instead of re-running
+    sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 7 for SELF
+    sbatch --array=1-90 --output='/dev/null' sergio_matlab_chip_makegas1_103.sbatch 8 for FORN
+
+  just run
+    jobs_not_done.sc
+  as needed  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Now you have to put the files together, by essentially running
+  cp  ../MAKEIR_ALL_H24/clust_runXtopts_mkgNvfiles.m clust_runXtopts_mkgNvfiles_SELF_FORN.m
+  run clust_runXtopts_mkgNvfiles_SELF_FORN.m  for JOB = 101, 102
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Now go compress           : see step 4 above
+  cd /home/sergio/HITRAN2UMBCLBL/CMPRUN
+  
+  %cmprunIR_umbcLBL_all([101 102],605:25:2830);
+  %  has been modifield to look for
+  %    /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830//abs.dat/g102v2805_CKD_43.mat
+  %  instead of
+  %    /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830//abs.dat/g102v2805.mat
+  use cmprunCKD.m
+  
+comvert to F77/F90 binary : see step 5 above
+  cd /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
+
+  edit loop_mat2forCKD.m
+    set paths correctly
+    this calls mat2forGENERIC_CKD.m
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Also See 
+% [sergio@c24-52 MAKEIR]$ grep -in run8watercontinuum */*/*.m
+% H2008/MAKEIR_WV_H08/runXtopts_savegas1FORN.m:69:      [w,d] = run8watercontinuum(1,fmin,fmax,fip,quick);
+% H2008/MAKEIR_WV_H08/runXtopts_savegas1SELF.m:69:      [w,d] = run8watercontinuum(1,fmin,fmax,fip,quick);
+% [sergio@c24-52 MAKEIR]$ grep -in run8watercontinuum */*/*/*.m
+% H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/HITRAN_Rundir/driver_glab_lblrtm_forn_ONELAY.m:66:  [w,dcon] = run8watercontinuum(gid,v1,v2,ipfile,topt);
+% H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/HITRAN_Rundir/driver_run8_glab_lblrtm_forn_MANYLAY.m:67:  [w,dcon] = run8watercontinuum(gid,v1,v2,ipfile,topt);
+% H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/HITRAN_Rundir/driver_run8_glab_lblrtm_forn_ONELAY.m:68:  [w,dcon] = run8watercontinuum(gid,v1,v2,ipfile,topt);
+% H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/HITRAN_Rundir/driver_run8_glab_lblrtm_self.m:83:  [w,dcon] = run8watercontinuum(gid,v1,v2,ipfile,topt);
+% 
+% see ../../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/HITRAN_Rundir/driver_run8_glab_lblrtm_forn_MANYLAY.m
+%   topt.CKD = 25;
+%   [w,dcon] = run8watercontinuum(gid,v1,v2,ipfile,topt);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%

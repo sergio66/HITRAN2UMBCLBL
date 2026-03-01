@@ -5,15 +5,15 @@
 addpath /home/sergio/SPECTRA
 
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-%JOB  = 1
+if length(JOB) == 0
+  JOB = 1;
+end
 
 nbox = 5;
 pointsPerChunk = 10000;
 gases = [1];
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 poffset = [0.1, 1.0, 3.3, 6.7, 10.0];
 

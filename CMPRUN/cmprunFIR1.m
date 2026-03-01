@@ -1,4 +1,4 @@
-function cmprun(glist, vlist)
+function cmprunFIR1(glist, vlist)
 
 % function cmprun(glist, vlist)
 %
@@ -24,10 +24,7 @@ end
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-%load /home/sergio/abscmp/refproTRUE
-%load /home/sergio/abscmp/refpro
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 glist0 = glist;
 

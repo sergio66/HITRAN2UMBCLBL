@@ -1,4 +1,4 @@
-function cmprun(glist, vlist)
+function cmprunIR_WV_H12(glist, vlist)
 
 % compression script
 % existing data is not deleted, so if you want to
@@ -106,9 +106,7 @@ end
 
 abseps = 1e-8;
 
-% load reference profile to check gasses available
-% load /home/sergio/abscmp/refproTRUE
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_ref_profile
 
 if length(glist) == 2
   %% this is if we are only doing 1, 103
