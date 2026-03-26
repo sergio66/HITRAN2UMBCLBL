@@ -6,7 +6,8 @@ Contents
 4) Compress the files
 5) Convert to F77/F90 binary files ( <<< automatically put into /asl/data/kcarta >>> )
 6) Testing compressed H2020 vs H2024
-7) CKD 4.3
+7A) CKD 4.3 : making binary files CKDSelf43.bin, CKDFor43.bin for kCARTA
+7B) CKD 4.3 : making kCompressed CKD 4.3 Self/Forn files
 
 If you have just cloned UMBC_LBL and HITRAN2UMBCLBL, make sure you
   mkdir /home/sergio/git/UMBC_LBL/IPFILES
@@ -213,8 +214,23 @@ Run
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-7) CKD 4.3
-----------
+7A) CKD 4.3 : making binary files CKDSelf43.bin, CKDFor43.bin for kCARTA
+------------------------------------------------------------------------
+
+VERY IMPORTANT : see
+  /home/sergio/SPECTRA/Revisions.txt
+which tells you to look at code(s) in
+  CKDLINUX/CKD_LOOKUP_Self_Forn_KCARTA_BIN_FILES/
+that make eg /home/sergio/KCARTADATA/General/CKDieee_le/CKDSelf43.bin
+             /home/sergio/KCARTADATA/General/CKDieee_le/CKDForn43.bin
+as KCARTA uses this by default
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+7B) CKD 4.3 : making kCompressed CKD 4.3 Self/Forn files
+--------------------------------------------------------
+
+This is to make KCARTA kcompressed database of CKD 43
 
 OH BOY THERE IS ALSO /home/sergio/HITRAN2UMBCLBL/MAKE_CKD but lets ignore that!!!!
 
@@ -271,7 +287,7 @@ comvert to F77/F90 binary : see step 5 above
   edit loop_mat2forCKD.m
     set paths correctly
     this calls mat2forGENERIC_CKD.m
-  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Also See 

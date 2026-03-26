@@ -61,7 +61,7 @@ dlblrtm = [];
 
 addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
 
-junk = load(ipfile);
+junk = load(ipfile,'-ascii');
 [mm,nn] = size(junk);
 
 addpath /home/sergio/SPECTRA

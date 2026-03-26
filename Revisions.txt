@@ -1,12 +1,22 @@
-02/27/26    Reintroduced files to make FORN/SELF continuum : see MAKEIR/H2024/MAKEIR_WV_H24 and the Readme there
+02/27/26   CKD 4.3 : making kCompressed CKD 4.3 Self/Forn files
+             Reintroduced files to make FORN/SELF continuum : see MAKEIR/H2024/MAKEIR_WV_H24 and the Readme there
 
-              clust_runXtopts_savegas1FORN.m
-              clust_runXtopts_savegas1SELF.m
-              runXtopts_savegas1SELF.m
-              runXtopts_savegas1FORN.m
+               clust_runXtopts_savegas1FORN.m
+               clust_runXtopts_savegas1SELF.m
+               runXtopts_savegas1SELF.m
+               runXtopts_savegas1FORN.m
 
-            Also tweaked /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunCKD.m
-	                 /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forCKD.m
+             Also tweaked /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunCKD.m
+	                  /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forCKD.m
+         
+           CKD 4.3 : making binary files CKDSelf43.bin, CKDFor43.bin for kCARTA	   
+           VERY IMPORTANT : To make default CKD files for KCARTA also see
+  	      MAKEIR/H2024/MAKEIR_WV_H24/Readme 
+              /home/sergio/SPECTRA/Revisions.txt
+            which tells you to look at code(s) and Readme_makeCKD_forKCARTA in
+              CKDLINUX/CKD_LOOKUP_Self_Forn_KCARTA_BIN_FILES/
+            that make eg /home/sergio/KCARTADATA/General/CKDieee_le/CKDSelf43.bin
+                         /home/sergio/KCARTADATA/General/CKDieee_le/CKDForn43.bin
 
 02/14/26    Make sure you dump slurm output to /dev/null eg 
               sbatch --array=1-990%256 --output='/dev/null/' sergio_matlab_chip_makegas1_103.sbatch 1,2 or 3

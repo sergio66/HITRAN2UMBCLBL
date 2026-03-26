@@ -1,4 +1,4 @@
-function makeTAPE5_N2O2(gid,v1,v2,ipfile,dvx,iLay,iTalk);
+function makeTAPE5_N2O2true(gid,v1,v2,ipfile,dvx,iLay,iTalk);
 
 %% same as makeTAPE5_N2O2fake except it makes TRUE OD gas amount for gid=7,22
 
@@ -18,7 +18,7 @@ if gid ~= 7
   error('this code really assumes O2 is being sent in!')
 end
 
-gas = load(ipfile);
+gas = load(ipfile,'-ascii');
 gas = gas(iLay,:);
 
 p  = gas(2) * 1013.25;       %% change from atm to mb

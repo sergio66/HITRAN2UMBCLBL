@@ -1,0 +1,113 @@
+Cpntents
+---------
+
+1) Basics
+2) file_parallelprocess_gas_2_6.txt
+3) freq_boundaries.m freq_boundariesLBL.m
+4) files clust_runXtopts_mkgNvfiles,clust_runXtopts_mkgWVvfiles
+5) clust_runXtopts_savegasN_file.m
+6) Cluster jobs and checking output
+7) Cat the chunks together (11 Toffsets), then compress and convert to binary
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ **** clust_runXtopts_savegasN_fileHIGHRES.m : is for FIr1 = 500 - 805 cm-1 at 0.0005 cm-1 ****
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+See /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/Readme
+
+1) Basics
+----------
+cd ..
+cd MAKEIR
+cd H2024
+mkdir MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1   %% since we are on H2024 version, but aer v3.8.1 (based on H2020)
+cd MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1
+  %% ../../H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12/ ---> ./../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/
+cp -a  ../../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/*.m      .
+cp -a  ../../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/*.sbatch .
+cp -a  ../../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/*.txt    .
+cp -a  ../../H2016_G2015/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM12p8/Readme    .
+
+2) file_parallelprocess_gas_2_6.txt
+-----------------------------------
+if needed, cp file_parallelprocess_allgases.txt file_parallelprocess_gas_2_6.txt
+though file_parallelprocess_gas_2_6.txt is probably already here
+  and edit so only two gases are there (CO2 and CH4)
+edit parse_job_string.m if needed
+  
+3) freq_boundaries.m freq_boundariesLBL.m
+------------------------------------------
+this is old, fix it in both
+  dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtm2/'];
+to become
+  xdirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/'];
+  dirout = [xdirout '/g' num2str(gid) '.dat/lblrtm/'];   %% usual  
+
+4) files clust_runXtopts_mkgNvfiles,clust_runXtopts_mkgWVvfiles
+---------------------------------------------------------------
+this is old, fix it
+[sergio@maya-usr1 MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H16]$ grep -in lblrtm12 *.m
+
+fix    addpath.m    as needed
+
+and fix these
+ diroutXN = [dirout(1:slash(6)) '/lblrtm12.4/all/abs.dat'];
+ diroutXN = [dirout(1:slash(6)) '/lblrtm12.4/WV/abs.dat'];
+ diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/all/abs.dat'];
+ diroutXN = [dirout(1:slash(6)) '/lblrtm12.8/WV/abs.dat'];
+using the following, so this should be correct
+  dirlbl = 'lblrtm12.8';
+  dirlbl = 'lblrtm12.17';
+  diroutXN = [dirout(1:slash(6)) '/' dirlbl '/all/abs.dat'];
+
+5) clust_runXtopts_savegasN_file.m
+-----------------------------------
+
+Then carefully edit
+  clust_runXtopts_savegasN_file.m
+  clust_runXtopts_savegasN_file_2.m
+  clust_runXtopts_savegasN_file_3.m
+  clust_runXtopts_savegasN_file_4.m
+so 12 --> 16 --> 24
+Better way : edit and use cder_here.m
+set_the_freq_boundaries  %%% make sure you do this!!!!!
+
+6) Cluster jobs and checking output
+-----------------------------------
+First fix the symbolic links at
+  /home/sergio/HITRAN2UMBCLBL/LBLRTM/
+and make the Toffset directories using   test_mkerTxoff.sc     makes
+See the "Readme_links_Toffset" in that directory
+
+which has
+
+  make ToffALL (a symbolic link) and some subdirs
+  --------------------------------------------------
+  
+  mkdir /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL
+  ln -s /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL ToffALL
+  
+  now run
+    mker_TOFFSETS_1_5.sc  >& ughm
+    copy_TOFFSETS_1_5.sc  >& ughc
+  which makes ToffALL/Toff_01 .. ToffALL/Toff_11
+              ToffALL/Toff2_01 .. ToffALL/Toff2_11
+              ToffALL/Toff3_01 .. ToffALL/Toff3_11
+              ToffALL/Toff4_01 .. ToffALL/Toff4_11
+              ToffALL/Toff5_01 .. ToffALL/Toff5_11
+  and then copies the *.m and other files, as well as the symbolic links to lblrtm, slblrtm etc
+
+Then
+  /bin/rm slurm*.out; sbatch --array=1-22 sergio_matlab_chip_jobB.sbatch  (parse_job_string.m has "file_parallelprocess_gas_2_6.txt" for gases2,6)
+
+compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
+
+7) Cat the chunks together (11 Toffsets), then compress and convert to binary
+-----------------------------------------------------------------------------
+these put togeher the chunks after they are made
+-rw-r--r-- 1 sergio pi_strow  5756 Mar 15 03:09 clust_runXtopts_mkgWVvfiles.m
+-rw-r--r-- 1 sergio pi_strow  4603 Mar 15 03:08 clust_runXtopts_mkgNvfiles.m
+and they go into eg /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat/g2v2830.mat
+
+go to  eg /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunIR_LBLRTM.m
+and to eg /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forIR_LBLRTM_all.m

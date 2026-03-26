@@ -37,9 +37,9 @@ end
 %ipfileUSStdWV = load('/home/sergio/SPECTRA/IPFILES/std_water');
 if length(ipfilewv) == 0
   disp('ooops need to use US std for WV profile in makeTAPE5_noN2con_WVeffects.m')
-  wv_profile = load('std_water');
+  wv_profile = load('std_water','-ascii');
 else
-  wv_profile = load(ipfilewv);
+  wv_profile = load(ipfilewv,'-ascii');
 end
 disp(' ')
 disp(' >>>>>>> .... loaded in WV profile for WV-GID broadening ....... <<<<<<<<<<')
@@ -47,7 +47,7 @@ disp(' ')
 
 wv_profile = wv_profile(iLay,:);
 
-gas_profile = load(ipfile);
+gas_profile = load(ipfile,'-ascii');
 gas_profile = gas_profile(iLay,:);
 
 if length(iLay) == 1

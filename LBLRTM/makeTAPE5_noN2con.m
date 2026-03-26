@@ -1,4 +1,4 @@
-function qfactor = makeTAPE5_yesN2con(gidIN,v1,v2,ipfile,dvx,iLay,iTalk);
+function qfactor = makeTAPE5_noN2con(gidIN,v1,v2,ipfile,dvx,iLay,iTalk);
 
 %% bdry is a optional structure that contains the [z,p,T] info for the two boundaries;
 %% if they do not exit then p1 = p2 = p; T1 = T2 = T; z1 = 0, z2 = 2 km
@@ -22,7 +22,7 @@ elseif gid == 0
   error('huh NO gases???')
 end
 
-gas_profile = load(ipfile);
+gas_profile = load(ipfile,'-ascii');
 gas_profile = gas_profile(iLay,:);
 
 [mm,nn] = size(gas_profile);

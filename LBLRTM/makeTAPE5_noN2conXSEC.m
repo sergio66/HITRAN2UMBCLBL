@@ -1,4 +1,4 @@
-function qfactor = makeTAPE5_yesN2conXSEC(gid,v1,v2,ipfile,dvx,iLay,iTalk);
+function qfactor = makeTAPE5_noN2conXSEC(gid,v1,v2,ipfile,dvx,iLay,iTalk);
 
 %% see http://web.gps.caltech.edu/~drf/misc/lblrtm/lblrtm_instructions.html
 
@@ -18,7 +18,7 @@ elseif gid == 0
   error('huh NO gases???')
 end
 
-gas_profile = load(ipfile);
+gas_profile = load(ipfile,'-ascii');
 gas_profile = gas_profile(iLay,:);
 
 [mm,nn] = size(gas_profile);

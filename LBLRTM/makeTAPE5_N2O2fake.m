@@ -16,7 +16,7 @@ if gid > 12
   error('been too lazy to code up more than 12 gases!')
 end
 
-gas = load(ipfile);
+gas = load(ipfile,'-ascii');
 gas = gas(iLay,:);
 
 p  = gas(2) * 1013.25;       %% change from atm to mb

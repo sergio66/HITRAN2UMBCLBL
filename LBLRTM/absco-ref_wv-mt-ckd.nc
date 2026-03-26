@@ -1,0 +1,1 @@
+/home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/data/absco-ref_wv-mt-ckd.nc
