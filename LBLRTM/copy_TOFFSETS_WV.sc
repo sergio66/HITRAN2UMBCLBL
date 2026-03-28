@@ -1,3 +1,9 @@
+echo "This comes after running     mker_TOFFSETS_WV.sc"
+
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/ToffWV_01 .. ToffALL/ToffWV_11"
 /bin/cp *.m lner.sc  ToffALL/ToffWV_01
 /bin/cp *.m lner.sc  ToffALL/ToffWV_02
 /bin/cp *.m lner.sc  ToffALL/ToffWV_03
@@ -10,6 +16,8 @@
 /bin/cp *.m lner.sc  ToffALL/ToffWV_10
 /bin/cp *.m lner.sc  ToffALL/ToffWV_11
 
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/ToffWV2_01 .. ToffALL/ToffWV2_11"
 /bin/cp *.m lner.sc  ToffALL/ToffWV2_01
 /bin/cp *.m lner.sc  ToffALL/ToffWV2_02
 /bin/cp *.m lner.sc  ToffALL/ToffWV2_03
@@ -22,6 +30,8 @@
 /bin/cp *.m lner.sc  ToffALL/ToffWV2_10
 /bin/cp *.m lner.sc  ToffALL/ToffWV2_11
 
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/ToffWV3_01 .. ToffALL/ToffWV3_11"
 /bin/cp *.m lner.sc  ToffALL/ToffWV3_01
 /bin/cp *.m lner.sc  ToffALL/ToffWV3_02
 /bin/cp *.m lner.sc  ToffALL/ToffWV3_03
@@ -34,6 +44,8 @@
 /bin/cp *.m lner.sc  ToffALL/ToffWV3_10
 /bin/cp *.m lner.sc  ToffALL/ToffWV3_11
 
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/ToffWV4_01 .. ToffALL/ToffWV4_11"
 /bin/cp *.m lner.sc  ToffALL/ToffWV4_01
 /bin/cp *.m lner.sc  ToffALL/ToffWV4_02
 /bin/cp *.m lner.sc  ToffALL/ToffWV4_03
@@ -46,6 +58,8 @@
 /bin/cp *.m lner.sc  ToffALL/ToffWV4_10
 /bin/cp *.m lner.sc  ToffALL/ToffWV4_11
 
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/ToffWV5_01 .. ToffALL/ToffWV5_11"
 /bin/cp *.m lner.sc  ToffALL/ToffWV5_01
 /bin/cp *.m lner.sc  ToffALL/ToffWV5_02
 /bin/cp *.m lner.sc  ToffALL/ToffWV5_03
@@ -124,6 +138,3 @@ cd ../../ToffALL/ToffWV5_08; lner.sc
 cd ../../ToffALL/ToffWV5_09; lner.sc
 cd ../../ToffALL/ToffWV5_10; lner.sc
 cd ../../ToffALL/ToffWV5_11; lner.sc
-
-
-

@@ -1,7 +1,6 @@
 addpath /home/sergio/SPECTRA
+addpath /home/sergio/git/matlabcode
 
-iUsualORHigh = -1; %% high res
-gid = 1;
 nbox = 5;
 pointsPerChunk = 10000;
 
@@ -14,11 +13,15 @@ if exist('numfiles')
   numfiles0 = numfiles;
 end
 
-iUsualORHigh = input('Enter low or high res (default +1/ high -1/ very high -2/ or -3 ) : default +1 : ');
+iUsualORHigh = -1;  %% high res
+iUsualORHigh = +10; %% 0.0025 cm-1
+iUsualORHigh = input('Enter low or high res (usual (+1/default)  high (-1) very high (-2 or -3) ) : default +1 : ');
 if length(iUsualORHigh) == 0
   iUsualORHigh = 1;
 end
 
+gid = 1;
+gid = 2;
 gid = input('Enter gid (default 2) : ');
 if length(gid) == 0
   gid = 2;
@@ -61,15 +64,25 @@ if gid ~= 1
     numfiles(wnx,offx) = +1;
   end
 
-  figure(1); pcolor(wn,1:11,numfiles'); colorbar; shading flat; title('files made'); colormap(jett);
+  figure(1); ppcolor(wn,1:11,numfiles'); colorbar; shading flat; title('files made'); colormap(jett);
   if exist('numfiles0')
-    figure(2); plot(wn,sum(numfiles0'),'bo-',wn,sum(numfiles'),'rx-'); title('files made'); 
-    figure(3); plot(1:11,sum(numfiles0),'bo-',1:11,sum(numfiles),'rx-'); title('files made, at Toffset'); 
-    figure(4); plot(wn,sum(numfiles') - sum(numfiles0'),'k.-'); title('progress files made'); 
+    figure(2); plot(wn,sum(numfiles0'),'bo-',wn,sum(numfiles'),'rx-'); title('files made');
+      legend('previous check','current check','location','best');
+    figure(3); plot(1:11,sum(numfiles0),'bo-',1:11,sum(numfiles),'rx-'); title('files made, at Toffset');
+      legend('previous check','current check','location','best');    
+    figure(4); plot(wn,sum(numfiles') - sum(numfiles0'),'k.-'); title('progress files made : current-previous');
   else
     figure(2); plot(wn,sum(numfiles'),'rx-'); title('files made'); 
   end
 
+  moo = find(sum(numfiles,1) < 90);
+  if length(moo) > 0
+    fprintf(1,'these are the Toffsets you still need to send to cluster  \n')
+    disp('though be careful about array eg if this is G2, things are fine ... but if G6, you need to add 11')
+    moo
+    disp('you can run plot_Toffset(gid,Toff) to see cumulative ods')
+  end
+  
 elseif gid == 1
   numfiles = zeros(length(wn),11,5);
   for nn = 1 : length(thedir)

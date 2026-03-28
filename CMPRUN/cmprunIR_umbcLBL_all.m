@@ -1,4 +1,4 @@
-function cmprunIR_umbcLBL_all(glist, vlist, HITRAN)
+function cmprunIR_all(glist, vlist, HITRAN)
 
 addpath0
 
@@ -46,12 +46,13 @@ else
   printarray(glist)
 end
 
-glist
-vlist
+printarray(glist)
+printarray(vlist)
 
 % loop on gas IDs
 for gid00 = 1 : length(glist)
   gid = glist(gid00);
+  %fprintf(1,'gid = %2i \n',gid)  
   
   if gid == 1
     error('use eg cmprunIR_WV_H20.m,cmprunIR_WV_H24.m')
@@ -143,15 +144,14 @@ for gid00 = 1 : length(glist)
     %fmon
     %fcmp
     %pause
-    
-    if exist(fmon) == 2  % monochromatic data exists
 
+    if ~exist(fmon)
+      fprintf(1,' gid = %3i vchunk = %5i fmonochromatic DNE %s \n',gid,vchunk,fmon)	                  
+    elseif exist(fmon) == 2  % monochromatic data exists
       if exist(fcmp) == 2  % compressed data exists
-
         % we found compressed data, so just print a message
         fprintf(1, 'cmprun: %s already exists\n', fcmp);
       else
-
         fprintf(1, 'making  %s \n', fcmp);
         % check for old data with max below abseps
         eval(['load ',fmon]);

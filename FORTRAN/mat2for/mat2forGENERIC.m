@@ -104,6 +104,7 @@ toff  = -50.0:10.0:50.0;
 fid = fopen([fdir,'/',fname], 'w' ,dtype);
 if fid == -1
   fprintf(1,'output dir = %s \n',fdir);
+  fprintf(1,'output name = %s \n',[fdir,'/',fname]);  
   error('can''t open output file')
 end
 

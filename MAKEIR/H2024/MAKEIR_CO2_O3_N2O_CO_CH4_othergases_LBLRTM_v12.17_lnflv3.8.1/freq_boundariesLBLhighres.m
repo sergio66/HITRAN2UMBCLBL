@@ -141,8 +141,8 @@ elseif iUsualORHigh > 0
   wn1 = 605;
   wn2 = 2855-25;   %% when checking against Howards results
 
-wn1 = 500;
-wn2 = 630;
+  % wn1 = 500;
+  % wn2 = 630;
 
   %% these may be overwritten by the code that actually calls this
   %% subroutine

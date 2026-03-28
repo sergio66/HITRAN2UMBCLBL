@@ -1,6 +1,9 @@
 # this is to automate
 #mkdir ToffALL/Toff_01   mkdir ToffALL/Toff_02  ... mkdir ToffALL/Toff_11
 #mkdir ToffALL/Toff2_01  mkdir ToffALL/Toff2_02 ... mkdir ToffALL/Toff2_11
+#mkdir ToffALL/Toff3_01  mkdir ToffALL/Toff3_02 ... mkdir ToffALL/Toff3_11
+#mkdir ToffALL/Toff4_01  mkdir ToffALL/Toff4_02 ... mkdir ToffALL/Toff4_11
+#mkdir ToffALL/Toff5_01  mkdir ToffALL/Toff5_02 ... mkdir ToffALL/Toff5_11
 
 ## this makes ToffALL/Toff_01 ... ToffALL/Toff_11
 for jj in {01..11}; do

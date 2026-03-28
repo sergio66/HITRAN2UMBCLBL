@@ -1,4 +1,4 @@
-function [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_WV_noN2con(gid,v1,v2,ipfile,ipfilewv,iDoGlab,iTalk,iALLorONElays,rRes)
+function [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_WVeffects_noN2con(gid,v1,v2,ipfile,ipfilewv,iDoGlab,iTalk,iALLorONElays,rRes)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% see lnfl/src/lnfl.F, line 4312
@@ -198,14 +198,17 @@ if iDoGlab > -2
       error('huh gid in driver_glab_lblrtm_forn_MANYLAY_noN2con.m')
     end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    disp(' ')    
     disp('  running !lblrtm >& ugh ....')
       %lbler = ['!lblrtm >& ugh']; eval(lbler)
       command = ['lblrtm >& ugh'];
-      command = ['lblrtm']      
+      command = ['lblrtm'];
       [status,cmdout] = system(command,'-echo');
     %disp('  catting ugh ....')
     %catter = ['!more ugh'];    eval(catter)
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      
 %pwd
 %!more TAPE5
 %pause

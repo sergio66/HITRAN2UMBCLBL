@@ -1,7 +1,6 @@
 function cmprunIR_LBLRTM(glist, vlist, HITRAN)
 
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
+addpath0
 
 % function cmprun(glist, vlist)
 %
@@ -12,7 +11,8 @@ addpath /asl/matlib/aslutil
 
 if nargin < 3
   HITRAN = 2012;
-  HITRAN = 2016;  
+  HITRAN = 2016;
+  HITRAN = 2024;  
 end
 
 if nargin < 2
@@ -35,17 +35,23 @@ load_ref_profile
 glist = intersect(glist, refpro.glist);
 clear refpro
 
-glist
-%vlist
+if length(glist) == 1
+  fprintf(1,'glist = %3i \n',glist)
+else  
+  printarray(glist)
+end
 
-whos glist
+printarray(glist)
+printarray(vlist)
 
 % loop on gas IDs
 for gid00 = 1 : length(glist)
-   gid = glist(gid00)
+  gid = glist(gid00);
+  %fprintf(1,'gid = %2i \n',gid)
+  
    if gid == 1
      error('use cmprunIR_WV')
-     end
+   end
    % set directories, depending on gas ID
    switch gid
      case 2
@@ -57,12 +63,17 @@ for gid00 = 1 : length(glist)
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm/kcomp/'];
 
        %%% >>>>>>>>>>>>> done with AER way of getting rid of N2/O2
-       %% this 2s for v12.4
+       %% this is for v12.4
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm2/abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g2.dat/lblrtm2/kcomp/'];
+       
        %% this is for v12.8
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.8/all/abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.8/all/kcomp/'];
+       
+       %% this is for v12.17
+       gdir = ['/umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       cdir = ['/umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
 
        disp('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
        disp('WARNING!!!! NANs may show up in the abs.dat, which show up in the kcomp files')
@@ -102,12 +113,20 @@ for gid00 = 1 : length(glist)
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.8/all//abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.8/all/kcomp/'];
 
+       %% this is for v12.17
+       gdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       cdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
+       
      case 7
        %%% >>>>>>>>>>>>> done with MY way of doing things, WRONG SHOULD NOT TRUST
        error('O2 using LBLRTM is messed up')
        xgdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g7.dat/lblrtm/abs.dat/']; 
        xcdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g7.dat/lblrtm/kcomp/'];
 
+       %% this is for v12.17
+       xgdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       xcdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
+       
      case 22
        %%% >>>>>>>>>>>>> done with MY way of doing things, WRONG SHOULD NOT TRUST AS ONLY PUTS continuum
        xgdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/g22.dat/lblrtm/abs.dat/']; 
@@ -121,6 +140,10 @@ for gid00 = 1 : length(glist)
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.4/all/abs.dat']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.4/all/kcomp/'];
 
+       %% this is for v12.17
+       gdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       cdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
+       
      otherwise
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/abs.dat/']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/kcomp/'];
@@ -131,12 +154,16 @@ for gid00 = 1 : length(glist)
        gdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.4/all/abs.dat']; 
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.4/all/kcomp/'];
 
+       %% this is for v12.17
+       gdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       cdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
+       
      end
 
-disp(' ')
-fprintf(1,'gid = %2i \n',gid);
-fprintf(1,'gdir = %s \n',gdir)
-fprintf(1,'cdir = %s \n',cdir)
+   disp(' ')
+   fprintf(1,'gid = %2i \n',gid);
+   fprintf(1,'gdir = %s \n',gdir)
+   fprintf(1,'cdir = %s \n',cdir)
 
   % loop on chunk start freq's
   for vchunk = vlist
@@ -158,15 +185,14 @@ fprintf(1,'cdir = %s \n',cdir)
     %fmon
     %fcmp
     %pause
-    
-    if exist(fmon) == 2  % monochromatic data exists
 
+    if exist(fmon) ~= 2
+      fprintf(1,' gid = %3i vchunk = %5i fmonochromatic DNE %s \n',gid,vchunk,fmon)
+    elseif exist(fmon) == 2  % monochromatic data exists
       if exist(fcmp) == 2  % compressed data exists
-
         % we found compressed data, so just print a message
         fprintf(1, 'cmprun: %s already exists\n', fcmp);
       else
-
         fprintf(1, 'making  %s \n', fcmp);
         % check for old data with max below abseps
         eval(['load ',fmon]);

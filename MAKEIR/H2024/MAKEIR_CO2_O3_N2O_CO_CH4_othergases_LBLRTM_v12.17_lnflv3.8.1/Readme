@@ -69,8 +69,10 @@ Then carefully edit
   clust_runXtopts_savegasN_file_3.m
   clust_runXtopts_savegasN_file_4.m
 so 12 --> 16 --> 24
+
 Better way : edit and use cder_here.m
-set_the_freq_boundaries  %%% make sure you do this!!!!!
+
+set_the_freq_boundaries  %%% make sure you do this!!!!!, this sets wn1 = 605, wn2 = 2855
 
 6) Cluster jobs and checking output
 -----------------------------------
@@ -98,16 +100,39 @@ which has
   and then copies the *.m and other files, as well as the symbolic links to lblrtm, slblrtm etc
 
 Then
-  /bin/rm slurm*.out; sbatch --array=1-22 sergio_matlab_chip_jobB.sbatch  (parse_job_string.m has "file_parallelprocess_gas_2_6.txt" for gases2,6)
+      (parse_job_string.m has "file_parallelprocess_gas_2_6.txt" for gases2,6)      
+      YOU NEED TO SEND DIFFERENT GASES TO DIFFERENT Toffset/ToffX_1,2,3,4,5,6,7,8,9,10,11 sets!!!!!!!
+        Option 1 : 
+          /bin/rm slurm*.out; sbatch --array=1-22%11 sergio_matlab_chip_jobB.sbatch  
+          calls clust_runXtopts_savegasN_file
+        Option 2 : see run_2_6.sc
+         /bin/rm slurm*.out;    
+         sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 1   %% for CO2
+         sbatch --array=12-22 sergio_matlab_chip_jobB.sbatch 2   %% for CH4
 
-compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
+to check process can do eg
+  watch "ls -lt /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830//g2.dat/lblrtm//"
+or
+  check_progress.m
+  
+to compare
+  compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
+
 
 7) Cat the chunks together (11 Toffsets), then compress and convert to binary
 -----------------------------------------------------------------------------
-these put togeher the chunks after they are made
+these put together the chunks after they are made
 -rw-r--r-- 1 sergio pi_strow  5756 Mar 15 03:09 clust_runXtopts_mkgWVvfiles.m
 -rw-r--r-- 1 sergio pi_strow  4603 Mar 15 03:08 clust_runXtopts_mkgNvfiles.m
-and they go into eg /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.8/all/abs.dat/g2v2830.mat
+and they go into eg /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.17/all/abs.dat/g2v2830.mat
 
-go to  eg /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunIR_LBLRTM.m
-and to eg /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forIR_LBLRTM_all.m
+After the cluster jobs are done run
+  clust_runXtopts_mkgNvfiles.m  for gases 2,6,7,22
+  clust_runXtopts_mkgWVvfiles.m for WVall (no iso separation)
+	
+then go to eg /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunIR_LBLRTM.m
+    and to eg /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forIR_LBLRTM_all.m
+
+Compare the LBLRTM12.8 vs LBLRTM12.17 ODs using
+  /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/compare_LBLRTM_2_6_vers_12p8_vs_vers12p17.m
+  

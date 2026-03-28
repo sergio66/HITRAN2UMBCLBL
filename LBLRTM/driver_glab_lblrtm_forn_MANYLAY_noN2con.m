@@ -200,10 +200,11 @@ if iDoGlab > -2
     end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    disp(' ')
     disp('  running !lblrtm >& ugh ....')
       %lbler = ['!lblrtm >& ugh']; eval(lbler)
       command = ['lblrtm >& ugh'];
-      command = ['lblrtm']      
+      command = ['lblrtm'];      
       [status,cmdout] = system(command,'-echo');
     %disp('  catting ugh ....')
     %catter = ['!more ugh'];    eval(catter)
@@ -236,7 +237,11 @@ if iDoGlab > -2
         OD = interp1(vx,OD,newvx);
         vx = newvx;
       end
-      woop = find(vx >= v1 - 2.001*0.0005 & vx <= v2 - 0.0025 + 2.001*0.0005); 
+      woop = find(vx >= v1 - 2.002*0.0005 & vx <= v2 - 0.0025 + 2.002*0.0005);
+      if mod(length(woop),5) ~= 0
+        whos woop	
+	keyboard_nowindow
+      end
       vxx = boxint(vx(woop),5);
       ODD = boxint(OD(woop),5);
       

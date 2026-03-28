@@ -13,20 +13,11 @@
 
 ########################################################################
 
-#  Name of the job:
-#SBATCH --job-name=RUN8_gas3_42
-
-# requeue; if held type scontrol release JOBID
-#SBATCH --requeue
-
-#  N specifies that 1 job step is to be allocated per instance of #matlab
-#SBATCH -N1
-
-#  This specifies the number of cores per matlab session will be available for parallel jobs
-#SBATCH --cpus-per-task 1
-
+#SBATCH --job-name=RUN8_gas3_42           # Name of the job:
+#SBATCH --requeue                         # requeue; if held type scontrol release JOBID
+#SBATCH -N1                               # N specifies that 1 job step is to be allocated per instance of #matlab
+#SBATCH --cpus-per-task 1                 # specifies number of cores per matlab session available for parallel jobs
 #SBATCH --account=pi_strow
-
 #SBATCH --cluster=chip-cpu
 
 ########################################################################

@@ -9,72 +9,19 @@
 %%                   12 34567 89
 %% where gasID = 01 .. 99,   HI = 1 .. 11 (for Toff = -5 : +5) and wavenumber = 00050:99999
 
-%%% OLD WAY
-%{
-%% test eg JOB='0102230054'; clust_runXtopts_savegasN_file
-JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-JOB = getenv('SLURM_ARRAY_TASK_ID');
-Sgid     = str2num(JOB(1:2));                        %% should be 1
-Schunk   = str2num(JOB(3:7));                        %% for IR 605 : 25 : 2805
-Stoffset = str2num(JOB(8:9)); Stt = Stoffset - 6;    %% should be 1 - 11 ---> -5 : +5
-Sppmult  = str2num(JOB(10));                         %% should be 1 - 5
-%}
-
-%% to see what chunks should be made, check out
-%% PARAMETER (kCompParamFile = 
-%%     /home/sergio/KCARTA/SCRIPTS/MAKE_COMP_HTXY_PARAM_SC/PARAM_TEMP/testH2012_oldCO2
-
-%%% NEW WAY gids to do == 
-thefile = load('file_parallelprocess_wv.txt');   %%% 297 entries in there
-JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-% JOB = 3*11 + 5;  %% so this is (third+1) gas == gas  1, offset 5, pp(1)
-% JOB = 1*11 + 5;  %% so this is (sixth+1) gas == gas 12, offset 5
-JOB = thefile(JOB);
-JOB = num2str(JOB,'%010d');
-Sgid     = str2num(JOB(1:2));
-Schunk   = str2num(JOB(3:7));  
-Stoffset = str2num(JOB(8:9)); Stt = Stoffset - 6;
-Sppmult  = str2num(JOB(10));
+parse_job_string_WV
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp('see /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LNFL2.6/aer_v_3.2/line_files_By_Molecule/01_H2O/Readme')
-%{
->>> disp('qtips04.m : for water the isotopes are 161  181  171  162  182  172');
-
-lrwxrwxrwx 1 sergio pi_strow      15 Apr 28 12:03 01_H2O -> 01_h2o_162_excl
-
-originally
--rw-r--r-x 1 sergio pi_strow   44464 Oct 22  2012 01_h2o_172_only
--rw-r--r-x 1 sergio pi_strow 1586522 Oct 22  2012 01_h2o_181_only
--rw-r--r-x 1 sergio pi_strow  275660 Oct 22  2012 01_h2o_182_only
--rw-r--r-x 1 sergio pi_strow 1142001 Oct 22  2012 01_h2o_171_only
--rw-r--r-x 1 sergio pi_strow 1910454 Oct 22  2012 01_h2o_162_only
--rw-r--r-x 1 sergio pi_strow 8956941 Oct 22  2012 01_h2o_162_excl
--rw-r--r-x 1 sergio pi_strow 5989739 Oct 22  2012 01_h2o_161_only
--rw-r--r-x 1 sergio pi_strow 6807226 Oct 22  2012 01_H2O
-
-now
-lrwxrwxrwx 1 sergio pi_strow      15 Apr 28 12:03 01_H2O -> 01_h2o_162_excl
--rw-r--r-x 1 sergio pi_strow   44464 Oct 22  2012 01_h2o_172_only
--rw-r--r-x 1 sergio pi_strow 1586522 Oct 22  2012 01_h2o_181_only
--rw-r--r-x 1 sergio pi_strow  275660 Oct 22  2012 01_h2o_182_only
--rw-r--r-x 1 sergio pi_strow 1142001 Oct 22  2012 01_h2o_171_only
--rw-r--r-x 1 sergio pi_strow 1910454 Oct 22  2012 01_h2o_162_only
--rw-r--r-x 1 sergio pi_strow 8956941 Oct 22  2012 01_h2o_162_excl
--rw-r--r-x 1 sergio pi_strow 5989739 Oct 22  2012 01_h2o_161_only
--rw-r--r-x 1 sergio pi_strow 6807226 Oct 22  2012 01_H2O_use_this_for_all
-
-ie (a) have moved 01_H2O to 01_H2O_use_this_for_all
-   (b) currently symbolically link          01_H2O  to  01_h2o_162_excl         which is everything but the HDO (isotope 4) database  (gas 1)
-   (c) after this is done symbolically link 01_H2O  to  01_h2o_162_only         which is ONLY the HDO isotope                         (gas 103)
-   (d) after this is done symbolically link 01_H2O  to  01_H2O_use_this_for_all which is default                                      (gas 110)
-%}
+wv_readme
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 poffset = [0.1, 1.0, 3.3, 6.7, 10.0];
 ppmult = poffset;
 ppmult = ppmult(Sppmult);
 fprintf(1,'JOB String = %s    parsed to gid = %2i chunk = %5i Stoffset = %2i ppmult = %8.6f \n',JOB,Sgid,Schunk,Stoffset,ppmult);
+
+adderpath
+addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/ToffWV5_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 nbox = 5;
 pointsPerChunk = 10000;
@@ -87,19 +34,11 @@ load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
 %%         PARAMETER (kOrigRefPath =
 %%      $          '/asl/data/kcarta_sergio/KCDATA/RefProf_July2010.For.v115up_CO2ppmv385/')
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffWV5_' num2str(Stoffset,'%02d')]; eval(addpather);
-addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
-
 gg    = Sgid;
 gasid = Sgid;  
 gid   = Sgid;
 
-freq_boundaries                           %% these are standard, using 0.0025 cm-1 output
-%% freq_boundariesLBL                     %% these are high res, using 0.0005 cm-1 output
-%% choose_usualORhighORveryhigh_freqres   %% iUsualORHigh = -1 or -2
+set_the_freq_boundaries  %%% make sure you do this!!!!!
 
 ee = exist(dirout);
 if ee == 0
@@ -163,7 +102,7 @@ while fmin <= wn2
       fclose(fid);
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffWV5_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/ToffWV5_' num2str(Stoffset,'%02d')]; eval(cder);
       rmerTAPEX = ['!/bin/rm TAPE5 TAPE6 TAPE9 TAPE10 TAPE11 TAPE12']; eval(rmerTAPEX);      
       
       if iUseOldWay == +1
@@ -176,7 +115,7 @@ while fmin <= wn2
         dN2O2 = dlblrtm;
 
         d = dall - dN2O2;
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+        cder_here
 
         if max(d(:)) > 1e-40
           saver = ['save ' fout ' w d dall dN2O2'];
@@ -199,9 +138,8 @@ while fmin <= wn2
 	else
 	  error('need 1 <= gid <= 32   and 51 <= gid <= 63')
 	end
-        d = dlblrtm;
-        %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12
+        d = dlblrtm;        
+        cder_here
 
         if max(d(:)) > 1e-40
           saver = ['save ' fout ' w d'];
@@ -221,9 +159,7 @@ while fmin <= wn2
   fmin = fmin + dv;
 %  %% one chunk is enough
 %  return
-%  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12
+  cder_here
 end                 %% loop over freq
 
-% cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_H12
+cder_here

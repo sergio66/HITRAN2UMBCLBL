@@ -1,3 +1,9 @@
+echo "This comes after running     mker_TOFFSETS_6_12.sc"
+
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff6_01 .. ToffALL/Toff6_11"
 /bin/cp *.m lner.sc  ToffALL/Toff6_01
 /bin/cp *.m lner.sc  ToffALL/Toff6_02
 /bin/cp *.m lner.sc  ToffALL/Toff6_03
@@ -23,7 +29,11 @@ cd ../../ToffALL/Toff6_09; lner.sc
 cd ../../ToffALL/Toff6_10; lner.sc
 cd ../../ToffALL/Toff6_11; lner.sc
 
-####
+
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff7_01 .. ToffALL/Toff7_11"
 
 cd ../..
 
@@ -52,7 +62,10 @@ cd ../../ToffALL/Toff7_09; lner.sc
 cd ../../ToffALL/Toff7_10; lner.sc
 cd ../../ToffALL/Toff7_11; lner.sc
 
-####
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff8_01 .. ToffALL/Toff8_11"
 
 cd ../..
 
@@ -81,7 +94,10 @@ cd ../../ToffALL/Toff8_09; lner.sc
 cd ../../ToffALL/Toff8_10; lner.sc
 cd ../../ToffALL/Toff8_11; lner.sc
 
-####
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff9_01 .. ToffALL/Toff9_11"
 
 cd ../..
 
@@ -110,7 +126,10 @@ cd ../../ToffALL/Toff9_09; lner.sc
 cd ../../ToffALL/Toff9_10; lner.sc
 cd ../../ToffALL/Toff9_11; lner.sc
 
-####
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff10_01 .. ToffALL/Toff10_11"
 
 cd ../..
 
@@ -139,7 +158,10 @@ cd ../../ToffALL/Toff10_09; lner.sc
 cd ../../ToffALL/Toff10_10; lner.sc
 cd ../../ToffALL/Toff10_11; lner.sc
 
-####
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff11_01 .. ToffALL/Toff11_11"
 
 cd ../..
 
@@ -168,7 +190,10 @@ cd ../../ToffALL/Toff11_09; lner.sc
 cd ../../ToffALL/Toff11_10; lner.sc
 cd ../../ToffALL/Toff11_11; lner.sc
 
-####
+########################################################################
+
+echo " "
+echo "copying lner.sc and running lner.sc in    ToffALL/Toff12_01 .. ToffALL/Toff12_11"
 
 cd ../..
 
@@ -196,3 +221,7 @@ cd ../../ToffALL/Toff12_08; lner.sc
 cd ../../ToffALL/Toff12_09; lner.sc
 cd ../../ToffALL/Toff12_10; lner.sc
 cd ../../ToffALL/Toff12_11; lner.sc
+
+########################################################################
+
+echo "done copy_TOFFSETS_6_12.sc"

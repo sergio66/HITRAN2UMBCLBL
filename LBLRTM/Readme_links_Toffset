@@ -1,0 +1,121 @@
+Contents
+---------
+1) Linking lblrtm, slblrtm, TAPE3 etc
+2) Tesing making ToffX dir
+3) make ToffALL (a symbolic link) and some subdirs
+4) To run off the gas ODs
+5) Making more dirs if needed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+1) Linking lblrtm, slblrtm, TAPE3 etc
+-------------------------------------
+
+First run
+  -rwxrwxr-x 1 sergio pi_sergio 9704 Mar 24 11:14 lner_chip.sc
+  -rwxrwxr-x 1 sergio pi_sergio 9704 Mar 24 11:14 lner.sc
+which are the same
+
+lrwxrwxrwx 1 sergio pi_sergio       84 Jan  4 04:47 xs -> /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LNFL/aer_v_3.6/xs_files_v3.6/xs
+lrwxrwxrwx 1 sergio pi_sergio       93 Jan  4 04:47 slblrtm -> /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_gnu_sgl
+lrwxrwxrwx 1 sergio pi_sergio       95 Jan  4 04:47 lblrtm -> /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.8/LBLRTM/lblrtm/lblrtm_v12.8_linux_intel_dbl
+lrwxrwxrwx 1 sergio pi_sergio       86 Jan  4 04:47 old_lblrtm -> /home/sergio/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.2/lblrtm/lblrtm_v12.2_linux_pgi_dbl
+
+becomes
+
+lrwxrwxrwx 1 sergio pi_sergio       92 Mar 25 23:09 slblrtm -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/lblrtm_v12.17_linux_gnu_sgl
+lrwxrwxrwx 1 sergio pi_sergio       94 Mar 25 23:09 lblrtm -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/lblrtm_v12.17_linux_intel_dbl
+lrwxrwxrwx 1 sergio pi_sergio       92 Mar 25 23:09 absco-ref_wv-mt-ckd.nc -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/data/absco-ref_wv-mt-ckd.nc
+lrwxrwxrwx 1 sergio pi_sergio       86 Mar 25 23:09 FSCDXS -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/cross-sections/FSCDXS
+lrwxrwxrwx 1 sergio pi_sergio       82 Mar 25 23:09 xs -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/cross-sections/xs
+lrwxrwxrwx 1 sergio pi_sergio      128 Mar 25 23:09 TAPE3 -> /home/sergio/git/IR_NIR_VIS_UV_RTcodes/LBLRTM/LBLRTM12.17/LBLRTM/LNFL/run_examples/run_example_infrared_sergio/TAPE3_aer_v_3.8.1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+2) Tesing making ToffX dir
+---------------------------
+
+test_mkerTxoff.sc
+
+wil make
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff02_05
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff02_04
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff02_03
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff02_02
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff02_01
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff01_05
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff01_04
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff01_03
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff01_02
+drwxrwxr-x 2 sergio pi_sergio        0 Mar 25 23:21 junkToff01_01
+
+which you can either delete
+  rmdir  junkToff*_*
+or they are part of .gitignore and will not be added
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+3) make ToffALL (a symbolic link) and some subdirs
+--------------------------------------------------
+
+mkdir /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL
+ln -s /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL ToffALL
+
+now run
+  mker_TOFFSETS_1_5.sc  >& ughm  
+  copy_TOFFSETS_1_5.sc  >& ughc
+which makes ToffALL/Toff_01 .. ToffALL/Toff_11
+            ToffALL/Toff2_01 .. ToffALL/Toff2_11
+            ToffALL/Toff3_01 .. ToffALL/Toff3_11
+            ToffALL/Toff4_01 .. ToffALL/Toff4_11
+            ToffALL/Toff5_01 .. ToffALL/Toff5_11
+and then copies the *.m and other files, as well as the symbolic links to lblrtm, slblrtm etc
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+4) To run off the gas ODs
+-------------------------
+  back to eg HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1
+  See the Readme there. In particular
+
+      (parse_job_string.m has "file_parallelprocess_gas_2_6.txt" for gases2,6)      
+      YOU NEED TO SEND DIFFERENT GASES TO DIFFERENT Toffset/ToffX_1,2,3,4,5,6,7,8,9,10,11 sets!!!!!!!
+        Option 1 : 
+          /bin/rm slurm*.out; sbatch --array=1-22%11 sergio_matlab_chip_jobB.sbatch  
+          calls clust_runXtopts_savegasN_file
+        Option 2 : 
+         /bin/rm slurm*.out;    
+         sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 1   %% for CO2
+         sbatch --array=12-22 sergio_matlab_chip_jobB.sbatch 2   %% for CH4
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+5) Making more dirs if needed
+-----------------------------
+
+Since mker_TOFFSETS_1_5.sc, copy_TOFFSETS_1_5.sc set up 5 ToffsetX subdirs each with 11 directories, 
+  I can run off 5 different gases, 11 offsets
+  (eg above
+         sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 1   %% for CO2 by calling   clust_runXtopts_savegasN_file.m
+         sbatch --array=12-22 sergio_matlab_chip_jobB.sbatch 2   %% for CH4 by calling   clust_runXtopts_savegasN_file_2.m	 
+  does gases 2,6)
+
+Can do three other gases at the same time
+         sbatch --array=23-33 sergio_matlab_chip_jobB.sbatch 3   %% for GX3 by calling   clust_runXtopts_savegasN_file_3.m
+         sbatch --array=34-44 sergio_matlab_chip_jobB.sbatch 4   %% for GX4 by calling   clust_runXtopts_savegasN_file_4.m
+         sbatch --array=45-55 sergio_matlab_chip_jobB.sbatch 5   %% for GX5 by calling   clust_runXtopts_savegasN_file_5.m	 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Can run
+  mker_TOFFSETS_6_12.sc  >& ughm
+  copy_TOFFSETS_6_12.sc  >& ughc
+to make more directories, so you can conceivably run 12 gases at the same time
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+Can run
+  mker_TOFFSETS_WV.sc  >& ughm
+  copy_TOFFSETS_WV.sc  >& ughc
+to make WV directories, so you can conceivably run 5 pressure offsets x 11 Toffsets at the same time

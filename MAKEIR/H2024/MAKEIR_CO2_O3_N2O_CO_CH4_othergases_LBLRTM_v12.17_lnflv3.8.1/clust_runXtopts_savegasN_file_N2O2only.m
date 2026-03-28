@@ -19,6 +19,10 @@
 
 %% test eg JOB='070223006'; clust_runXtopts_savegasN_file_N2O2only.m
 
+parse_job_string_N2O2
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 Sgid     = str2num(JOB(1:2));
 Schunk   = str2num(JOB(3:7));  
 Stoffset = str2num(JOB(8:9)); Stt = Stoffset - 6;
@@ -32,17 +36,18 @@ gases = Sgid;
 %% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
 %% load /home/sergio/abscmp/refproTRUE.mat
 load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+%% compare to INCLUDE/kcarta.param
+%%         PARAMETER (kOrigRefPath =
+%%      $          '/asl/data/kcarta_sergio/KCDATA/RefProf_July2010.For.v115up_CO2ppmv385/')
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(addpather);
-addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
+adderpath
+addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/Toff_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 gg    = Sgid;
 gasid = Sgid;  
 gid   = Sgid;
-freq_boundaries
+
+set_the_freq_boundaries  %%% make sure you do this!!!!!
 
 if gid ~= 7 & gid ~= 22
   error('this is only for gid = 7,22')
@@ -93,7 +98,7 @@ while fmin <= wn2
       fclose(fid);
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/Toff_' num2str(Stoffset,'%02d')]; eval(cder);
 
       %[w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1);
       %dall = dlblrtm;
@@ -104,7 +109,7 @@ while fmin <= wn2
 
       %d = dall - dN2O2;
       d = dN2O2;
-      cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+      cder_here
 
       saver = ['save ' fout ' w d'];
       eval(saver);
@@ -117,7 +122,7 @@ while fmin <= wn2
   fmin = fmin + dv;
 %  %% one chunk is enough
 %  return
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
+  cder_here
 end                 %% loop over freq
 
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
+cder_here

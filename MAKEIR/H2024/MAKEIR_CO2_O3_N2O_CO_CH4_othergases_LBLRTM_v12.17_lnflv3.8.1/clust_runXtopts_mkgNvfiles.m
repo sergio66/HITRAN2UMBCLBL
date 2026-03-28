@@ -42,9 +42,7 @@ nbox = 5;
 pointsPerChunk = 10000;
 iUsualORHigh = -1;    %%% these are high res, using 0.0005 cm-1 output
 
-%% freq_boundaries                        %% these are standard, using 0.0025 cm-1 output
-%% freq_boundariesLBL                     %% these are high res, using 0.0005 cm-1 output
-choose_usualORhighORveryhigh_freqres      %% iUsualORHigh = -1 or -2
+set_the_freq_boundaries  %%% make sure you do this!!!!!
 
 figure(1); clf
 addpath /home/sergio/SPECTRA
