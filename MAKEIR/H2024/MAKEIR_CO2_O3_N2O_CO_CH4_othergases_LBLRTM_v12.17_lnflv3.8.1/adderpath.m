@@ -11,3 +11,5 @@ addpath /home/sergio/git/matlabcode/matlibSergio/matlib/aslutil
 
 %addpath /home/sergio/git/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
 adder = ['addpath ' pwd]; eval(adder)
+
+outputdirToffALL = '/home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/';

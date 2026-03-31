@@ -18,6 +18,8 @@ elseif nargin == 3
   iUsualORHigh = 10;
 end
 
+fprintf(1,'GasID = %2i   Toffset = %2i of 11   Layer = %3i of 100 \n',gid,Toffset,N);
+	
 nbox = 5;
 pointsPerChunk = 10000;
 freq_boundariesLBL
@@ -25,6 +27,8 @@ freq_boundariesLBL
 fall = [];
 odall = [];
 odN   = [];
+od_all_lays = [];
+
 iCnt = 0;
 
 disp('loading in 89 chunks ....')
@@ -39,7 +43,7 @@ for ff = wn1 : 25 : wn2
   clear x
   
   fname = [dirout '/std' num2str(ff) '_' num2str(gid) '_' num2str(Toffset) '.mat'];
-  fprintf(1,'%s \n',fname);
+  %fprintf(1,'%s \n',fname);
   if exist(fname)
     thedir = dir(fname);
     if thedir.bytes > 1e5
@@ -49,6 +53,7 @@ for ff = wn1 : 25 : wn2
       od = sum(x.d,2);
       odall = [odall; od];
       odN   = [odN  x.d(:,N)'];
+      od_all_lays(iCnt,:) = x.d(1,:);
     else
       x.w = (1:10000);
       x.w = (x.w-1)*0.0025 + ff;
@@ -57,6 +62,7 @@ for ff = wn1 : 25 : wn2
       od = zeros(size(x.w));
       odall = [odall; od'];
       odN   = [odN 0*w];
+      od_all_lays(iCnt,:) = zeros(100,1);
     end      
   else
     x.w = (1:10000);
@@ -65,13 +71,19 @@ for ff = wn1 : 25 : wn2
     fall = [fall w];
     od = zeros(size(x.w));
     odall = [odall; od'];
-    odN   = [odN 0*w];    
+    odN   = [odN 0*w];
+    od_all_lays(iCnt,:) = zeros(100,1);    
   end
   
 end
 
-fprintf(1,'X \n')
+fprintf(1,'\n')
 
-% whos fall odall
 
-figure(1); semilogy(fall,odall,fall,odN); legend('Sum(OD)','OD(layN)','location','best');
+% whos fall odall od_all_lays
+
+figure(1); clf; semilogy(fall,odall,fall,odN); legend('Sum(OD)','OD(layN)','location','best');
+figure(2); clf; semilogx(od_all_lays,1:100);
+
+junk = log10([min(od_all_lays(:)) max(od_all_lays(:)) min(od_all_lays(:,1)) max(od_all_lays(:,1)) min(od_all_lays(:,100)) max(od_all_lays(:,100))]);
+fprintf(1,'min(OD) max(OD) min(OD)lay001 max(OD)lay001 min(OD)lay100 max(OD)lay100  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f \n',junk)

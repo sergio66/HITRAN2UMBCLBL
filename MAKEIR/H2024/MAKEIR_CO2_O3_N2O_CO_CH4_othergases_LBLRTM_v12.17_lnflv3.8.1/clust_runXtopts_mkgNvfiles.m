@@ -16,11 +16,15 @@ adderpath
 
 home = pwd;
 
-JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+%JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+%if length(JOB) == 0
+%  JOB = 2;
+%end  
+
+JOB = input('Enter gasID : (default 2) ');
 if length(JOB) == 0
   JOB = 2;
 end  
-%JOB = input('Enter gasID : ');
 gid = JOB;
 
 if gid == 1
@@ -33,9 +37,7 @@ if ~((gid >= 2 & gid <= 32) | (gid >= 51 & gid <= 63))
 end
 
 %{
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/refproTRUE.mat
+load_refprof
 %}
 
 nbox = 5;

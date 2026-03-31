@@ -50,15 +50,10 @@ nbox = 5;
 pointsPerChunk = 10000;
 gases = Sgid;
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_refprof
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(addpather);
-addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
+adderpath
+addpather = ['addpath ' outputdirToffALL '/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 gg    = Sgid;
 gasid = Sgid;  
@@ -144,7 +139,7 @@ while fmin <= wn2
       end
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd ' outputdirToffALL '/Toff' num2str(Sgid) '_' num2str(Stoffset,'%02d')]; eval(cder);
       pwd
 
       if iUseOldWay == +1

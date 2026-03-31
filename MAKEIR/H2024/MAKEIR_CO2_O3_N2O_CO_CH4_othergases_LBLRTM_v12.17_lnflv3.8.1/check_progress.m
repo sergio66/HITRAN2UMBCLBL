@@ -71,6 +71,10 @@ if gid ~= 1
     figure(3); plot(1:11,sum(numfiles0),'bo-',1:11,sum(numfiles),'rx-'); title('files made, at Toffset');
       legend('previous check','current check','location','best');    
     figure(4); plot(wn,sum(numfiles') - sum(numfiles0'),'k.-'); title('progress files made : current-previous');
+    ax = axis;
+    if ax(4) > 0
+      ylim([0 ax(4)])
+    end
   else
     figure(2); plot(wn,sum(numfiles'),'rx-'); title('files made'); 
   end

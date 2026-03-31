@@ -82,18 +82,10 @@ nbox = 5;
 pointsPerChunk = 10000;
 gases = Sgid;
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
-%% compare to INCLUDE/kcarta.param
-%%         PARAMETER (kOrigRefPath =
-%%      $          '/asl/data/kcarta_sergio/KCDATA/RefProf_July2010.For.v115up_CO2ppmv385/')
+load_refprof
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffWV4_' num2str(Stoffset,'%02d')]; eval(addpather);
-addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
+adderpath
+addpather = ['addpath ' outputdirToffALL '/ToffWV4_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 gg    = Sgid;
 gasid = Sgid;  
@@ -174,7 +166,7 @@ while fmin <= wn2
       fclose(fid);
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffWV4_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd ' outputdirToffALL '/ToffWV4_' num2str(Stoffset,'%02d')]; eval(cder);
       rmerTAPEX = ['!/bin/rm TAPE5 TAPE6 TAPE9 TAPE10 TAPE11 TAPE12']; eval(rmerTAPEX);      
       
       if iUseOldWay == +1

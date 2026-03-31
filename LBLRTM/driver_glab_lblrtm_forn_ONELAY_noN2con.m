@@ -150,9 +150,10 @@ dvx = 0.0005;
 
 cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/Toff_01
 
-% makeTAPE5(gid,v1-01,v2+01,ipfile,dvx); %% Mlawer suggested larger bracket than 1 cm-1
-% makeTAPE5(gid,v1-10,v2+10,ipfile,dvx); %% Mlawer suggested larger bracket than 1 cm-1
-makeTAPE5(gid,v1-25,v2+25,ipfile,dvx);   %% Mlawer suggested larger bracket than 1 cm-1
+iTalk   = +1;       %% assume talk during makeTAPE5
+% qfactor = makeTAPE5_noN2con(gid,v1-01,v2+01,ipfile,dvx,1,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
+% qfactor = makeTAPE5_noN2con(gid,v1-10,v2+10,ipfile,dvx,1,iTalk); %% Mlawer suggested larger bracket than 1 cm-1
+qfactor = makeTAPE5_noN2con(gid,v1-25,v2+25,ipfile,dvx,1,iTalk);   %% Mlawer suggested larger bracket than 1 cm-1
 
 lbler = ['!lblrtm >& ugh']; eval(lbler)
 catter = ['!more ugh'];     eval(catter)

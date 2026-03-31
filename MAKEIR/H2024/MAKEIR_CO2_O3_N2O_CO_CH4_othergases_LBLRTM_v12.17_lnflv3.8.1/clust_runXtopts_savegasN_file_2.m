@@ -12,6 +12,12 @@
 
 %% same as clust_runXtopts_savegasN_file.m except it goes to "Toff2_" subdirs ....
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% when the cluster does not work, can do
+%%  <<<< for JOBB = 1 : 22; clust_runXtopts_savegasN_file_2; end >>>>
+%% and you will make CO2/CH4, 11 Toffset, from 605-2830 cm-1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% this simply does all wavenumbers for gN
 
 % was   clustcmd -q long_contrib -n 11 clust_runXtopts_savegasN_file.m file_parallelprocess_CO2.txt
@@ -31,15 +37,10 @@ nbox = 5;
 pointsPerChunk = 10000;
 gases = Sgid;
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
-%% compare to INCLUDE/kcarta.param
-%%         PARAMETER (kOrigRefPath =
-%%      $          '/asl/data/kcarta_sergio/KCDATA/RefProf_July2010.For.v115up_CO2ppmv385/')
+load_refprof
 
 adderpath
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff2_' num2str(Stoffset,'%02d')]; eval(addpather);
+addpather = ['addpath ' outputdirToffALL '/Toff2_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 gg    = Sgid;
 gasid = Sgid;  
@@ -86,10 +87,16 @@ if ((gasid < 2 & gasid > 47) & (gasid < 51 & gasid > 81))
   error('need  2 <= gid <= 47 OR 51 <= gid <= 81')
 end
 
-fmax = wn2;
-%fmax = 1705;
-while fmax >= wn1 + dv
-  fmin = fmax - dv;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%fmax = wn2;
+%%fmax = 1705;
+%
+%while fmax >= wn1 + dv
+%  fmin = fmax - dv;
+
+while fmin <= wn2
+  fmax = fmin + dv;
 
   fprintf(1,'gas freq = %3i %6i \n',gg,fmin);
 
@@ -124,7 +131,7 @@ while fmax >= wn1 + dv
       fclose(fid);
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/ToffALL/Toff2_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd ' outputdirToffALL '/Toff2_' num2str(Stoffset,'%02d')]; eval(cder);
       rmerTAPEX = ['!/bin/rm TAPE5 TAPE6 TAPE9 TAPE10 TAPE11 TAPE12']; eval(rmerTAPEX);      
       
       if iUseOldWay == +1
@@ -178,7 +185,8 @@ while fmax >= wn1 + dv
       fprintf(1,'no lines for chunk starting %8.6f \n',fmin);
     end
   end               %% loop over temperature (1..11)
-  fmax = fmax - dv;
+%  fmax = fmax - dv;
+  fmin = fmin + dv;  
 %  %% one chunk is enough
 %  return
   cder_here

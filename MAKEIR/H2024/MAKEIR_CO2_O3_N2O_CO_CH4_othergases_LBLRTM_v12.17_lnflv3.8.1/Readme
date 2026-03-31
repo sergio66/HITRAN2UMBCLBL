@@ -1,6 +1,27 @@
 Cpntents
 ---------
 
+The Golden Rule is
+************************************************************************
+*        Since LBLRTM only runs using TAPE5,TAPE6,TAPE11,TAPE12        *
+*  you CANNOT CANNOT have more than one job running on same processor  *
+*  at the same time, else they will start overwriting each other.      *
+************************************************************************
+
+******************************************************************************************************************************************************************
+*  NOTE :      compare_kcompressed_vs_run8_vs_lblrtm.m   calls   driver_runXtopts_nosavegasN_onelay.m   which calls   driver_glab_lblrtm_forn_ONELAY_noN2con.m   *
+*  JUST LIKE : clust_runXtopts_savegasN_file.m           calls                                                        driver_glab_lblrtm_forn_MANYLAY_noN2con    *
+*  else if you call driver_glab_lblrtm_forn_ONELAY.m it will keep the N2/O2 continuum and that meses up comparisons to kCompressed cacls!!!!!                    *
+******************************************************************************************************************************************************************
+
+but when the cluster is as messed up you can start up 5 different matlab jobs on
+our machine (c24-52) and then on each matlab session individdually run
+processor 1 --> for JOBB = 01 : 04; clust_runXtopts_savegasN_file;   end   %% 4 jobs for CO2
+processor 2 --> for JOBB = 05 : 08; clust_runXtopts_savegasN_file_2; end   %% 4 jobs for CO2
+processor 3 --> for JOBB = 09 : 12; clust_runXtopts_savegasN_file_3; end   %% 4 jobs for CO2
+processor 4 --> for JOBB = 13 : 17; clust_runXtopts_savegasN_file_4; end   %% 5 jobs for CH4
+processor 5 --> for JOBB = 18 : 22; clust_runXtopts_savegasN_file_5; end   %% 4 jobs for CH4
+
 1) Basics
 2) file_parallelprocess_gas_2_6.txt
 3) freq_boundaries.m freq_boundariesLBL.m
@@ -76,6 +97,14 @@ set_the_freq_boundaries  %%% make sure you do this!!!!!, this sets wn1 = 605, wn
 
 6) Cluster jobs and checking output
 -----------------------------------
+
+The Golden Rule is
+************************************************************************
+*        Since LBLRTM only runs using TAPE5,TAPE6,TAPE11,TAPE12        *
+*  you CANNOT CANNOT have more than one job running on same processor  *
+*  at the same time, else they will start overwriting each other.      *
+************************************************************************
+
 First fix the symbolic links at
   /home/sergio/HITRAN2UMBCLBL/LBLRTM/
 and make the Toffset directories using   test_mkerTxoff.sc     makes
@@ -88,7 +117,7 @@ which has
   
   mkdir /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL
   ln -s /home/sergio/nogit/H2024_RUN8_NIRDATABASE/LBLRTM_ToffALL ToffALL
-  
+
   now run
     mker_TOFFSETS_1_5.sc  >& ughm
     copy_TOFFSETS_1_5.sc  >& ughc
@@ -115,10 +144,17 @@ to check process can do eg
 or
   check_progress.m
   
-to compare
+to compare (but we have lost the raw ODs after OCT 2015)
   compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
 
+To make sure things look ok ie you did not mix CO2 and CH4 onto the same processor/TooffX_YY directory, use
+  plot_Toffset(2,1-11,N)
 
+if puzzled about some gasID/chunk/layer (eg why is it giving -ve ODs when I do all 100 layers???) ...
+a) bad = driver_check_negative_od(gid) 
+b) driver_runXtopts_nosavegasN_onelay.m
+  which comes from modifying clust_runXtopts_savegasN_file.m
+    
 7) Cat the chunks together (11 Toffsets), then compress and convert to binary
 -----------------------------------------------------------------------------
 these put together the chunks after they are made
@@ -135,4 +171,9 @@ then go to eg /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunIR_LBLRTM.m
 
 Compare the LBLRTM12.8 vs LBLRTM12.17 ODs using
   /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/compare_LBLRTM_2_6_vers_12p8_vs_vers12p17.m
-  
+
+Compare the kcompressed data vs run8 vs lblrtm
+  /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/compare_kcompressed_vs_run8_vs_lblrtm.m  
+NOTE :      compare_kcompressed_vs_run8_vs_lblrtm.m   calls   driver_runXtopts_nosavegasN_onelay.m   which calls   driver_glab_lblrtm_forn_ONELAY_noN2con.m
+JUST LIKE : clust_runXtopts_savegasN_file.m           calls                                                        driver_glab_lblrtm_forn_MANYLAY_noN2con
+else if you call driver_glab_lblrtm_forn_ONELAY.m it will keep the N2/O2 continuum and that meses up comparisons to kCompressed cacls!!!!!

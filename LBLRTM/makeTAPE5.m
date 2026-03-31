@@ -25,8 +25,10 @@ n2 = q*(1-mr)/mr;      %% N2
 air = q/mr;            %% N2 + gasN
 
 if iTalk > 0
-  fprintf(1,'p = %15.7e mb  T = %15.7e K ,mr = %8.6e \n',p,T,mr);
-  fprintf(1,'  gas = %15.7e  molecules/cm2    n2 = %15.7e  molecules/cm2 air = %15.7e  molecules/cm2\n',q,n2,air);
+  fprintf(1,'LBLRTM --> makeTAPE5.m : gascell params\n');
+  fprintf(1,'  p = %15.7e atm  pp = %15.7e atm  T = %15.7f K  q = %15.7e molecules/cm2  \n',gas(2),gas(3),gas(4),gas(5))
+  fprintf(1,'  p = %15.7e mb   pp = %15.7e mb   T = %15.7f K  mr = %8.6e \n',p,pp,T,mr);
+  fprintf(1,'  gas = %15.7e  molecules/cm2      n2 = %15.7e  molecules/cm2      air = %15.7e  molecules/cm2\n',q,n2,air);
 end
 
 %% http://shadow.eas.gatech.edu/~vvt/lblrtm/lblrtm_inst.html
@@ -60,7 +62,7 @@ fprintf(fid,' %9.3f %9.3f  %s \n',v1,v2,str1);
 %%      2     3-5,   6-10,  11-20,      41-48,     53-60,     66-73
 %%    1X,I1    I3,    I5,   F10.2,  20X, F8.2,  4X, F8.2,  5X, F8.3
 str = ' 1  1   12       1.0                        2.00        1.00';
-  fprintf(fid,'%s \n',str);
+fprintf(fid,'%s \n',str);
  
 %           PAVE(L), TAVE(L), SECNTK(L), ITYL(L),  IPATH, ALTZ(L-1), PZ(L-1), TZ(L-1), ATLZ(L), PZ(L), TZ(L)
 %              1-10,   11-20,     21-30,   31-33,  34-35,     37-43,   44-51,   52-58,   59-65, 66-73, 74-80
@@ -70,7 +72,7 @@ str = ' 1  1   12       1.0                        2.00        1.00';
 %             E15.7,   F10.4,     F10.4,       A3,    I2,   1X,F7.2,    F8.3,    F7.2,    F7.2,  F8.3,  F7.2
   
 %% str = '   1.0853934E03  296.0000              1    1.00   1.500 296.00   2.00   0.500 296.00';
-  fprintf(fid,'   %9.6e %9.4f              1    1.00 %4.2e %6.2f  1.00 %4.2e %6.2f \n',p,T,p,T,p,T);
+fprintf(fid,'   %9.6e %9.4f              1    1.00 %4.2e %6.2f  1.00 %4.2e %6.2f \n',p,T,p,T,p,T);
 
 for ii = 1 : 12
   molecule(ii) = -1;

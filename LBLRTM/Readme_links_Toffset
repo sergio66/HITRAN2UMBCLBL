@@ -1,9 +1,24 @@
+The Golden Rule is
+************************************************************************
+*        Since LBLRTM only runs using TAPE5,TAPE6,TAPE11,TAPE12        *
+*  you CANNOT CANNOT have more than one job running on same processor  *
+*  at the same time, else they will start overwriting each other.      *
+************************************************************************
+
+but when the cluster is as messed up you can start up 5 different matlab jobs on
+our machine (c24-52) and then on each matlab session individdually run
+processor 1 --> for JOBB = 01 : 04; clust_runXtopts_savegasN_file;   end   %% 4 jobs for CO2
+processor 2 --> for JOBB = 05 : 08; clust_runXtopts_savegasN_file_2; end   %% 4 jobs for CO2
+processor 3 --> for JOBB = 09 : 12; clust_runXtopts_savegasN_file_3; end   %% 4 jobs for CO2
+processor 4 --> for JOBB = 13 : 17; clust_runXtopts_savegasN_file_4; end   %% 5 jobs for CH4
+processor 5 --> for JOBB = 18 : 22; clust_runXtopts_savegasN_file_5; end   %% 4 jobs for CH4
+
 Contents
 ---------
 1) Linking lblrtm, slblrtm, TAPE3 etc
 2) Tesing making ToffX dir
 3) make ToffALL (a symbolic link) and some subdirs
-4) To run off the gas ODs
+4) Run off the gas ODs (or RADs etc)
 5) Making more dirs if needed
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -74,8 +89,24 @@ and then copies the *.m and other files, as well as the symbolic links to lblrtm
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-4) To run off the gas ODs
--------------------------
+4) Run off the gas ODs (or RADs etc)
+-------------------------------------
+
+The Golden Rule is
+************************************************************************
+*        Since LBLRTM only runs using TAPE5,TAPE6,TAPE11,TAPE12        *
+*  you CANNOT CANNOT have more than one job running on same processor  *
+*  at the same time, else they will start overwriting each other.      *
+************************************************************************
+
+but when the cluster is as messed up you can start up 5 different matlab jobs on
+our machine (c24-52) and then on each matlab session individdually run
+processor 1 --> for JOBB = 01 : 04; clust_runXtopts_savegasN_file;   end   %% 4 jobs for CO2
+processor 2 --> for JOBB = 05 : 08; clust_runXtopts_savegasN_file_2; end   %% 4 jobs for CO2
+processor 3 --> for JOBB = 09 : 12; clust_runXtopts_savegasN_file_3; end   %% 4 jobs for CO2
+processor 4 --> for JOBB = 13 : 17; clust_runXtopts_savegasN_file_4; end   %% 5 jobs for CH4
+processor 5 --> for JOBB = 18 : 22; clust_runXtopts_savegasN_file_5; end   %% 4 jobs for CH4
+
   back to eg HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1
   See the Readme there. In particular
 

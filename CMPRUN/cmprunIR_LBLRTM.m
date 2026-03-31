@@ -114,9 +114,9 @@ for gid00 = 1 : length(glist)
        cdir = ['/asl/s1/sergio/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE/IR_605_2830/lblrtm12.8/all/kcomp/'];
 
        %% this is for v12.17
-       gdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
-       cdir = [' /umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
-       
+       gdir = ['/umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/abs.dat/'];
+       cdir = ['/umbc/rs/pi_sergio/WorkDirDec2025/H' num2str(HITRAN,'%04d') '_RUN8_NIRDATABASE//lblrtm12.17/all/kcomp/'];
+
      case 7
        %%% >>>>>>>>>>>>> done with MY way of doing things, WRONG SHOULD NOT TRUST
        error('O2 using LBLRTM is messed up')
@@ -197,8 +197,7 @@ for gid00 = 1 : length(glist)
         % check for old data with max below abseps
         eval(['load ',fmon]);
         if max(max(max(k))) <= abseps
-	  fprintf(1, 'cmprun: WARNING gas %d chunk %d max k <= abseps\n', ...
-		  gid, vchunk);
+	  fprintf(1, 'cmprun: WARNING gas %d chunk %d max k <= abseps\n',gid, vchunk);
 	end
 	clear k
 		  

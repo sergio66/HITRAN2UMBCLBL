@@ -27,15 +27,10 @@ nbox = 5;
 pointsPerChunk = 10000;
 gases = Sgid;
 
-%% in /home/sergio/HITRAN2UMBCLBL      refproTRUE.mat -> refprof_usstd16Aug2010_lbl.mat
-%% load /home/sergio/abscmp/refproTRUE.mat
-load /home/sergio/HITRAN2UMBCLBL/REFPROF/refproTRUE.mat
+load_refprof
 
-addpath /home/sergio/SPECTRA
-addpath /asl/matlib/science
-addpath /asl/matlib/aslutil
-addpather = ['addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(addpather);
-addpath /home/sergio/HITRAN2UMBCLBL/LBLRTM/XHUANG
+adderpath
+addpather = ['addpath ' outputdirToffALL '/Toff_' num2str(Stoffset,'%02d')]; eval(addpather);
 
 gg    = Sgid;
 gasid = Sgid;  
@@ -93,7 +88,7 @@ while fmin <= fmin0
       fclose(fid);
 
       %% [w,d] = run8co2(gasid,fmin,fmax,fip,topts);  
-      cder = ['cd /home/sergio/HITRAN2UMBCLBL/LBLRTM/Toff_' num2str(Stoffset,'%02d')]; eval(cder);
+      cder = ['cd ' outputdirToffALL '/Toff_' num2str(Stoffset,'%02d')]; eval(cder);
 
       if iUseOldWay == +1
         [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1);
@@ -104,14 +99,13 @@ while fmin <= fmin0
         dN2O2 = dlblrtm;
 
         d = dall - dN2O2;
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
+        cder_here
         saver = ['save ' fout ' w d dall dN2O2'];
 
       elseif iUseOldWay == +2
         [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_noN2con(gasid,fmin,fmax,['/home/sergio/SPECTRA/' fip],-1,-1,80);
         d = dlblrtm;
-        %cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12/
-        cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+        cder_here
         saver = ['save ' fout ' w d'];
       end
 
@@ -125,9 +119,7 @@ while fmin <= fmin0
   fmin = fmin + dv;
 %  %% one chunk is enough
 %  return
-%  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-  cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+  cder_here
 end                 %% loop over freq
 
-% cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_LBLRTM_H12
-cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_CO2_O3_N2O_CO_CH4_LBLRTM_H12
+cder_here
