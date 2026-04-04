@@ -7,6 +7,8 @@ gases = 2;
 gases = [7 22];   %% ew MT CKD3.2 version
 gases = 3;
 gases = [[3 : 42] [51 : 81]];
+
+gases = [7 22];
 gases = [[3 : 49] [51 : 81]];
 
 fchunks = 605 : 25 : 2830;

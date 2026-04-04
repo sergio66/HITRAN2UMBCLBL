@@ -5,6 +5,17 @@
 # run this with /bin/rm slurm*.out; sbatch --array=1-473   sergio_matlab_chip_jobB.sbatch  for ALL MOLGAS
 # run this with /bin/rm slurm*.out; sbatch --array=474-814 sergio_matlab_chip_jobB.sbatch  for ALL XSCGAS
 
+# run this with /bin/rm slurm*.out; sbatch --array=1-11    sergio_matlab_chip_jobB.sbatch 1-5   for CO2/CH4  : see run_2_6.sc
+# run this with /bin/rm slurm*.out; sbatch --array=1-11    sergio_matlab_chip_jobB.sbatch 6-10  for WV
+# run this with /bin/rm slurm*.out; sbatch --array=1-11    sergio_matlab_chip_jobB.sbatch 11-12 for N2/O2    : see run_7_22.sc
+
+# The Golden Rule is
+# ************************************************************************
+# *        Since LBLRTM only runs using TAPE5,TAPE6,TAPE11,TAPE12        *
+# *  you CANNOT CANNOT have more than one job running on same processor  *
+# *  at the same time, else they will start overwriting each other.      *
+# ************************************************************************
+
 ########################################################################
 
 #SBATCH --job-name=RUN_LBLRTM             # Name of the job:
@@ -54,22 +65,53 @@ fi
 ####### calling srun twice for these paralel jobs might be asking for too much overhead
 ####### srun matlab -nodisplay -r "clustbatch_random_allfovV1; exit"
 
+## dont use /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab, use matlab
+
 if [[ "$1" -eq "" ]]; then
   echo "cmd line arg = DNE, clust_runXtopts_savegasN_file"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
+  matlab -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
 elif [[ "$1" -eq "1" ]]; then
   echo "cmd line arg = 1, clust_runXtopts_savegasN_file"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file; exit"
 elif [[ "$1" -eq "2" ]]; then
-  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_2"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_2; exit"
+  echo "cmd line arg = 2, clust_runXtopts_savegasN_file_2"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_2; exit"
 elif [[ "$1" -eq "3" ]]; then
-  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_3"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_3; exit"
+  echo "cmd line arg = 3, clust_runXtopts_savegasN_file_3"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_3; exit"
 elif [[ "$1" -eq "4" ]]; then
-  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_4"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_4; exit"
+  echo "cmd line arg = 4, clust_runXtopts_savegasN_file_4"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_4; exit"
 elif [[ "$1" -eq "5" ]]; then
-  echo "cmd line arg = 1, clust_runXtopts_savegasN_file_5"
-  /usr/ebuild/installs/software/MATLAB/2023b/bin/matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_5; exit"
+  echo "cmd line arg = 5, clust_runXtopts_savegasN_file_5"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_5; exit"
+#  
+elif [[ "$1" -eq "6" ]]; then
+  echo "cmd line arg = 6, clust_runXtopts_savegasWV_file"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file; exit"
+elif [[ "$1" -eq "7" ]]; then
+  echo "cmd line arg = 7, clust_runXtopts_savegasWV_file_2"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_2; exit"
+elif [[ "$1" -eq "8" ]]; then
+  echo "cmd line arg = 8, clust_runXtopts_savegasWV_file_3"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_3; exit"
+elif [[ "$1" -eq "9" ]]; then
+  echo "cmd line arg = 9, clust_runXtopts_savegasWV_file_4"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_4; exit"
+elif [[ "$1" -eq "10" ]]; then
+  echo "cmd line arg = 10, clust_runXtopts_savegasWV_file_5"
+  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasWV_file_5; exit"
+#  
+#elif [[ "$1" -eq "11" ]]; then
+#  echo "cmd line arg = 11, clust_runXtopts_savegasN_file_N2O2"
+#  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_N2O2only; exit"
+#elif [[ "$1" -eq "12" ]]; then
+#  echo "cmd line arg = 12, clust_runXtopts_savegasN_file_N2O2_2"
+#  matlab  -nodisplay -nosplash -r "clust_runXtopts_savegasN_file_N2O2only_2; exit"
+elif [[ "$1" -eq "11" ]]; then
+  echo "cmd line arg = 11, new_clust_runXtopts_savegasN_file_N2only"
+  matlab  -nodisplay -nosplash -r "new_clust_runXtopts_savegasN_file_N2only; exit"
+elif [[ "$1" -eq "12" ]]; then
+  echo "cmd line arg = 12, clust_runXtopts_savegasN_file_O2only"
+  matlab  -nodisplay -nosplash -r "new_clust_runXtopts_savegasN_file_O2only; exit"
 fi

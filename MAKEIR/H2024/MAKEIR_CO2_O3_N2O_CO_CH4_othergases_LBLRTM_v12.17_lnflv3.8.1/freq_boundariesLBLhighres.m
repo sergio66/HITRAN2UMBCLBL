@@ -3,11 +3,13 @@
 % dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtmMlawer/'];   %% few runs for Eli, testing CO and O3
 % dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat/lblrtm0.0005/'];   %% high res for kcarta
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %% see freq_boundaries.m
-xdirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/'];
+xdirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/'];  %% the git dir, do not use
+                                                                                      %% /home/sergio/git
+xdirout = ['/umbc/rs/pi_sergio/TonsOfData/H2024_RUN8_NIRDATABASE/IR_605_2830/'];      %% the nogit dir
+                                                                                      %% /home/sergio/nogit
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if iUsualORHigh > 0
   dirout = [xdirout '/g' num2str(gid) '.dat/lblrtm/'];   %% usual
 elseif iUsualORHigh == -1

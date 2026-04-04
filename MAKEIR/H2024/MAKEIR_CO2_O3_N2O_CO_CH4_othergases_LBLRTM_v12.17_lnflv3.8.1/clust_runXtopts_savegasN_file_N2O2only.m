@@ -74,6 +74,9 @@ while fmin <= wn2
   for tt = Stt
     tprof = refpro.mtemp + tt*10;
 
+    %% should really be gid but put 1 since this is O2/N2 continuum which goe way beyond the few lines
+    %%  1300-1800 cm-1 for O2, peaking at 1550 cm-1
+    %%  1850-2650 cm-1 for N2, peaking at 2350 cm-1    
     iYes = findlines_plot(fmin-dv,fmax+dv,1); 
 
     fout = [dirout '/std' num2str(fmin)];

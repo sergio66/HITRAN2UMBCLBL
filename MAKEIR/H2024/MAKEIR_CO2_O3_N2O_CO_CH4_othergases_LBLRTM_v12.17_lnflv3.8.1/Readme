@@ -1,4 +1,4 @@
-Cpntents
+Contents
 ---------
 
 The Golden Rule is
@@ -13,6 +13,11 @@ The Golden Rule is
 *  JUST LIKE : clust_runXtopts_savegasN_file.m           calls                                                        driver_glab_lblrtm_forn_MANYLAY_noN2con    *
 *  else if you call driver_glab_lblrtm_forn_ONELAY.m it will keep the N2/O2 continuum and that meses up comparisons to kCompressed cacls!!!!!                    *
 ******************************************************************************************************************************************************************
+
+*****************************************************************************
+* The Readme tells you the default load_refprof.m loads in 385 ppmv profile *
+* convert to 400 ppmv using kcomp_co2_385_to_400.m                          *
+*****************************************************************************
 
 but when the cluster is as messed up you can start up 5 different matlab jobs on
 our machine (c24-52) and then on each matlab session individdually run
@@ -29,6 +34,8 @@ processor 5 --> for JOBB = 18 : 22; clust_runXtopts_savegasN_file_5; end   %% 4 
 5) clust_runXtopts_savegasN_file.m
 6) Cluster jobs and checking output
 7) Cat the chunks together (11 Toffsets), then compress and convert to binary
+8) ***** The CO2 is at 385 ppmv, need to convert to 400 ppmv  *****
+9) Do the same steps (6),(7) for O2/N2 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  **** clust_runXtopts_savegasN_fileHIGHRES.m : is for FIr1 = 500 - 805 cm-1 at 0.0005 cm-1 ****
@@ -148,7 +155,10 @@ to compare (but we have lost the raw ODs after OCT 2015)
   compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
 
 To make sure things look ok ie you did not mix CO2 and CH4 onto the same processor/TooffX_YY directory, use
-  plot_Toffset(2,1-11,N)
+  findlines_plot(605,2830,2);
+  plot_Toffset(2,Toff,N);        Toff=1-11 (offset) N=1-100 (layer)
+  findlines_plot(605,2830,6);  
+  plot_Toffset(6,Toff,N);        Toff=1-11 (offset) N=1-100 (layer)    
 
 if puzzled about some gasID/chunk/layer (eg why is it giving -ve ODs when I do all 100 layers???) ...
 a) bad = driver_check_negative_od(gid) 
@@ -157,6 +167,96 @@ b) driver_runXtopts_nosavegasN_onelay.m
     
 7) Cat the chunks together (11 Toffsets), then compress and convert to binary
 -----------------------------------------------------------------------------
+these put together the chunks after they are made
+-rw-r--r-- 1 sergio pi_strow  5756 Mar 15 03:09 clust_runXtopts_mkgWVvfiles.m
+-rw-r--r-- 1 sergio pi_strow  4603 Mar 15 03:08 clust_runXtopts_mkgNvfiles.m
+and they go into eg /asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830//lblrtm12.17/all/abs.dat/g2v2830.mat
+
+After the cluster jobs are done run
+  clust_runXtopts_mkgNvfiles.m  for gases 2,6,7,22
+  clust_runXtopts_mkgWVvfiles.m for WVall (no iso separation)
+	
+then go to eg /home/sergio/HITRAN2UMBCLBL/CMPRUN/cmprunIR_LBLRTM.m
+    and to eg /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/loop_mat2forIR_LBLRTM_all.m
+
+Compare the LBLRTM12.8 vs LBLRTM12.17 ODs using
+  /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/compare_LBLRTM_2_6_vers_12p8_vs_vers12p17.m
+
+Compare the kcompressed data vs run8 vs lblrtm
+  /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for/compare_kcompressed_vs_run8_vs_lblrtm.m  
+NOTE :      compare_kcompressed_vs_run8_vs_lblrtm.m   calls   driver_runXtopts_nosavegasN_onelay.m   which calls   driver_glab_lblrtm_forn_ONELAY_noN2con.m
+JUST LIKE : clust_runXtopts_savegasN_file.m           calls                                                        driver_glab_lblrtm_forn_MANYLAY_noN2con
+else if you call driver_glab_lblrtm_forn_ONELAY.m it will keep the N2/O2 continuum and that meses up comparisons to kCompressed cacls!!!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+8) The CO2 is at 385 ppmv, need to convert to 400 ppmv
+------------------------------------------------------
+
+See /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/Readme
+
+The Readme tells you the default load_refprof.m loads in 385 ppmv profile
+So everything you make is at 385 ppmv
+
+You compress the files, make the mat2for, save into 385 ppm, then convert to 400 ppmv using
+  kcomp_co2_385_to_400.m
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+9) Do the same steps (6),(7) for O2/N2 
+---------------------------------------
+
+mkdir -p /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g7.dat/lblrtm
+mkdir -p /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g22.dat/lblrtm
+
+% THIS IS BAD, DO NOT DO
+% Then run
+%   run_7_22.sc
+% calls   
+%   ## put O2 on Toffset/Toff_1,2,3,4,5,6,7,8,9,10,11
+%   sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 11
+%   ## put N2 on Toffset/Toff2_1,2,3,4,5,6,7,8,9,10,11
+%   sbatch --array=12-22 sergio_matlab_chip_jobB.sbatch 12
+% which calls clust_runXtopts_savegasN_file_N2O2only,clust_runXtopts_savegasN_file_N2O2only_2
+% 
+
+THIS IS GOOD, uses latest /home/sergio/SPECTRA/CKDLINUX/MT_CKD-4.3
+  new_clust_runXtopts_savegasN_file_N2only.m
+  new_clust_runXtopts_savegasN_file_O2only.m
+Since     cntnm_sergio_v4.3_linux_gnu_dbl   currently only writes to CNTNM.OPTDPT, have to run individually and sequentially  
+  for JOBB = 1 : 11; new_clust_runXtopts_savegasN_file_N2only; end
+  for JOBB = 1 : 11; new_clust_runXtopts_savegasN_file_O2only; end
+
+   run_7_22.sc
+ calls   
+   ## put O2 on Toffset/Toff_1,2,3,4,5,6,7,8,9,10,11
+   sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 11
+   ## put N2 on Toffset/Toff2_1,2,3,4,5,6,7,8,9,10,11
+   sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 12
+ which calls new_clust_runXtopts_savegasN_file_N2only,new_clust_runXtopts_savegasN_file_O2only
+
+to check process can do eg
+  watch "date; ls -lt /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830//g7.dat/lblrtm/ | wc -l; \
+               ls -lt /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830//g22.dat/lblrtm/ | wc -l; 
+or
+  check_progress.m
+
+NOW YOU NEED TO MAKE THE N2/O2 LINES .... see run8(7,22 ... with NO CONTINUUM)
+
+to compare (but we have lost the raw ODs after OCT 2015)
+  compare_LBLRTM12p4_LBLRTM12p8(gid,chunk,toffset)
+
+To make sure things look ok ie you did not mix CO2 and CH4 onto the same processor/TooffX_YY directory, use
+  findlines_plot(605,2830,7);
+  plot_Toffset(7,Toff,N);        Toff=1-11 (offset) N=1-100 (layer)
+  findlines_plot(605,2830,22);
+  plot_Toffset(22,Toff,N);        Toff=1-11 (offset) N=1-100 (layer)
+
+if puzzled about some gasID/chunk/layer (eg why is it giving -ve ODs when I do all 100 layers???) ...
+a) bad = driver_check_negative_od(gid) 
+%% b) driver_runXtopts_nosavegasN_onelay.m XXXXXX does not work for 7,22
+  which comes from modifying clust_runXtopts_savegasN_file.m
+    
 these put together the chunks after they are made
 -rw-r--r-- 1 sergio pi_strow  5756 Mar 15 03:09 clust_runXtopts_mkgWVvfiles.m
 -rw-r--r-- 1 sergio pi_strow  4603 Mar 15 03:08 clust_runXtopts_mkgNvfiles.m

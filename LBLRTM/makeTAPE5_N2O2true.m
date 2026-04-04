@@ -100,29 +100,43 @@ for ii = 1 : 22
   molecule(ii) = -1;
 end
 
-if v1 < 1805
-  molecule(gid) = q;
-  molecule(22)  = n2;
-  summolecule   = air;  %% which is 0
-elseif v1 > 1805
-  molecule(gid) = -1;
-  molecule(22)  = n2;
-  summolecule   = q;  %% which is O2 = rest of gases
-end
+iNewOrOld = -1;  %% before April 2026
+iNewOrOld = +1;  %% after April 2026
 
-
-if v1 < 1805
-  molecule(gid) = -1;
-  molecule(22)  = -1;
-  summolecule   = n2;  %% which is 0
-elseif v1 > 1805
-  molecule(gid) = -1;
-  molecule(22)  = n2;
-  summolecule   = q;  %% which is O2 = rest of gases
-
-  molecule(gid) = q;
-  molecule(22)  = n2;
-  summolecule   = -1;  
+if iNewOrOld < 0
+  if v1 < 1805
+    molecule(gid) = q;
+    molecule(22)  = n2;
+    summolecule   = air;  %% which is 0
+  else
+    molecule(gid) = -1;
+    molecule(22)  = n2;
+    summolecule   = q;  %% which is O2 = rest of gases
+  end
+  
+  if v1 < 1805
+    molecule(gid) = -1;
+    molecule(22)  = -1;
+    summolecule   = n2;  %% which is 0
+  else
+    molecule(gid) = -1;
+    molecule(22)  = n2;
+    summolecule   = q;  %% which is O2 = rest of gases
+  
+    molecule(gid) = q;
+    molecule(22)  = n2;
+    summolecule   = -1;  
+  end
+elseif iNewOrOld > 0
+  if gid == 22
+    molecule(gid) = q;
+    molecule(22)  = n2;
+    summolecule   = -1;  
+  elseif god == 7
+    molecule(gid) = q;
+    molecule(22)  = 0;
+    summolecule   = n2;  
+  end
 end
 
 %%%% gases 1-7 >>>>>>>>>>>>>>>>>>>>>>>>>>

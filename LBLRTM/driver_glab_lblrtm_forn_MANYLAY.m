@@ -40,7 +40,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% LBLRTM
 
-addpath XHUANG
+% addpath XHUANG
 
 junk = load(ipfile);
 [mm,nn] = size(junk);

@@ -28,7 +28,7 @@ if length(JOB) == 0
 end
 
 iX2000 = +1;   %% to do gases 42-49, as these fall outside slurm job array 1-20000
-iX2000 = -1;   %% DEFAULT VALUE< do not add 20000 to JOB
+iX2000 = -1;   %% DEFAULT VALUE  << do not add 20000 to JOB>>
 if iX2000 > 0
   disp('WARNING : adding 20000 to job array so we can make gases 43-49')
   JOB = JOB + 20000;

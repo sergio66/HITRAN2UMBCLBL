@@ -1,4 +1,4 @@
-function [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_N2O2(gid,v1,v2,ipfile,iDoGlab,iTalk)
+function [w,dglab,dlblrtm] = driver_glab_lblrtm_forn_MANYLAY_N2O2true(gid,v1,v2,ipfile,iDoGlab,iTalk)
 
 %% >>>>>>>>> see code in /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2012/MAKEIR_ALL_H12_NOBASEMENT <<<<<<<<<<<<
 
@@ -42,11 +42,12 @@ if gid ~= 7 & gid ~= 22
   error('this computes true O2 + N2 total ODS and so need gid = 7 or 22')
 end
 
-addpath XHUANG
+% addpath XHUANG
+
 dvx = 0.0025;
 dvx = 0.0005;
 
-junk = load(ipfile);
+junk = load(ipfile,'-ascii');
 [mm,nn] = size(junk);
 
 addpath /home/sergio/SPECTRA

@@ -16,7 +16,8 @@ home = pwd;
 JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
 if length(JOB) == 0
   JOB = 15;  
-  JOB = 3;
+  JOB = 22;
+  JOB = 7;  
 end
 
 gid = JOB;
@@ -43,7 +44,7 @@ freq_boundaries
 
 figure(1); clf
 addpath /home/sergio/SPECTRA
-[iYes,line] = findlines_plot(wn1-dv,wn2+dv,gid);
+[iYes,line] = findlines_plot(wn1-dv,wn2+dv,gid);  
 
 if dv >= 25
   [iYes,line] = findlines_plot(fmin-dv,fmax+dv,gid);
@@ -51,7 +52,69 @@ else
   [iYes,line] = findlines_plot(fmin-25,fmax+dv+25,gid);
 end
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% see /home/sergio/SPECTRA/n2_o2_continuum_range_ckd3p2_ckd4p3
+if gid == 7
+  %% this is for CKD 4.3
+  o2range = [1280        1840];  %% CKD continuum dies at 1350 cm-1, but HITRAN2024 says there are weak lines at 1290 cm-1
+  n2range = [1997.790    2900];
+  n2range = [1930.00     2900];  %% CKD continuum dies at 1997 cm-1, but HITRAN2024 says there are weak lines at 1930 cm-1
+
+  linelen = length(line.wnum);
+  linemax = max(line.wnum);
+  if linemax < 1840
+    fprintf(1,'O2 : lincnt in before extending to 1840 cm-1 = %6i \n',length(line.wnum));
+    lala = floor(linemax) : 1 : 1840;
+    for junk = 1 : length(lala)
+      line.wnum(linelen+junk) = lala(junk);
+    end
+    fprintf(1,'O2 : lincnt in after  extending to 1840 cm-1 = %6i \n',length(line.wnum));    
+  end
+
+  linelen = length(line.wnum);
+  linemin = min(line.wnum);
+  if linemin > 1280
+    fprintf(1,'O2 : lincnt in before extending to 1280 cm-1 = %6i \n',length(line.wnum));  
+    lala = 1280 : 1 : ceil(linemin);
+    for junk = 1 : length(lala)
+      line.wnum(linelen+junk) = lala(junk);
+    end
+    fprintf(1,'O2 : lincnt in after extending to 1280 cm-1 = %6i \n',length(line.wnum));      
+  end
+
+elseif gid == 22
+  %% this is for CKD 4.3
+  o2range = [1280        1840];  %% CKD continuum dies at 1350 cm-1, but HITRAN2024 says there are weak lines at 1290 cm-1
+  n2range = [1997.790    2900];
+  n2range = [1930.00     2900];  %% CKD continuum dies at 1997 cm-1, but HITRAN2024 says there are weak lines at 1930 cm-1
+
+  linelen = length(line.wnum);
+  linemax = max(line.wnum);
+  if linemax < 2900
+    fprintf(1,'N2 : lincnt in before extending to 2900 cm-1 = %6i \n',length(line.wnum));
+    lala = floor(linemax):1:2900;
+    for junk = 1 : length(lala)
+      line.wnum(linelen+junk) = lala(junk);
+    end
+    fprintf(1,'N2 : lincnt in after  extending to 2900 cm-1 = %6i \n',length(line.wnum));    
+  end
+
+  linelen = length(line.wnum);
+  linemin = min(line.wnum);
+  if linemin > 1930
+    fprintf(1,'N2 : lincnt in before extending to 1930 cm-1 = %6i \n',length(line.wnum));  
+    lala = 1930 : 1 : ceil(linemin);
+    for junk = 1 : length(lala)
+      line.wnum(linelen+junk) = lala(junk);
+    end
+    fprintf(1,'N2 : lincnt in after extending to 1930 cm-1 = %6i \n',length(line.wnum));      
+  end
+
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 iCnt = 0;
 for wn = wn1 : dv : wn2
   woo = find(line.wnum >= wn-dv & line.wnum <= wn+dv+dv);

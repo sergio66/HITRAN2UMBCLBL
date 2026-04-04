@@ -33,5 +33,6 @@ fdir = '/asl/data/kcarta/H2020.ieee-le/IR605/etc.ieee-le/';
 %% H2024
 %% cdir = '/asl/s1/sergio/H2024_RUN8_NIRDATABASE/IR_605_2830/kcomp/';          
 cdir = '/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/kcomp/';
+cdir = '/home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/kcomp/';
 %% fdir = '/asl/data/kcarta/H2024.ieee-le/IR605/etc.ieee-le/';
 fdir = '/umbc/xfs3/strow/asl/rta/kcarta/H2024.ieee-le/IR605/etc.ieee-le/';

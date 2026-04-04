@@ -187,7 +187,7 @@ while fmin <= iaChunk(end)
 
         if pp == 0
 %%%          figure(2); plot(fr,exp(-d(1,:)),fr,exp(-(d(1,:)-dO2N2(1,:))),'r'); hold on; pause(0.1); % disp('ret to continue');   
-          figure(2); plot(fr,exp(-d(1,:))); hold on; pause(0.1); % disp('ret to continue');   
+          figure(2); plot(fr,exp(-d(1,:))); hold on; pause(0.1); title('Transmission of Layer 1'); % disp('ret to continue');   
         end
       end
     end                 %% loop over temperature (1..11) pp

@@ -1,3 +1,12 @@
+CLASSES
+
+COMMON CODE
+GASES 3-42, with a note about G2,G6
+GASES 51-81
+CKD4.3 GASES 1 (101,102),7,22
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 GASES 3-42 : Contents
 ---------------------
 1) Running eg clust_runXtopts_savegasN_file.m :
@@ -24,7 +33,15 @@ GASES 51-81 : Contents
      submit job using    sbatch --array=1-900%128 --output='/dev/null' sergio_matlab_chip_makegas51_81.sbatch 1
      check progress of individual gases using                         filelist_xsecgN.m                  to see which fles of gis still need to be done
      when happy with what you see, and jobs have ended, run           loop_filelist_xsecN_missing.m     to remove empty files
-     
+
+CKD4.3 GASES 101,102,7,22 : Contents
+-------------------------------------
+1) WV has CKD4.3 self and forn continuum
+2) Gases 7,22
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 COMMON : PUTTING CHUNKS TOGETHER, COMPRESS, TURN INTO F77 BIN FILES, MAKE list of files for kcarta
 ---------------------------------------------------------------------------------------------------
@@ -57,7 +74,17 @@ since it does this
   cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-GASES 3-42
+GASES 3-42, with a note about G2,G6
+
+1) CO2, CH4
+-----------
+
+See /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1
+The Readme tells you the default load_refprof.m loads in 385 ppmv profile
+So everything you make is at 385 ppmv
+
+You compress the files, make the mat2for, save into 385 ppm, then convert to 400 ppmv using
+  kcomp_co2_385_to_400.m
 
 1) Running eg clust_runXtopts_savegasN_file.m
 -----------------------------------------------
@@ -248,6 +275,69 @@ Note : have to be careful about iSwitchXsecDataBase
   Then it calls write_out_jobsnotdone_for_cluster  so you can re-run/newly run what is needed
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+CKD4.3 : GASES 1 (101,102),7,22
+--------------------------------
+1) WV has CKD4.3 self and forn continuum
+   See Readme_H2024_wv
+   7A) CKD 4.3 : making binary files CKDSelf43.bin, CKDFor43.bin for kCARTA
+   7B) CKD 4.3 : making kCompressed CKD 4.3 Self/Forn files   
+   See /home/sergio/SPECTRA/CKDLINUX/MT_CKD_H2O-4.3
+   Quite striaghtforward (after you compile the code and adsapt it to work with run8watercontinuum.m)
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+
+2) Gases 7,22
+   See /home/sergio/SPECTRA/CKDLINUX/MT_CKD-4.3
+   Very fast code
+   
+   First look at
+/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_CO2_O3_N2O_CO_CH4_othergases_LBLRTM_v12.17_lnflv3.8.1/run_7_22.sc
+## THIS IS NEW CODE  new_clust_runXtopts_savegasN_file_N2only, new_clust_runXtopts_savegasN_file_O2only
+# ## put O2 on Toffset/Toff_1,2,3,4,5,6,7,8,9,10,11
+sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 11
+#
+# ## put N2 on Toffset/Toff2_1,2,3,4,5,6,7,8,9,10,11
+sbatch --array=01-11 sergio_matlab_chip_jobB.sbatch 12
+   <<<<<<<<< However it only produces SMOOTH continuum, no lines >>>>>>>> into the
+     /umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/lblrtm
+  directory. 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>
+run8 used to automatically add in CKD3.2 (or probably 2.4) continuum
+   Now we have CKD4.3 so that is the new (default) option
+So now can call
+  /home/sergio/SPECTRA/run8.m
+which reads in HITRAN lines and the /home/sergio/SPECTRA/CKDLINUX/MT_CKD-4.3 executable
+  to gives lineOD + continuuumOD
+cd /home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24
+
+code puts data into /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g7.dat/
+                    /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g22.dat/
+We have run this off earlier for all gases, so make a copy for g7.g22 and rerun!
+   mv /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g7.dat/std*.mat     /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g7.dat/oldrun8/.
+   mv /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g22.dat/std*.mat     /home/sergio/nogit/H2024_RUN8_NIRDATABASE/IR_605_2830/g22.dat/oldrun8/.
+Look at ~/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_ALL_H24/clust_runXtopts_savegasN_file.m
+It reads gN_ir_list.txt
+See /home/sergio?SPECTRA/wrapper_run8_gas7_gas22_ckd_4p3_continuum.m for o2range/n2range
+  g7  is lines 3202 to 3421 (070128001 to 070175511)   -- really need to 1830 chunk
+  g7  is lines 3202 to 3454 (070128001 to 070183011)   -- now at 1830 chuk but will it run till there
+  g22 is lines 14653 to 15048 (220185501 to 220273011) -- really need to 2830 chunk
+  g22 is lines 14653 to 15093 (220185501 to 220283011) -- now at 2830 chuk but will it run till there
+
+Compare older run8 (run with CKD3.2) vs newer run8 (run with CKD4.3) using
+  driver_compare_newVSold_N2_O2(gid,fchunk,toff)
+    or
+  loop_driver_compare_newVSold_N2_O2
+
+Then after you are done running gid 7,22 blow away
+  /umbc/rs/pi_sergio/TonsOfData/H2024_RUN8_NIRDATABASE/IR_605_2830/abs.dat/g7v*
+  /umbc/rs/pi_sergio/TonsOfData/H2024_RUN8_NIRDATABASE/IR_605_2830/abs.dat/g22v*
+and re-run
+  clust_runXtopts_mkgNvfiles for gid 7
+  clust_runXtopts_mkgNvfiles for gid 22
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -300,9 +390,9 @@ cp /umbc/rs/pi_sergio/WorkDirDec2025/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/a
   fix the paths there if needed
 
 edit cmprunIR_umbcLBL_all.m needed  H2012 --> H2016 --> H2020 --> H2024  
-  cmprunIR_umbcLBL_all([[3:42] [51:81],605:25:2830,2020,2024);
+  cmprunIR_umbcLBL_all([[3:42] [51:81],605:25:2830,2024);
 
-edit dir0 in there and then it figuresout cdir, gdir
+edit dir0 in there and then it figures out cdir, gdir
       %% new way : set dir0, then it reads freq_boundaries and figures out gdir,cdir
       dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H20/';
       dir0 = '/home/sergio/HITRAN2UMBCLBL/MAKEIR/H2024/MAKEIR_WV_H24/';

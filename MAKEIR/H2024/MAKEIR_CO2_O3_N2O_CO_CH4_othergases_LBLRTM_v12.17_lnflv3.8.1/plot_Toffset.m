@@ -1,6 +1,9 @@
 function [fall,odall,odN] = plot_Toffset(gid,Toffset,N,iUsualORHigh)
 
 %% [fall,odall,odN] = plot_Toffset(2,5,3);
+%% gid = 2,6,7,22 (typically)
+%% Toffset = 1 -- 11
+%% N = layer to plot 1--100  in fig 1
   
 if nargin == 0
   gid == 2;
@@ -27,6 +30,9 @@ freq_boundariesLBL
 fall = [];
 odall = [];
 odN   = [];
+od1   = [];
+od100 = [];
+
 od_all_lays = [];
 
 iCnt = 0;
@@ -52,7 +58,9 @@ for ff = wn1 : 25 : wn2
       fall = [fall w];
       od = sum(x.d,2);
       odall = [odall; od];
-      odN   = [odN  x.d(:,N)'];
+      odN   = [odN   x.d(:,N)'];
+      od1   = [od1   x.d(:,1)'];
+      od100 = [od100 x.d(:,100)'];            
       od_all_lays(iCnt,:) = x.d(1,:);
     else
       x.w = (1:10000);
@@ -61,7 +69,9 @@ for ff = wn1 : 25 : wn2
       fall = [fall w];
       od = zeros(size(x.w));
       odall = [odall; od'];
-      odN   = [odN 0*w];
+      odN   = [odN    0*w];
+      od1   = [od1    0*w];
+      od100 = [od100  0*w];      
       od_all_lays(iCnt,:) = zeros(100,1);
     end      
   else
@@ -72,6 +82,8 @@ for ff = wn1 : 25 : wn2
     od = zeros(size(x.w));
     odall = [odall; od'];
     odN   = [odN 0*w];
+    od1   = [od1    0*w];
+    od100 = [od100  0*w];          
     od_all_lays(iCnt,:) = zeros(100,1);    
   end
   
@@ -82,8 +94,11 @@ fprintf(1,'\n')
 
 % whos fall odall od_all_lays
 
-figure(1); clf; semilogy(fall,odall,fall,odN); legend('Sum(OD)','OD(layN)','location','best');
+figure(1); clf; semilogy(fall,odall,'o-',fall,od1,fall,odN,fall,od100); legend('Sum(OD)','OD(lay1)','OD(layN)','OD(lay100)','location','best');
 figure(2); clf; semilogx(od_all_lays,1:100);
 
+junk = ([min(od_all_lays(:)) max(od_all_lays(:)) min(od_all_lays(:,1)) max(od_all_lays(:,1)) min(od_all_lays(:,100)) max(od_all_lays(:,100))]);
+fprintf(1,'no log : min(OD) max(OD) min(OD)lay001 max(OD)lay001 min(OD)lay100 max(OD)lay100  %8.4e  %8.4e  %8.4e  %8.4e  %8.4e  %8.4e \n',junk)
+
 junk = log10([min(od_all_lays(:)) max(od_all_lays(:)) min(od_all_lays(:,1)) max(od_all_lays(:,1)) min(od_all_lays(:,100)) max(od_all_lays(:,100))]);
-fprintf(1,'min(OD) max(OD) min(OD)lay001 max(OD)lay001 min(OD)lay100 max(OD)lay100  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f  %8.4f \n',junk)
+fprintf(1,'log10 : min(OD) max(OD) min(OD)lay001 max(OD)lay001 min(OD)lay100 max(OD)lay100  %8.4e  %8.4e  %8.4e  %8.4e  %8.4e  %8.4e \n',junk)

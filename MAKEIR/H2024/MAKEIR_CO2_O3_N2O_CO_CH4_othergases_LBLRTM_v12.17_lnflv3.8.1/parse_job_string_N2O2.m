@@ -24,20 +24,24 @@ Stoffset = str2num(JOB(8:9)); Stt = Stoffset - 6;
 % thefile = load('file_parallelprocess_allgases.txt');   %%% 297 entries in there
 thefile = load('file_parallelprocess_gas_7_22.txt');     %%% 22  entries in there
 
-JOB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
-if length(JOB) == 0
-  JOB = 3;
-  JOB = 2;
-  JOB = 9;    
-  JOB = 1;
+if ~exist('JOBB')
+  JOBB = str2num(getenv('SLURM_ARRAY_TASK_ID'));
+end
+if length(JOBB) == 0
+  JOBB = 1;
+  JOBB = 9;  
+  JOBB = 18;
+  JOBB = 5;
 end  
+
+JOBB
 
 % JOB = 10*11 + 5;
 % JOB = 3*11 + 5;  %% so this is (third+1) gas == gas  9, offset 5
 % JOB = 6*11 + 5;  %% so this is (sixth+1) gas == gas 12, offset 5
 % JOB = 10*11 + 5; %% so this is (tenth+1) gas == gas 16, offset 5
 
-JOB = thefile(JOB);
+JOB = thefile(JOBB);
 JOB = num2str(JOB,'%09d');
 
 Sgid     = str2num(JOB(1:2));

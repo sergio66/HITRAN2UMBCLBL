@@ -2,7 +2,13 @@ dirout = ['/spinach/s6/sergio/RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat
 dirout = ['/asl/s1/sergio/H2012_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
 dirout = ['/asl/s1/sergio/H2016_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
 dirout = ['/asl/s1/sergio/H2020_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
-dirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];
+
+dirout = ['/umbc/rs/pi_sergio/WorkDirDec2025/H2024_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];  %% the git dir, do not use
+                                                                                                          %% /home/sergio/git
+dirout = ['/umbc/rs/pi_sergio/TonsOfData/H2024_RUN8_NIRDATABASE/IR_605_2830/g' num2str(gid) '.dat'];      %% the nogit dir
+                                                                                                          %% /home/sergio/nogit
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 topts = runXtopts_params_smart(2000); 
 dv = topts.ffin*nbox*pointsPerChunk;

@@ -10,6 +10,10 @@ addpath /home/sergio/HITRAN2UMBCLBL/FORTRAN/mat2for
 inputCO2ppm = 385;
 outputCO2ppm = 400;
 
+cd /home/sergio/asl/rta/kcarta/H2024.ieee-le/IR605/lblrtm12.17/etc.ieee-le/CO2_400ppmv/
+pwd
+ls
+
 thedir = dir(['../CO2_385ppmv/*_g2.dat']);
 for ii = 1 : length(thedir)
   filename = ['../CO2_385ppmv/' thedir(ii).name];
